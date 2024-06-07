@@ -14,8 +14,7 @@ class IceCondition:
 
 
 def calc_shortest_path(base:bg.BaseGraph, ice_cond:IceCondition, speed:float, move_class:str,time:dt.datetime,source_node,target_node=None, icebreaker = False):#TODO ice_cond: класс для хранения условий
-    """Возвращает список конечных вершин с длиной маршрута в часах и перечнем верши
-    {1:{"time":45.1,"path":[5,2,6,1]}}
+    """возвращает список конечных вершин с длиной маршрута в часах до каждой и маршрутом {1:{"time":45.1,"path":[5,2,6,1]}}
     """
     node_time = {}
     node_prev = {}
@@ -29,7 +28,7 @@ def calc_shortest_path(base:bg.BaseGraph, ice_cond:IceCondition, speed:float, mo
         current_node = next_nodes.get()[1]
         seen.append(current_node)
         for n in base.graph.neighbors(current_node):
-            new_time = node_time[current_node] + vessel.calc_time(base.graph.get_edge_data(current_node,n)["length"],speed, move_class,ice_cond= 20, icebreaker = icebreaker) #TODO запрос расчета ice_cond
+            new_time = node_time[current_node] + vessel.calc_time(base.graph.get_edge_data(current_node,n)["length"],speed, move_class,ice_cond= ice_cond.condition(current_node,n,node_time[current_node]), icebreaker = icebreaker) #TODO запрос расчета ice_cond
             if node_time[n] > new_time:
                 node_time[n] = new_time
                 node_prev[n] = current_node

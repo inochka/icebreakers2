@@ -141,7 +141,7 @@ base_edges = [(44,15, {"length" : 270.0166416, "id" : 0, "rep_id": 54, "status":
 
 class BaseGraph:
     """
-    Опорный граф, вершины должны нумероваться от 0 последовательно
+    Опорный граф
     """
     def __init__(self):
         self.graph = nx.Graph()
