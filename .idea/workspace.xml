@@ -5,10 +5,14 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="e78089cb-925a-4359-a202-b5ffc0c2e52d" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/frontend/src/assets/styles/popup.scss" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/assets/styles/legend.scss" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/assets/styles/legend.scss" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/frontend/src/components/Layers.vue" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/components/Layers.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/components/Modals/ModalGantt.vue" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/components/Modals/ModalGantt.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/store/common/common-store.ts" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/store/common/common-store.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/components/Map.vue" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/components/Map.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/components/UI/Legend.vue" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/components/UI/Legend.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/mock/icebreakers.ts" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/mock/icebreakers.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/style.css" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/style.css" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -85,7 +89,7 @@
       <workItem from="1717661059401" duration="1000" />
       <workItem from="1717661076783" duration="636000" />
       <workItem from="1717828767763" duration="307000" />
-      <workItem from="1717829092760" duration="33559000" />
+      <workItem from="1717829092760" duration="36084000" />
     </task>
     <servers />
   </component>

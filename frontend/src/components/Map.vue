@@ -1,5 +1,9 @@
 <template>
   <div id="map"/>
+  <div id="popup" class="ol-popup">
+    <a href="#" id="popup-closer" class="ol-popup-closer"></a>
+    <div id="popup-content"></div>
+  </div>
 </template>
 
 <script setup lang="ts">
@@ -19,10 +23,11 @@ import {IBaseEdge, IBaseNode, IPath, IVessel, IWaybill, tTypeWay} from "../types
 import {GeoJSONFeature} from "ol/format/GeoJSON";
 import {Circle, Fill, Icon, Stroke, Style} from "ol/style";
 import {FeatureLike} from "ol/Feature";
-import startPoint from '../assets/icons/port-sign-svgrepo-com.png'
 import endPoint from '../assets/icons/anchor-icon-svgrepo-com.png'
+import {Overlay} from "ol";
 
 const map: Ref<Map | null> = ref(null);
+const popover = ref(undefined)
 
 const {paths, baseNodes, vessels, baseEdges} = storeToRefs(useVesselsStore())
 
@@ -41,7 +46,90 @@ onMounted(() => {
       zoom: 0,
     }),
   });
+
+  const container = document.getElementById('popup');
+  const content = document.getElementById('popup-content');
+  const closer = document.getElementById('popup-closer');
+
+  if (!container || !content || !closer) return
+
+  const popup = new Overlay({
+    element: container,
+    positioning: 'bottom-center',
+    stopEvent: false,
+  });
+
+  closer.onclick = () => {
+    popup.setPosition(undefined);
+    closer.blur();
+    return false;
+  };
+
+  map.value.addOverlay(popup);
+
+  map.value.on('click', (evt) => {
+    const feature = map.value?.forEachFeatureAtPixel(evt.pixel, (feature) => feature);
+
+    disposePopover();
+
+    if (!feature) return
+
+    popup.setPosition(evt.coordinate);
+
+    content.innerHTML = getFeature(feature);
+  });
+
+  map.value.on('pointermove', (e) => {
+    const pixel = map.value?.getEventPixel(e.originalEvent);
+    const hit = map.value?.hasFeatureAtPixel(pixel!);
+    map.value.getTarget().style.cursor = hit ? 'pointer' : '';
+  });
+
+  map.value.on('movestart', disposePopover);
 })
+
+const getFeature = (feature: FeatureLike) => {
+  const properties = feature.getProperties()
+  const type = feature.getGeometry()?.getType()
+
+  return `
+  <p><span style="color: gray">Название: </span>${properties.name}</p>
+  <p><span style="color: gray">Ледовый класс: </span>${properties.ice_class}</p>
+  <p><span style="color: gray">Скорость в узлах по чистой воде: </span>${properties.speed}</p>
+  <p><span style="color: gray">Исходный порт: </span>${properties.source_name}</p>
+  ${properties.target_name && `<p><span style="color: gray">Конечный порт: </span>${properties.target_name}</p>`}
+  <p><span style="color: gray">Дата начала плавания: </span>${properties.start_date}</p>
+  <p><span style="color: gray">Текущая точка: </span>${getTypePoint(properties.event, type)}</p>
+  <p><span style="color: gray">Текущая дата: </span>${properties.time}</p>
+  `
+}
+
+const getTypePoint = (event: tTypeWay, type: 'Point' | 'LineString') => {
+  if (tTypeWay.MOVE === event && type === 'Point') {
+    return 'Исходная точка'
+  }
+
+  if (tTypeWay.MOVE === event || (tTypeWay.FIN === event && type !== 'Point')) {
+    return 'Судно в пути'
+  }
+
+  if (tTypeWay.WAIT === event) {
+    return 'Остановка движения'
+  }
+
+  if (tTypeWay.FORMATION === event) {
+    return 'Проводка караваном'
+  }
+
+  return 'Конечная точка'
+}
+
+const disposePopover = () => {
+  if (popover.value) {
+    popover.value.dispose();
+    popover.value = undefined;
+  }
+}
 
 const getCoords = (point: number) => {
   const currentBaseEdge = baseEdges.value.find((edge: IBaseEdge) => edge.id === point)
@@ -99,7 +187,6 @@ const getFeatures = (waybill: IWaybill[], currentVessel: IVessel) => {
     }
 
     if (idx === waybill.length - 1) {
-      console.log(coordinates, coordinates[1])
       geoJsonData.push({
         type: 'Feature',
         geometry: {
@@ -135,10 +222,22 @@ const getStyles = (feature: FeatureLike) => {
 
   if (type === 'Point' && event === tTypeWay.MOVE) {
     return new Style({
-      image: new Icon({
-        src: startPoint,
-        height: 20,
-        width: 20,
+      fill: new Fill({
+        color: 'blue'
+      }),
+      stroke: new Stroke({
+        width: 3,
+        color: 'blue'
+      }),
+      image: new Circle({
+        fill: new Fill({
+          color: 'blue'
+        }),
+        stroke: new Stroke({
+          width: 5,
+          color: 'blue'
+        }),
+        radius: 5
       }),
     })
   }

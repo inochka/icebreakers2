@@ -168,7 +168,8 @@ const changeParentCheckbox = (type: typeTransport) => {
 
   .list {
     margin-left: 20px;
-    height: 300px;
+    max-height: 300px;
+    min-height: 150px;
     overflow-y: auto;
     padding-right: 10px;
     scrollbar-color: #acace5 #eef3ff;
