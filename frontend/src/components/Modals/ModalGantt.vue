@@ -4,7 +4,7 @@
   </div>
 
   <div class="body">
-    <Gantt v-if="!loading"/>
+    <Gantt />
 
     <div class="legend">
       <div class="legend_elem">
@@ -25,18 +25,6 @@
 
 <script setup lang="ts">
 import Gantt from "../UI/Gantt.vue";
-import {onMounted, ref} from "vue";
-import {useVesselsStore} from "../../store";
-
-const {getVessels, getPaths} = useVesselsStore()
-
-const loading = ref(true)
-
-onMounted(() => {
-  getVessels()
-  getPaths()
-  loading.value = false
-})
 </script>
 
 <style lang="scss" scoped>

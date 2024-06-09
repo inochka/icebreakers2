@@ -3,7 +3,7 @@
     <div>
       <div class="title-wrapper">
         <div class="title-wrapper_block">
-          <Checkbox @onChecked="onCheckAll(typeTransport.ICEBREAKERS)" :checked="checkAllIcebreakers" />
+          <Checkbox @onChecked="onCheckAll(typeTransport.ICEBREAKERS)" :checked="checkAllIcebreakers"/>
           <h3 class="title">Ледоколы</h3>
         </div>
         <ArrowIcon
@@ -28,7 +28,7 @@
     <div>
       <div class="title-wrapper">
         <div class="title-wrapper_block">
-          <Checkbox @onChecked="onCheckAll(typeTransport.VESSELS)" :checked="checkAllVessels" />
+          <Checkbox @onChecked="onCheckAll(typeTransport.VESSELS)" :checked="checkAllVessels"/>
           <h3 class="title">Заявка на проводку</h3>
         </div>
         <ArrowIcon
@@ -49,18 +49,21 @@
         </div>
       </div>
     </div>
+
+    <button class="btn-gantt" :disabled="!paths.length" @click="onOpenGantt">
+      Посмотреть диаграмму Гантта
+    </button>
   </div>
 </template>
 
 <script setup lang="ts">
 import {storeToRefs} from "pinia";
 import Checkbox from "./UI/Checkbox.vue";
-import {useVesselsStore} from "../store";
+import {useCommonStore, useVesselsStore} from "../store";
 import {onMounted, ref} from "vue";
 import Layer from "./Layer.vue";
 import ArrowIcon from '../assets/icons/arrow.svg'
 import {tModal} from "../types.ts";
-import {useCommonStore} from "../store";
 
 enum typeTransport {
   "VESSELS" = 'vessels',
@@ -68,9 +71,9 @@ enum typeTransport {
 }
 
 const {getVessels, getIcebreakers} = useVesselsStore()
-const {vessels, icebreakers} = storeToRefs(useVesselsStore())
+const {vessels, icebreakers, paths} = storeToRefs(useVesselsStore())
 
-const {isLoading} = storeToRefs(useCommonStore())
+const {isLoading, openModal, typeModal} = storeToRefs(useCommonStore())
 
 const isVisibleVessels = ref(true)
 const isVisibleIcebreakers = ref(true)
@@ -82,6 +85,11 @@ const isChangeParentIcebreaker = ref(false)
 onMounted(async () => {
   await Promise.all([getVessels(), getIcebreakers()])
 })
+
+const onOpenGantt = () => {
+  openModal.value = true
+  typeModal.value = tModal.GANTT
+}
 
 const loadGraph = () => {
   isLoading.value = true
@@ -173,6 +181,43 @@ const changeParentCheckbox = (type: typeTransport) => {
       gap: 5px;
       margin-bottom: 3px;
     }
+  }
+
+  .btn-gantt {
+    position: absolute;
+    bottom: 20px;
+    border: none;
+    display: flex;
+    padding: 0.75rem 1.5rem;
+    background-color: #488aec;
+    color: #ffffff;
+    font-size: 0.75rem;
+    line-height: 1rem;
+    font-weight: 700;
+    cursor: pointer;
+    text-align: center;
+    text-transform: uppercase;
+    vertical-align: middle;
+    align-items: center;
+    border-radius: 0.5rem;
+    user-select: none;
+    gap: 0.75rem;
+    box-shadow: 0 4px 6px -1px #488aec31, 0 2px 4px -1px #488aec17;
+    transition: all 0.6s ease;
+  }
+
+  .btn-gantt:hover {
+    box-shadow: 0 10px 15px -3px #488aec4f, 0 4px 6px -2px #488aec17;
+  }
+
+  .btn-gantt:focus,
+  .btn-gantt:active {
+    opacity: 0.85;
+    box-shadow: none;
+  }
+
+  .btn-gantt:disabled, .btn-gantt[disabled=disabled] {
+    background-color: gray;
   }
 }
 </style>
