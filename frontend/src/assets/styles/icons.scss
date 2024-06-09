@@ -1,0 +1,11 @@
+.icon {
+  color: gray;
+  cursor: pointer;
+  transform: translateY(8px);
+  width: 24px;
+  height: 24px;
+
+  &:hover {
+    color: black;
+  }
+}

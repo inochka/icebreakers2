@@ -1,4 +1,6 @@
 <template>
+  <Loader v-if="isLoading" />
+
   <div class="wrapper">
     <div class="cell cell-sidebar">
       <Layers />
@@ -7,6 +9,8 @@
       <Map/>
     </div>
   </div>
+
+  <Legend />
 
   <Teleport to="#modal">
     <Modal v-if="openModal" />
@@ -17,10 +21,12 @@
 import Map from "./components/Map.vue";
 import Layers from "./components/Layers.vue";
 import {storeToRefs} from "pinia";
-import {useStore} from "./store";
 import Modal from "./components/UI/Modal.vue";
+import Loader from "./components/UI/Loader.vue";
+import {useCommonStore} from "./store";
+import Legend from "./components/UI/Legend.vue";
 
-const {openModal} = storeToRefs(useStore())
+const {openModal, isLoading} = storeToRefs(useCommonStore())
 
 </script>
 

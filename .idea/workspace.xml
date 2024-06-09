@@ -5,26 +5,44 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="e78089cb-925a-4359-a202-b5ffc0c2e52d" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/frontend/src/assets/icons/close.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/frontend/src/assets/icons/info.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/frontend/src/assets/styles/checkbox.scss" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/frontend/src/assets/styles/modal.scss" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/frontend/src/components/Modals/Modal.vue" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/frontend/src/components/Modals/ModalVessel.vue" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/frontend/src/store/index.ts" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/frontend/src/store/store.ts" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/frontend/src/store/types.ts" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/frontend/src/types.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/frontend/src/assets/icons/anchor-icon-svgrepo-com.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/frontend/src/assets/icons/arrow.svg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/frontend/src/assets/icons/port-sign-svgrepo-com.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/frontend/src/assets/icons/ship-line-svgrepo-com.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/frontend/src/assets/styles/icons.scss" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/frontend/src/assets/styles/legend.scss" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/frontend/src/components/Layer.vue" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/frontend/src/components/Modals/ModalGantt.vue" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/frontend/src/components/Modals/ModalVesselOrIcebreaker.vue" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/frontend/src/components/UI/Gantt.vue" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/frontend/src/components/UI/Legend.vue" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/frontend/src/components/UI/Loader.vue" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/frontend/src/mock/base_edge.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/frontend/src/mock/base_node.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/frontend/src/mock/icebreakers.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/frontend/src/mock/path.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/frontend/src/mock/vessels.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/frontend/src/store/common/common-store.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/frontend/src/store/common/types.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/frontend/src/store/vessels/types.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/frontend/src/store/vessels/vessels-store.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/index.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/models.json" beforeDir="false" afterPath="$PROJECT_DIR$/docs/models.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/frontend/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/package-lock.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/frontend/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/package.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/frontend/src/App.vue" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/App.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/assets/vue.svg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/assets/icons/path.svg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/assets/styles/modal.scss" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/assets/styles/modal.scss" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/frontend/src/components/Layers.vue" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/components/Layers.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/components/Map.vue" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/components/Map.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/components/Modals/Checkbox.vue" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/components/UI/Checkbox.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/components/Modals/ModalVessel.vue" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/components/UI/Modal.vue" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/components/UI/Modal.vue" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/frontend/src/main.ts" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/main.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/style.css" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/style.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/vite.config.ts" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/vite.config.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/store/index.ts" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/store/index.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/store/store.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/store/types.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/types.ts" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/types.ts" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -51,27 +69,29 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;last_opened_file_path&quot;: &quot;D:/the_system_for_nuclear_icebreaker&quot;,
-    &quot;list.type.of.created.stylesheet&quot;: &quot;SCSS&quot;,
-    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
-    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
-    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
-    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
-    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
-    &quot;ts.external.directory.path&quot;: &quot;D:\\the_system_for_nuclear_icebreaker\\frontend\\node_modules\\typescript\\lib&quot;,
-    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "last_opened_file_path": "D:/epcs-c-web-client-uigis",
+    "list.type.of.created.stylesheet": "SCSS",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "ts.external.directory.path": "D:\\the_system_for_nuclear_icebreaker\\frontend\\node_modules\\typescript\\lib",
+    "vue.rearranger.settings.migration": "true"
   },
-  &quot;keyToStringList&quot;: {
-    &quot;vue.recent.templates&quot;: [
-      &quot;Vue Composition API Component&quot;
+  "keyToStringList": {
+    "vue.recent.templates": [
+      "Vue Composition API Component"
     ]
   }
-}</component>
+}]]></component>
   <component name="RecentsManager">
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="D:\the_system_for_nuclear_icebreaker\frontend\src\assets\icons" />
+      <recent name="D:\the_system_for_nuclear_icebreaker\frontend\src\components\UI" />
       <recent name="D:\the_system_for_nuclear_icebreaker\frontend\src\components\Modals" />
       <recent name="D:\the_system_for_nuclear_icebreaker\frontend" />
     </key>
@@ -79,7 +99,7 @@
   <component name="SharedIndexes">
     <attachedChunks>
       <set>
-        <option value="bundled-js-predefined-1d06a55b98c1-91d5c284f522-JavaScript-WS-241.15989.105" />
+        <option value="bundled-js-predefined-1d06a55b98c1-0b3e54e931b4-JavaScript-WS-241.17011.90" />
       </set>
     </attachedChunks>
   </component>
@@ -98,6 +118,8 @@
       <workItem from="1717617800205" duration="8218000" />
       <workItem from="1717661059401" duration="1000" />
       <workItem from="1717661076783" duration="636000" />
+      <workItem from="1717828767763" duration="307000" />
+      <workItem from="1717829092760" duration="32881000" />
     </task>
     <servers />
   </component>
