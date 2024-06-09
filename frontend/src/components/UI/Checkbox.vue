@@ -1,10 +1,14 @@
 <template>
-  <input type="checkbox"/>
-  <span class="custom-checkbox"></span>
+  <input :checked="checked" type="checkbox"/>
+  <span @click="$emit('onChecked')" class="custom-checkbox"></span>
 </template>
 
 <script setup lang="ts">
+type Props = {
+  checked: Boolean
+}
 
+defineProps<Props>()
 </script>
 
 <style scoped>

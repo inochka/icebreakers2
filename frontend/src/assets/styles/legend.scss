@@ -1,0 +1,39 @@
+.legend {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+
+  &_elem {
+    display: flex;
+    gap: 5px;
+  }
+
+  .square {
+    height: 20px;
+    width: 20px;
+  }
+
+  .move {
+    background: green;
+  }
+
+  .formation {
+    background: blue;
+  }
+
+  .wait {
+    background-color: gray;
+  }
+
+  .circle {
+    height: 20px;
+    width: 20px;
+    background-color: gray;
+    border-radius: 50%;
+  }
+
+  .point-icon {
+    height: 20px;
+    width: 20px;
+  }
+}
