@@ -35,7 +35,7 @@ def test_path():
     paths = nav.calc_shortest_path(base,ice_cond,vessel, vessel.start_date,29,46)
     print(paths)
     base.draw_geo()
-    base.draw_path(paths[46]["path"])
+    base.draw_path(paths[1])
     plt.show()
 
 if __name__ == "__main__":
