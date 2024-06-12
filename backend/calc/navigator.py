@@ -13,7 +13,7 @@ class IceCondition:
         return base_node_u + base_node_v + time_n  #TODO тут должна быть логика расчета по ледовым данным
 
 class Navigator:
-    def calc_shortest_path(base:BaseGraph, ice_cond:IceCondition, vessel:Vessel ,time:datetime,source_node,target_node=None, icebreaker:IceBreaker = None):
+    def calc_shortest_path(self,base:BaseGraph, ice_cond:IceCondition, vessel:Vessel ,time:datetime,source_node,target_node=None, icebreaker:IceBreaker = None):
         """
         base - опорный граф
         ice_cond - ледовые условия
@@ -36,13 +36,14 @@ class Navigator:
         while not next_nodes.empty() and (target_node != None and target_node not in seen):
             current_node = next_nodes.get()[1]
             seen.append(current_node)
-            length = base.graph.get_edge_data(current_node,n)["length"]
-            ice_cond = ice_cond.condition(current_node,n,node_time[current_node])
-            new_time = node_time[current_node] + vessel.calc_time_ice(length, ice_cond, icebreaker)
-            if node_time[n] > new_time:
-                node_time[n] = new_time
-                node_prev[n] = current_node
-                next_nodes.put((new_time,n))
+            for n in base.graph.neighbors(current_node):
+                length = base.graph.get_edge_data(current_node,n)["length"]
+                ice = ice_cond.condition(current_node,n,node_time[current_node])
+                new_time = node_time[current_node] + vessel.calc_time(length, ice, icebreaker)
+                if node_time[n] > new_time:
+                    node_time[n] = new_time
+                    node_prev[n] = current_node
+                    next_nodes.put((new_time,n))
         res = {}
         def calc_path(n,source_node,node_prev):
             path = [n]

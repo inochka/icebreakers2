@@ -32,10 +32,10 @@ def test_path():
     icebreaker = IceBreaker()
     icebreaker.load_from(icebreaker_data[1])
     nav = Navigator()
-    paths = nav.calc_shortest_path(base,ice_cond,vessel, vessel.start_date,29)
+    paths = nav.calc_shortest_path(base,ice_cond,vessel, vessel.start_date,29,46)
     print(paths)
     base.draw_geo()
-    base.draw_path(paths[16]["path"])
+    base.draw_path(paths[46]["path"])
     plt.show()
 
 if __name__ == "__main__":
