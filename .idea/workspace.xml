@@ -5,14 +5,20 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="e78089cb-925a-4359-a202-b5ffc0c2e52d" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/frontend/src/assets/styles/popup.scss" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend/__init__.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend/app.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend/calc/__init__.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend/constants.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend/data/__init__.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend/data/base_graph_data.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend/data/vessels_data.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend/models.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend/utils.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/requirements.txt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/assets/styles/legend.scss" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/assets/styles/legend.scss" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/components/Layers.vue" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/components/Layers.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/components/Map.vue" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/components/Map.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/components/UI/Legend.vue" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/components/UI/Legend.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/mock/icebreakers.ts" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/mock/icebreakers.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/style.css" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/style.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/calc/base_graph.py" beforeDir="false" afterPath="$PROJECT_DIR$/backend/calc/base_graph.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/calc/vessel.py" beforeDir="false" afterPath="$PROJECT_DIR$/backend/calc/vessel.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -22,14 +28,28 @@
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
       <list>
-        <option value="TypeScript File" />
         <option value="Vue Composition API Component" />
-        <option value="SCSS File" />
+        <option value="Python Script" />
       </list>
     </option>
   </component>
   <component name="Git.Settings">
+    <option name="RECENT_BRANCH_BY_REPOSITORY">
+      <map>
+        <entry key="$PROJECT_DIR$" value="main" />
+      </map>
+    </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+    <option name="UPDATE_TYPE" value="REBASE" />
+  </component>
+  <component name="HighlightingSettingsPerFile">
+    <setting file="file://$PROJECT_DIR$/backend/app.py" root0="FORCE_HIGHLIGHTING" />
+  </component>
+  <component name="LLMProjectSettings">
+    <option name="turned_on" value="false" />
+  </component>
+  <component name="MarkdownSettingsMigration">
+    <option name="stateVersion" value="1" />
   </component>
   <component name="ProjectColorInfo">{
   &quot;associatedIndex&quot;: 8
@@ -41,15 +61,19 @@
   </component>
   <component name="PropertiesComponent"><![CDATA[{
   "keyToString": {
+    "FastAPI.app.executor": "Run",
+    "Python.base_graph.executor": "Debug",
+    "RunOnceActivity.OpenProjectViewOnStart": "true",
     "RunOnceActivity.ShowReadmeOnStart": "true",
-    "last_opened_file_path": "D:/epcs-c-web-client-uigis",
-    "list.type.of.created.stylesheet": "SCSS",
+    "git-widget-placeholder": "api__draft",
+    "last_opened_file_path": "//wsl$/Ubuntu/home/nttos/PycharmProjects/the_system_for_nuclear_icebreaker/backend",
     "node.js.detected.package.eslint": "true",
     "node.js.detected.package.tslint": "true",
     "node.js.selected.package.eslint": "(autodetect)",
     "node.js.selected.package.tslint": "(autodetect)",
     "nodejs_package_manager_path": "npm",
-    "ts.external.directory.path": "D:\\the_system_for_nuclear_icebreaker\\frontend\\node_modules\\typescript\\lib",
+    "settings.editor.selected.configurable": "reference.idesettings.debugger.python",
+    "ts.external.directory.path": "D:\\the_system_for_nuclear_icebreaker\\node_modules\\typescript\\lib",
     "vue.rearranger.settings.migration": "true"
   },
   "keyToStringList": {
@@ -59,17 +83,39 @@
   }
 }]]></component>
   <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="\\wsl$\Ubuntu\home\nttos\PycharmProjects\the_system_for_nuclear_icebreaker\backend" />
+      <recent name="\\wsl$\Ubuntu\home\nttos\PycharmProjects\the_system_for_nuclear_icebreaker\backend\data" />
+    </key>
     <key name="MoveFile.RECENT_KEYS">
-      <recent name="D:\the_system_for_nuclear_icebreaker\frontend\src\assets\icons" />
-      <recent name="D:\the_system_for_nuclear_icebreaker\frontend\src\components\UI" />
-      <recent name="D:\the_system_for_nuclear_icebreaker\frontend\src\components\Modals" />
+      <recent name="\\wsl$\Ubuntu\home\nttos\PycharmProjects\the_system_for_nuclear_icebreaker\backend\data" />
+      <recent name="\\wsl$\Ubuntu\home\nttos\PycharmProjects\the_system_for_nuclear_icebreaker\backend" />
       <recent name="D:\the_system_for_nuclear_icebreaker\frontend" />
     </key>
+  </component>
+  <component name="RunManager">
+    <configuration name="app" type="Python.FastAPI">
+      <option name="additionalOptions" value="--port 8003" />
+      <option name="file" value="\\wsl$\Ubuntu\home\nttos\PycharmProjects\the_system_for_nuclear_icebreaker\backend\app.py" />
+      <module name="the_system_for_nuclear_icebreaker" />
+      <option name="ENV_FILES" value="" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <option name="SDK_HOME" value="/home/nttos/.virtualenvs/the_system_for_nuclear_icebreaker/bin/python" />
+      <option name="SDK_NAME" value="Python 3.10.12 WSL (Ubuntu): (/home/nttos/.virtualenvs/the_system_for_nuclear_icebreaker/bin/python)" />
+      <option name="WORKING_DIRECTORY" value="" />
+      <option name="IS_MODULE_SDK" value="false" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
+      <option name="launchJavascriptDebuger" value="false" />
+      <method v="2" />
+    </configuration>
   </component>
   <component name="SharedIndexes">
     <attachedChunks>
       <set>
-        <option value="bundled-js-predefined-1d06a55b98c1-0b3e54e931b4-JavaScript-WS-241.17011.90" />
+        <option value="bundled-python-sdk-5a2391486177-2887949eec09-com.jetbrains.pycharm.pro.sharedIndexes.bundled-PY-233.13763.11" />
       </set>
     </attachedChunks>
   </component>
@@ -84,16 +130,49 @@
       <workItem from="1717534070365" duration="2418000" />
       <workItem from="1717572810475" duration="22000" />
       <workItem from="1717586136501" duration="336000" />
-      <workItem from="1717586486822" duration="1168000" />
-      <workItem from="1717617800205" duration="8218000" />
-      <workItem from="1717661059401" duration="1000" />
-      <workItem from="1717661076783" duration="636000" />
-      <workItem from="1717828767763" duration="307000" />
-      <workItem from="1717829092760" duration="36084000" />
+      <workItem from="1718097963865" duration="1333000" />
+      <workItem from="1718131535628" duration="7950000" />
     </task>
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="3" />
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/backend/calc/base_graph.py</url>
+          <line>68</line>
+          <option name="timeStamp" value="1" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/backend/app.py</url>
+          <line>15</line>
+          <option name="timeStamp" value="5" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/backend/app.py</url>
+          <line>27</line>
+          <option name="timeStamp" value="6" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/backend/utils.py</url>
+          <line>3</line>
+          <option name="timeStamp" value="7" />
+        </line-breakpoint>
+      </breakpoints>
+      <default-breakpoints>
+        <breakpoint type="python-exception">
+          <properties notifyOnTerminate="true" exception="BaseException">
+            <option name="notifyOnTerminate" value="true" />
+          </properties>
+        </breakpoint>
+      </default-breakpoints>
+    </breakpoint-manager>
+  </component>
+  <component name="com.intellij.coverage.CoverageDataManagerImpl">
+    <SUITE FILE_PATH="coverage/the_system_for_nuclear_icebreaker$base_graph.coverage" NAME="base_graph Coverage Results" MODIFIED="1718134592839" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/backend/calc" />
+    <SUITE FILE_PATH="coverage/the_system_for_nuclear_icebreaker$app.coverage" NAME="app Coverage Results" MODIFIED="1718137984008" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="" />
   </component>
 </project>
