@@ -60,14 +60,16 @@ class Vessel(AbstractVessel):
 
 
 
-    def calc_time_ice(self,length,ice_cond, icebreaker:IceBreaker):
+    def calc_time(self,length,ice_cond, icebreaker:IceBreaker):
         """
         Расчет времени прохождения ребра длиной length в условиях ice_cond ледокольной проводкой
         """
-        self_time = calc_time(length, self.speed, self.move_pen_19_15_ice, self.move_pen_14_10_ice, ice_cond )
-        icbreaker_time = icebreaker.calc_time(length,ice_cond)
-        return max(self_time,icbreaker_time)
-
+        self_time = super.calc_time(length, self.speed, self.move_pen_19_15_ice, self.move_pen_14_10_ice, ice_cond )
+        if icebreaker:  
+            icebreaker_time = icebreaker.calc_time(length,ice_cond)
+            return max(self_time,icebreaker_time)
+        else:
+            return self_time
     def set_move_pen(self):
         """
         Рассчитывает штрафы на движение по ледовому классу
@@ -84,9 +86,9 @@ class Vessel(AbstractVessel):
             self.move_pen_14_10_ice = 0.3
         elif self.ice_class in ["Arc 7"]:
             self.move_pen_19_15 = 0.4
-            self.move_pen_19_15_ice = 0.4
-            self.move_pen_14_10 = 1
-            self.move_pen_14_10_ice = 0.8        
+            self.move_pen_19_15_ice = 0
+            self.move_pen_14_10 = 0.85
+            self.move_pen_14_10_ice = 0.2        
         elif self.ice_class in ["Arc 9"]:
             raise ValueError ("Для Arc 9 нужно использовать отдельный конструктор IceBreaker ")
         else:
