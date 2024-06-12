@@ -15,9 +15,13 @@ class Context:
         tmp = templates_data[template_name]
         print(tmp)
         for v in tmp['vessels']:
-            self.vessels[v] = vessels_data[v]
+            new_v = Vessel()
+            new_v.load_from(vessels_data[v])
+            self.vessels[v] = new_v
         for v in tmp['icebreakers']:
-            self.icebreakers[v] = icebreaker_data[v]
+            new_v = IceBreaker()
+            new_v.load_from(icebreaker_data[v])
+            self.icebreakers[v] = new_v
 
 if __name__ == "__main__":
     context = Context()
