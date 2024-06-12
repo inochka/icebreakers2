@@ -4,3 +4,4 @@ import sys
 print (sys.path)
 
 #export PYTHONPATH='/Users/casper/hakaton/git/the_system_for_nuclear_icebreaker'
+#export PYTHONPATH=$PYTHONPATH:/Users/casper/hakaton/git/the_system_for_nuclear_icebreaker

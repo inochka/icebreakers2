@@ -1,8 +1,10 @@
-from backend.calc.navigator import Navigator,IceCondition
+from backend.calc.navigator import Navigator,IceCondition,Grade
 from base_graph import BaseGraph
 import matplotlib.pyplot as plt
 from vessel import Vessel,IceBreaker
 from backend.data.vessels_data import vessels_data, icebreaker_data
+from context import Context
+from time import time
 
 def set_g_base2(base): #задать базовый граф 2 вершины
     # определяем список узлов (ID узлов)
@@ -38,6 +40,76 @@ def test_path():
     base.draw_path(paths[1])
     plt.show()
 
+def test_calc_upper_grade():
+    base = BaseGraph()
+    ice_cond = IceCondition()
+    base.set_base_values()   
+    context = Context()
+    context.load_from_template('test_1')
+    nav = Navigator()
+    grade,paths = nav.rough_estimate(base,ice_cond,context)
+    print("stuck_vessels: ")
+    print(grade.stuck_vessels)
+    print("total_time: ")
+    print(grade.total_time)
+    print("paths: ")
+    print(paths)
+
+def test_calc_lower_grade():
+    base = BaseGraph()
+    ice_cond = IceCondition()
+    base.set_base_values()   
+    context = Context()
+    context.load_from_template('test_1')
+    nav = Navigator()
+    grade,paths = nav.rough_estimate(base,ice_cond,context,with_best_icebreaker=True)
+    print("stuck_vessels: ")
+    print(grade.stuck_vessels)
+    print("total_time: ")
+    print(grade.total_time)
+    print("paths: ")
+    print(paths)
+
+def test_calc_lower_grade():
+    base = BaseGraph()
+    ice_cond = IceCondition()
+    base.set_base_values()   
+    context = Context()
+    context.load_from_template('test_1')
+    nav = Navigator()
+    grade,paths = nav.rough_estimate(base,ice_cond,context,with_best_icebreaker=True)
+    print("stuck_vessels: ")
+    print(grade.stuck_vessels)
+    print("total_time: ")
+    print(grade.total_time)
+    print("paths: ")
+    print(paths)
+
+def test_all_vessels_path_from():
+    base = BaseGraph()
+    ice_cond = IceCondition()
+    base.set_base_values()   
+    context = Context()
+    context.load_from_template('test_1')
+    nav = Navigator()
+    res = nav.all_vessels_path_from(base,ice_cond,context)
+    print(res)
+
+def test_create_calc_cache():
+    base = BaseGraph()
+    ice_cond = IceCondition()
+    base.set_base_values()   
+    context = Context()
+    context.load_from_template('test_1')
+    nav = Navigator()
+    nav.create_calc_cache(base, ice_cond, context)
+    print(nav.priority)    
+
 if __name__ == "__main__":
-    test_path()
+    start = time()
+    print('===============')
+    test_create_calc_cache()
+    fin = time()
+    print('============'+str(fin-start))
+
 
