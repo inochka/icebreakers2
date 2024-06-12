@@ -1,6 +1,7 @@
 from enum import Enum
 import math
-import datetime as dt
+from datetime import datetime
+from backend.utils import parse_dates
 from backend.models import VesselModel, IcebreakerModel, CustomBaseModel
 
 class AbstractVessel:
@@ -10,14 +11,14 @@ class AbstractVessel:
     ice_class:str #Ледовый класс, допустимые значения "NO","Arc 1","Arc 2","Arc 3", "Arc 4","Arc 5","Arc 7","Arc 9"
     speed:float #скорость в узлах по чистой воде
     source:int #Пункт начала плавания, номер вершины в маршрутном графе
-    start_date:dt.date
+    start_date:datetime
     move_pen_19_15: float #штраф при самостоятельном движении, если запрещено то 1
     move_pen_14_10: float  #штраф при самостоятельном под проводкой, если запрещено то 1 
-    def calc_time(self,length,ice_cond):
+    def calc_time(self,length,ice_cond_val):
         """
-        Расчет времени прохождения ребра длиной length в условиях ice_cond
+        Расчет времени прохождения ребра длиной length в условиях ice_cond_val
         """
-        return calc_time(length, self.speed, self.move_pen_19_15, self.move_pen_14_10, ice_cond )
+        return calc_time(length, self.speed, self.move_pen_19_15, self.move_pen_14_10, ice_cond_val )
 
     @classmethod
     def make_model_from_dict_entry(cls, id: int, attrs: dict):
@@ -37,7 +38,7 @@ class IceBreaker(AbstractVessel):
         self.source = data["source"]
         self.move_pen_19_15 = data["move_pen_19_15"]
         self.move_pen_14_10 = data["move_pen_14_10"]        
-        self.start_date = dt.strptime(data["start_date"], '%d.%m.%Y')
+        self.start_date = parse_dates(data["start_date"])
 
 class Vessel(AbstractVessel):
 
@@ -55,19 +56,21 @@ class Vessel(AbstractVessel):
         self.speed = data["speed"]
         self.source = data["source"]
         self.target = data["target"]
-        self.start_date = dt.strptime(data["start_date"], '%d.%m.%Y')
+        self.start_date = parse_dates(data["start_date"])
         self.set_move_pen()
 
 
 
-    def calc_time_ice(self,length,ice_cond, icebreaker:IceBreaker):
+    def calc_time(self,length,ice_cond_val, icebreaker:IceBreaker):
         """
-        Расчет времени прохождения ребра длиной length в условиях ice_cond ледокольной проводкой
+        Расчет времени прохождения ребра длиной length в условиях ice_cond_val ледокольной проводкой
         """
-        self_time = calc_time(length, self.speed, self.move_pen_19_15_ice, self.move_pen_14_10_ice, ice_cond )
-        icbreaker_time = icebreaker.calc_time(length,ice_cond)
-        return max(self_time,icbreaker_time)
-
+        self_time = super().calc_time(length, ice_cond_val )
+        if icebreaker:  
+            icebreaker_time = icebreaker.calc_time(length,ice_cond_val)
+            return max(self_time,icebreaker_time)
+        else:
+            return self_time
     def set_move_pen(self):
         """
         Рассчитывает штрафы на движение по ледовому классу
@@ -84,31 +87,31 @@ class Vessel(AbstractVessel):
             self.move_pen_14_10_ice = 0.3
         elif self.ice_class in ["Arc 7"]:
             self.move_pen_19_15 = 0.4
-            self.move_pen_19_15_ice = 0.4
-            self.move_pen_14_10 = 1
-            self.move_pen_14_10_ice = 0.8        
+            self.move_pen_19_15_ice = 0
+            self.move_pen_14_10 = 0.85
+            self.move_pen_14_10_ice = 0.2        
         elif self.ice_class in ["Arc 9"]:
             raise ValueError ("Для Arc 9 нужно использовать отдельный конструктор IceBreaker ")
         else:
             raise ValueError ("Неизвестное значение ледового класса: "+str(self.ice_class))
 
-def calc_time(length, speed, move_pen_19_15, move_pen_14_10, ice_cond ):
+def calc_time(length, speed, move_pen_19_15, move_pen_14_10, ice_cond_val ):
     """
     Рассчитывает время прохождения ребра в часах Если для данного льда самостоятельное движение невозможно возвращается бесконечность math.inf
     length - расстояние в морских милях
     speed - скорость в узлах (морских миль в час) по чистой воде
     move_pen_19_15 - штраф по льду 19-15
     move_pen_14_10 - штраф по льду 14-10
-    ice_cond - ледовые условия на маршруте
+    ice_cond_val - ледовые условия на маршруте
     """
     assert(length>0)
     assert(speed>0)
     #определяем тяжесть ледовых условий
-    if ice_cond >= 19.5:
+    if ice_cond_val >= 19.5:
         move_pen = 0
-    elif ice_cond >= 14.5:
+    elif ice_cond_val >= 14.5:
         move_pen = move_pen_19_15
-    elif ice_cond >=10: 
+    elif ice_cond_val >=10: 
         move_pen = move_pen_14_10 
     else: 
         move_pen = 1
