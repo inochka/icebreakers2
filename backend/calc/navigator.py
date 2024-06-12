@@ -8,7 +8,7 @@ import matplotlib.pyplot as plt
 
 class IceCondition:
     """Хранение данных о ледовой обстановке"""
-    def condition(self, base_node_u,base_node_v, time_n:dt.datetime)->float:
+    def condition(self, base_node_u, base_node_v, time_n:dt.datetime)->float:
         """Возвращает ледовые условия для ребра u-v на момент времени time_n"""
         return base_node_u + base_node_v + time_n  #TODO тут должна быть логика расчета по ледовым данным
 
