@@ -9,6 +9,10 @@
       <p>Проводка караваном</p>
     </div>
     <div class="legend_elem">
+      <div class="square without-formation"></div>
+      <p>Движение без каравана</p>
+    </div>
+    <div class="legend_elem">
       <div class="circle wait"></div>
       <p>Ожидание</p>
     </div>

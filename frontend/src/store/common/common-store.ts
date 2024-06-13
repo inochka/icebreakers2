@@ -11,7 +11,5 @@ export const useCommonStore = defineStore<
         modalInfo: null,
 
         isLoading: false,
-
-        animationId: null
     }),
 })
