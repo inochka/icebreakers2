@@ -1,11 +1,9 @@
-import networkx as nx
 from datetime import datetime
 import math
 from base_graph import BaseGraph
 from vessel import Vessel,IceBreaker
 from queue import PriorityQueue
-from context import Context
-import matplotlib.pyplot as plt
+from context import Context,Grade
 from backend.constants import PathEventsType
 from backend.utils import add_hours
 
@@ -15,10 +13,7 @@ class IceCondition:
         """Возвращает ледовые условия для ребра u-v на момент времени time_n"""
         return 16  #TODO тут должна быть логика расчета по ледовым данным
 
-class Grade:
-    """Оценка стоимости проводки"""
-    stuck_vessels:int = 0 #количество судов не достигших точки назначения
-    total_time:int = 0 #общее время всех судов на маршруте в часах (на считая ледоколов) в часах
+
 
 class Navigator:
     #сохраненные результаты расчетов

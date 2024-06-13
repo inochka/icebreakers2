@@ -63,12 +63,11 @@ def test_calc_lower_grade():
     context.load_from_template('test_1')
     nav = Navigator()
     grade,paths = nav.rough_estimate(base,ice_cond,context,with_best_icebreaker=True)
-    print("stuck_vessels: ")
-    print(grade.stuck_vessels)
-    print("total_time: ")
-    print(grade.total_time)
-    print("paths: ")
-    print(paths)
+    context.res_grade = grade
+    context.res_vessels = paths
+    ship_path = context.make_list_of_models_for_res_vessels()
+    print(ship_path)
+
 
 def test_calc_lower_grade():
     base = BaseGraph()

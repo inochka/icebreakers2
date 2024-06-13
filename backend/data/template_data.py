@@ -19,5 +19,9 @@ templates_data = {
     'test_1':{'name':"Заявки первой недели",
             'vessels':list(v for v in islice(vessels_data,0,4)),
             'icebreakers':list(v for v in islice(icebreaker_data,0,len(icebreaker_data)))
+            },
+     'test_2'{'name':"Тест судна ледовый класс 7",
+            'vessels':[6],
+            'icebreakers':[1,2]
             }
 }

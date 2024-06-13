@@ -57,11 +57,13 @@ class BaseEdge(CustomBaseModel):
     status: Optional[int] = None  # на сессии ответов на вопросы сказали что игнорируем
 
 class PathEvent(CustomBaseModel):
-    event: PathEventsType  # тип события (move, wait, formation, fin)
+    event: PathEventsType  # тип события (move, wait, formation, fin, stuck)
     point: int  # где произошло событие
     time: datetime  # когда произошло событие
 
-class ShipPath(CustomBaseModel):
+class VesselPath(CustomBaseModel):
+    vessel_id: int
+    total_time_hours: float 
     start_date: datetime
     end_date: datetime
     source: int
@@ -72,7 +74,15 @@ class ShipPath(CustomBaseModel):
     min_ice_condition: Optional[float] = None  # худшие ледовые условия на маршруте
     speed: Optional[float] = None  # средняя скорость на маршруте
     waybill: List[PathEvent]   # описание пути
-    path_line: Optional[str] = None  # маршрут для отрисовки
+
+class IcebreakerPath(CustomBaseModel):
+    icebreaker_id: int
+    start_date: datetime
+    source: int
+    source_name: str
+    min_ice_condition: Optional[float] = None  # худшие ледовые условия на маршруте
+    waybill: List[PathEvent]   # описание пути
+
 
 class PostCalcPath(CustomBaseModel):
     vessel_id: int  # идентификатор судна
@@ -82,3 +92,11 @@ class PostCalcPathIce(CustomBaseModel):
     icebreaker_id: int
     formation_point: int  # точка начала проводки
     leave_point: int  # точка окончания проводки
+
+class Template(CustomBaseModel):
+    id: str
+    name: str
+
+class Algorythm(CustomBaseModel):
+    id: str
+    name: str
