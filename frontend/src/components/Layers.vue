@@ -18,7 +18,7 @@
               @changeParentCheckbox="changeParentCheckbox(typeTransport.ICEBREAKERS)"
               :layer="icebreaker"
               :is-change-parent="isChangeParentIcebreaker"
-              :type="tModal?.ICEBREAKER"
+              :type="typeTransport.ICEBREAKER"
               :is-check-parent="checkAllIcebreakers"
           />
         </div>
@@ -44,7 +44,7 @@
               @changeParentCheckbox="changeParentCheckbox(typeTransport.VESSELS)"
               :layer="vessel"
               :is-check-parent="checkAllVessels"
-              :type="tModal?.VESSEL"
+              :type="typeTransport.VESSEL"
           />
         </div>
       </div>
@@ -65,14 +65,10 @@ import {useCommonStore, useVesselsStore} from "../store";
 import {onMounted, ref} from "vue";
 import Layer from "./Layer.vue";
 import ArrowIcon from '../assets/icons/arrow.svg'
-import {tModal} from "../types.ts";
+import {IIcebreaker, IVessel, tModal} from "../types.ts";
+import {typeTransport} from "../store/common/types.ts";
 
-enum typeTransport {
-  "VESSELS" = 'vessels',
-  'ICEBREAKERS' = 'icebreakers',
-}
-
-const {getVessels, getIcebreakers} = useVesselsStore()
+const {getVessels, getIcebreakers, getPath} = useVesselsStore()
 const {vessels, icebreakers, paths} = storeToRefs(useVesselsStore())
 
 const {isLoading, openModal, typeModal} = storeToRefs(useCommonStore())
@@ -101,27 +97,47 @@ const loadGraph = () => {
   }, 1000)
 }
 
-const onCheckAll = (type: typeTransport) => {
+const getUniqData = (list: IVessel[] | IIcebreaker[]) => {
+  return list.reduce((accumulator, item2) => {
+        if (!accumulator.some(item1 =>
+            item1.id === item2.id)) {
+          accumulator.push(item2);
+        }
+        return accumulator;
+      }, paths.value);
+}
+
+const getAllPaths = async (list: IVessel[] | IIcebreaker[], type: typeTransport) => {
+  loadGraph()
+
+  await Promise.all(getUniqData(list).map(async (seaTransport: IVessel | IIcebreaker) => {
+    await getPath(seaTransport.id, type)
+  }))
+}
+
+const onCheckAll = async (type: typeTransport) => {
   if (type === 'vessels') {
     checkAllVessels.value = !checkAllVessels.value
 
     if (!checkAllVessels.value) {
+      paths.value = []
       isChangeParentVessel.value = true
       return;
     }
 
-    loadGraph()
+    await getAllPaths(vessels.value, type)
     return
   }
 
   checkAllIcebreakers.value = !checkAllIcebreakers.value
 
   if (!checkAllIcebreakers.value) {
+    paths.value = []
     isChangeParentIcebreaker.value = true
     return
   }
 
-  loadGraph()
+  await getAllPaths(icebreakers.value, type)
 }
 
 const changeParentCheckbox = (type: typeTransport) => {
