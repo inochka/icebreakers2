@@ -10,6 +10,7 @@ from dateutil import parser
 from scipy.interpolate import LinearNDInterpolator
 import matplotlib.pyplot as plt
 from backend.calc.base_graph import BaseGraph
+import backend.config
 
 logger = logging.getLogger(__name__)
 
@@ -19,13 +20,28 @@ class IceCondition:
 
     dfs: dict[datetime, pd.DataFrame]
     interpolators: dict[datetime, LinearNDInterpolator]
+    graphs_with_conds: dict[datetime, Graph]
 
-    def __init__(self, file_path: Path | str):
+    def __init__(self, file_path: Path | str, graph: Graph):
         self.dfs = self.read_file(file_path)
         interpolators = {}
         for dt, df in self.dfs.items():
           interpolators[dt] =  self.make_interpolator(df)
         self.interpolators = interpolators
+
+        # просчитываем граф весов
+        self.graphs_with_conds = {}
+        for dt in self.dfs.keys():
+            logger.info(f"Calculating weights for base graph at {dt}")
+            self.graphs_with_conds[dt] = self.obtain_condition_for_graph(graph, dt)
+
+    def condition(self, base_node_u, base_node_v, dt :datetime) -> float:
+        """
+        Метод для получения ледовых условий на ребре по заданным идентификаторам его вершин
+        """
+        forecast_date = self.find_appropriate_conditions_date(list(self.interpolators.keys()), dt)
+        return self.graphs_with_conds[forecast_date][base_node_u][base_node_v]['ice_condition']
+
 
     def obtain_condition_for_edge(self, u: np.ndarray, v: np.ndarray, dt: datetime)->float:
         """
@@ -98,10 +114,6 @@ class IceCondition:
     @staticmethod
     def convert_str_to_datetime(datestr: str) -> datetime:
         return parser.parse(datestr)
-
-    def condition(self, base_node_u, base_node_v, time_n: datetime)->float:
-        """Возвращает ледовые условия для ребра u-v на момент времени time_n"""
-        return base_node_u + base_node_v + time_n  #TODO тут должна быть логика расчета по ледовым данным
 
     def read_file(self, file_path: str | Path):
         logger.info(f"Reading ice conditions file...")
@@ -179,7 +191,9 @@ class IceCondition:
 
 
 file_path = "../input_files/IntegrVelocity.xlsx"
-ice_cond = IceCondition(file_path)
+base_graph = BaseGraph()
+base_graph.set_base_values()
+ice_cond = IceCondition(file_path, base_graph.graph)
 u = np.array([70, 80])
 v = np.array([75, 68])
 dt = datetime(year=2020, month=3, day=1)
@@ -189,3 +203,6 @@ graph = BaseGraph()
 graph.set_base_values()
 new_graph = ice_cond.obtain_condition_for_graph(graph.graph, dt)
 print(new_graph)
+#edge = base_graph.graph.edges[0][1]
+cond = ice_cond.condition(0, 43, dt)
+print(cond)

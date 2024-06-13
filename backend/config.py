@@ -1,10 +1,5 @@
 import logging.config
 import os
-import sys
-from datetime import datetime
-from pathlib import Path
-
-from dotenv import load_dotenv
 
 
 LOGGING = {
