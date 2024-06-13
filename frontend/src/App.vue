@@ -6,7 +6,7 @@
       <Layers/>
     </div>
     <div class="cell cell-map">
-      <Map2/>
+      <Map/>
     </div>
   </div>
 
@@ -18,7 +18,7 @@
 </template>
 
 <script setup lang="ts">
-import Map2 from "./components/Map2.vue";
+import Map from "./components/Map.vue";
 import Layers from "./components/Layers.vue";
 import {storeToRefs} from "pinia";
 import Modal from "./components/UI/Modal.vue";

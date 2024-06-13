@@ -14,12 +14,12 @@ import {onMounted, Ref, ref, watch} from "vue";
 import {OSM} from "ol/source";
 import 'ol/ol.css';
 import {fromLonLat, transform} from 'ol/proj';
-import {useCommonStore, useVesselsStore} from "../store";
+import {useVesselsStore} from "../store";
 import {storeToRefs} from "pinia";
 import VectorLayer from "ol/layer/Vector";
 import VectorSource from "ol/source/Vector";
 import {GeoJSON} from "ol/format";
-import {IBaseEdge, IBaseNode, IPath, IVessel, IWaybill, tTypeWay} from "../types.ts";
+import {IBaseEdge, IBaseNode, IIcebreaker, IPath, IVessel, IWaybill, tTypeWay, typeTransport} from "../types.ts";
 import {GeoJSONFeature} from "ol/format/GeoJSON";
 import {Circle, Fill, Icon, Stroke, Style} from "ol/style";
 import Feature, {FeatureLike} from "ol/Feature";
@@ -30,10 +30,8 @@ const map: Ref<Map | null> = ref(null);
 const popover = ref(undefined)
 
 const vectorLayers: Ref<Record<string, VectorLayer<Feature<Geometry>>>> = ref({})
-const vectorSources: Ref<Record<string, VectorSource<Feature<Geometry>>>> = ref({})
 
-const {paths, baseNodes, vessels, baseEdges} = storeToRefs(useVesselsStore())
-const {animationId} = storeToRefs(useCommonStore())
+const {paths, baseNodes, vessels, baseEdges, icebreakers} = storeToRefs(useVesselsStore())
 
 onMounted(() => {
   map.value = new Map({
@@ -139,7 +137,6 @@ const getCoords = (point: number) => {
   const currentBaseEdge = baseEdges.value.find((edge: IBaseEdge) => edge.id === point)
 
   if (!currentBaseEdge) return []
-
   const {start_point_id, end_point_id} = currentBaseEdge;
 
   const startPoint: IBaseNode | undefined = baseNodes.value.find(({id}: IBaseNode) => id === start_point_id);
@@ -147,12 +144,12 @@ const getCoords = (point: number) => {
   if (!endPoint || !startPoint) return [];
 
   return [
-    [fromLonLat([startPoint.lat, startPoint.lon])],
-    [fromLonLat([endPoint.lat, endPoint.lon])],
+    [fromLonLat([startPoint.lon, startPoint.lat])],
+    [fromLonLat([endPoint.lon, endPoint.lat])],
   ]
 }
 
-const getFeatures = (waybill: IWaybill[], currentVessel: IVessel) => {
+const getFeatures = (waybill: IWaybill[], currentVessel: IVessel, success: boolean) => {
   const geoJsonData: GeoJSONFeature[] = []
 
   waybill.forEach((line: IWaybill, idx: number) => {
@@ -165,11 +162,11 @@ const getFeatures = (waybill: IWaybill[], currentVessel: IVessel) => {
         type: 'Feature',
         geometry: {
           'type': 'Point',
-          'coordinates': coordinates[0],
+          'coordinates': coordinates[0][0],
         },
         properties: {
           ...line,
-          ...currentVessel
+          ...currentVessel,
         },
       })
 
@@ -212,7 +209,8 @@ const getFeatures = (waybill: IWaybill[], currentVessel: IVessel) => {
       },
       properties: {
         ...line,
-        ...currentVessel
+        ...currentVessel,
+        success
       },
     })
   })
@@ -221,7 +219,7 @@ const getFeatures = (waybill: IWaybill[], currentVessel: IVessel) => {
 }
 
 const getStyles = (feature: FeatureLike) => {
-  const {event} = feature.getProperties()
+  const {event, success} = feature.getProperties()
   const type = feature.getGeometry()?.getType()
 
   if (type === 'Point' && event === tTypeWay.MOVE) {
@@ -281,7 +279,7 @@ const getStyles = (feature: FeatureLike) => {
   if (event === tTypeWay.MOVE || event === tTypeWay.FIN) {
     return new Style({
       stroke: new Stroke({
-        color: 'green',
+        color: success ? 'green' : 'red',
         width: 2,
       })
     })
@@ -297,12 +295,15 @@ const getStyles = (feature: FeatureLike) => {
 
 const createGeoJson = () => {
   paths.value.forEach((item: IPath) => {
-    const {waybill, id_vessel} = item
+    const {waybill, id, type, success} = item
 
-    const currentVessel = vessels.value.find((vessel: IVessel) => vessel.id === id_vessel)
+    if (vectorLayers.value[id]) return
 
-    if (!currentVessel) {
-      throw new Error(`Unknown vessel: ${id_vessel}`)
+    const listTransport = type === typeTransport.VESSELS ? vessels.value : icebreakers.value
+    const seaTransport = listTransport.find((transport: IVessel | IIcebreaker) => transport.id === id)
+
+    if (!seaTransport) {
+      throw new Error(`Unknown transport: ${id}`)
     }
 
     const features = {
@@ -313,31 +314,41 @@ const createGeoJson = () => {
           name: 'EPSG:3857',
         },
       },
-      features: getFeatures(waybill, currentVessel),
+      features: getFeatures(waybill, seaTransport, success),
     }
     const vectorSource = new VectorSource({
       features: new GeoJSON().readFeatures(features),
     });
-
-    vectorSources.value[id_vessel] = vectorSource
 
     const vectorLayer = new VectorLayer({
       source: vectorSource,
       style: (feature) => getStyles(feature)
     });
 
-    vectorLayers.value[id_vessel] = vectorLayer
+    vectorLayers.value[id] = vectorLayer
     map.value?.addLayer(vectorLayer);
   })
 }
 
-watch(() => paths.value, (newPathList) => {
-  if (newPathList.length) createGeoJson()
-}, {deep: true})
+const removeLayers = () => {
+  const ids = structuredClone(Object.keys(vectorLayers.value))
+  ids.forEach(key => {
+    if (paths.value.find(path => path.id === key)) {
+      map.value?.removeLayer(vectorLayers[key])
+      delete vectorLayers[key]
+    }
+  })
+}
 
-watch(() => animationId.value, () => {
-  if (animationId.value) createAnimation()
-})
+watch(() => paths.value, (newPathList) => {
+  if (vectorLayers.value.length) removeLayers()
+
+  if (newPathList.length) {
+    createGeoJson()
+  } else if (vectorLayers.value.length) {
+    vectorLayers.value.forEach((item) => map.value.removeLayer(item))
+  }
+}, {deep: true})
 </script>
 
 <style scoped>

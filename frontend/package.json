@@ -15,11 +15,8 @@
     "dayjs": "^1.11.11",
     "luxon": "^3.4.4",
     "ol": "^9.2.4",
-    "ol-contextmenu": "^5.4.0",
-    "ol-ext": "^4.0.18",
     "pinia": "^2.1.7",
-    "vue": "^3.4.21",
-    "vue3-openlayers": "^10.0.1"
+    "vue": "^3.4.21"
   },
   "devDependencies": {
     "@types/luxon": "^3.4.2",
@@ -29,6 +26,7 @@
     "typescript": "^5.2.2",
     "vite": "^5.2.0",
     "vite-svg-loader": "^5.1.0",
-    "vue-tsc": "^2.0.6"
+    "vue-tsc": "^2.0.6",
+    "vue3-select-component": "^0.2.4"
   }
 }

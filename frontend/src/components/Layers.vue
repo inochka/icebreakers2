@@ -1,5 +1,18 @@
 <template>
   <div class="wrapper-layers">
+    <div class="period">
+      <Checkbox @onChecked="showPeriod" :checked="isShowPeriod"/>
+      <p>Выбрать период</p>
+
+      <div v-if="showPeriod">
+        <VueSelect
+            v-model="selected"
+            :options="weeks"
+            placeholder="Select an option"
+        />
+      </div>
+    </div>
+
     <div>
       <div class="title-wrapper">
         <div class="title-wrapper_block">
@@ -18,7 +31,7 @@
               @changeParentCheckbox="changeParentCheckbox(typeTransport.ICEBREAKERS)"
               :layer="icebreaker"
               :is-change-parent="isChangeParentIcebreaker"
-              :type="typeTransport.ICEBREAKER"
+              :type="typeTransport.ICEBREAKERS"
               :is-check-parent="checkAllIcebreakers"
           />
         </div>
@@ -44,7 +57,7 @@
               @changeParentCheckbox="changeParentCheckbox(typeTransport.VESSELS)"
               :layer="vessel"
               :is-check-parent="checkAllVessels"
-              :type="typeTransport.VESSEL"
+              :type="typeTransport.VESSELS"
           />
         </div>
       </div>
@@ -62,13 +75,12 @@
 import {storeToRefs} from "pinia";
 import Checkbox from "./UI/Checkbox.vue";
 import {useCommonStore, useVesselsStore} from "../store";
-import {onMounted, ref} from "vue";
+import {computed, ref} from "vue";
 import Layer from "./Layer.vue";
 import ArrowIcon from '../assets/icons/arrow.svg'
-import {IIcebreaker, IVessel, tModal} from "../types.ts";
-import {typeTransport} from "../store/common/types.ts";
+import {IIcebreaker, IVessel, tModal, typeTransport} from "../types.ts";
 
-const {getVessels, getIcebreakers, getPath} = useVesselsStore()
+const {getPath} = useVesselsStore()
 const {vessels, icebreakers, paths} = storeToRefs(useVesselsStore())
 
 const {isLoading, openModal, typeModal} = storeToRefs(useCommonStore())
@@ -79,10 +91,18 @@ const checkAllVessels = ref(false)
 const checkAllIcebreakers = ref(false)
 const isChangeParentVessel = ref(false)
 const isChangeParentIcebreaker = ref(false)
+const isShowPeriod = ref(false)
 
-onMounted(async () => {
-  await Promise.all([getVessels(), getIcebreakers()])
+const weeks = computed(() => {
+  const startDate = vessels.value[0].start_date
+  const endDate = vessels.value.at(-1).start_date
+
+  const weeks = 
 })
+
+const showPeriod = () => {
+  isShowPeriod.value = !isShowPeriod.value
+}
 
 const onOpenGantt = () => {
   openModal.value = true
@@ -99,12 +119,12 @@ const loadGraph = () => {
 
 const getUniqData = (list: IVessel[] | IIcebreaker[]) => {
   return list.reduce((accumulator, item2) => {
-        if (!accumulator.some(item1 =>
-            item1.id === item2.id)) {
-          accumulator.push(item2);
-        }
-        return accumulator;
-      }, paths.value);
+    if (!accumulator.some(item1 =>
+        item1.id === item2.id)) {
+      accumulator.push(item2);
+    }
+    return accumulator;
+  }, paths.value);
 }
 
 const getAllPaths = async (list: IVessel[] | IIcebreaker[], type: typeTransport) => {

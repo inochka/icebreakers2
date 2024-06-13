@@ -3,8 +3,8 @@ import {VesselStore} from "./types.ts";
 import {path} from "../../mock/path.ts";
 import axios from "axios";
 import {AxiosRequestConfig, AxiosResponse} from "axios";
-import {vessels} from "../../mock/vessels.ts";
-import {icebreakers} from "../../mock/icebreakers.ts";
+import {vessels} from "../../mock/vessels.json.ts";
+import {icebreakers} from "../../mock/icebreakers.json.ts";
 import {typeTransport} from "../../types.ts";
 
 const baseURL = 'http://127.0.0.1:8000/'
@@ -37,15 +37,15 @@ export const useVesselsStore = defineStore<
     }),
 
     actions: {
-        async getVessels(vessel_id?: number) {
+        async getVessels(id?: number) {
             try {
                 const {data} = await requestApi({
                     method: 'get',
                     url: '/vessels/',
-                    params: {vessel_id},
+                    // params: {id: 1},
                 })
 
-                if (!vessel_id) {
+                if (!id) {
                     this.vessels = data
                 } else {
 
@@ -55,15 +55,15 @@ export const useVesselsStore = defineStore<
                 this.vessels = vessels
             }
         },
-        async getIcebreakers(icebreaker_id?: number) {
+        async getIcebreakers(id?: number) {
             try {
                 const {data} = await requestApi({
                     method: 'get',
                     url: '/icebreakers/',
-                    params: {icebreaker_id},
+                    params: {id},
                 })
 
-                if (!icebreaker_id) {
+                if (!id) {
                     this.icebreakers = data
                 } else {
 

@@ -5,11 +5,6 @@
   </div>
   <p class="layer_date">{{ layer.start_date }}</p>
   <div class="icons">
-<!--    <RouteIcon-->
-<!--        @click="isChecked && (animationId = layer.id)"-->
-<!--        class="icon"-->
-<!--        :class="{disabled: !isChecked}"-->
-<!--    />-->
     <InfoIcon @click="onOpenInfoModal" class="icon"/>
   </div>
 </template>
@@ -20,12 +15,11 @@ import {storeToRefs} from "pinia";
 import {useCommonStore, useVesselsStore} from "../store";
 import Checkbox from "./UI/Checkbox.vue";
 import InfoIcon from '../assets/icons/info.svg'
-import RouteIcon from '../assets/icons/route.svg'
 import {ref, watch} from "vue";
 
-const {openModal, typeModal, modalInfo, isLoading, animationId} = storeToRefs(useCommonStore())
+const {openModal, typeModal, modalInfo, isLoading} = storeToRefs(useCommonStore())
 
-const {getPath} = useVesselsStore()
+const {getPath, paths} = useVesselsStore()
 
 const emits = defineEmits(['changeParentCheckbox'])
 
@@ -53,7 +47,7 @@ const loadGraph = () => {
 
   setTimeout(() => {
     isLoading.value = false
-    getPath(props.layer.id, props.type)
+    if (isChecked.value) getPath(props.layer.id, props.type)
   }, 1000)
 }
 
@@ -65,7 +59,12 @@ const onOpenInfoModal = () => {
 
 const onChecked = () => {
   isChecked.value = !isChecked.value
-  if (props.isCheckParent && !isChecked.value) emits('changeParentCheckbox')
+  if (props.isCheckParent && !isChecked.value) {
+    emits('changeParentCheckbox')
+  } else if (!isChecked.value) {
+    const idx = paths.value.findIndex(path => path.id === props.layer.id)
+    paths.value.splice(idx, 1)
+  }
 
   loadGraph()
 }
