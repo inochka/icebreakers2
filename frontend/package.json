@@ -15,8 +15,11 @@
     "dayjs": "^1.11.11",
     "luxon": "^3.4.4",
     "ol": "^9.2.4",
+    "ol-contextmenu": "^5.4.0",
+    "ol-ext": "^4.0.18",
     "pinia": "^2.1.7",
-    "vue": "^3.4.21"
+    "vue": "^3.4.21",
+    "vue3-openlayers": "^10.0.1"
   },
   "devDependencies": {
     "@types/luxon": "^3.4.2",

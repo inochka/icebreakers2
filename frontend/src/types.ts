@@ -42,7 +42,8 @@ export interface IWaybill {
 }
 
 export interface IPath {
-    "id_vessel": number
+    "id": number
+    "type": typeTransport
     "start_date": string
     "end_date": string
     "source": number // Пункт начала плавания, номер вершины в маршрутном графе
@@ -50,10 +51,10 @@ export interface IPath {
     "target": number //Пункт окончания плавания, номер вершины в маршрутном графе
     "target_name": string // название, определяется по номеру вершины
     "success": boolean // если false значит маршрут непроходим без ледокольной проводки и остальные параметры ниже отсутствуют
-    "min_ice_condition": number //худшие ледовые условия на маршруте
+    "min_ice_condition"?: number //худшие ледовые условия на маршруте
     "speed": number //средняя скорость на маршруте
-    "waybill": IWaybill[],
-    "path_line": []
+    "waybill"?: IWaybill[],
+    "path_line"?: []
 }
 
 export interface IBaseNode {
@@ -71,4 +72,9 @@ export interface IBaseEdge {
     "length": number // длина в морских милях
     "rep_id": number //видимо игнорируем
     "status": number
+}
+
+export enum typeTransport {
+    "VESSELS" = 'vessels',
+    'ICEBREAKERS' = 'icebreakers',
 }

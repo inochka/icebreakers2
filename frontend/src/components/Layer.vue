@@ -15,7 +15,7 @@
 </template>
 
 <script setup lang="ts">
-import {IIcebreaker, IVessel, tModal} from "../types.ts";
+import {IIcebreaker, IVessel, tModal, typeTransport} from "../types.ts";
 import {storeToRefs} from "pinia";
 import {useCommonStore, useVesselsStore} from "../store";
 import Checkbox from "./UI/Checkbox.vue";
@@ -32,7 +32,7 @@ const emits = defineEmits(['changeParentCheckbox'])
 type Props = {
   layer: IVessel | IIcebreaker
   isCheckParent: boolean
-  type: string
+  type: typeTransport
   isChangeParent: boolean
 }
 
@@ -53,12 +53,12 @@ const loadGraph = () => {
 
   setTimeout(() => {
     isLoading.value = false
-    getPath()
+    getPath(props.layer.id, props.type)
   }, 1000)
 }
 
 const onOpenInfoModal = () => {
-  typeModal.value = props.type === 'vessel' ? tModal?.VESSEL! : tModal.ICEBREAKER
+  typeModal.value = props.type === typeTransport.VESSELS ? tModal.VESSEL : tModal.ICEBREAKER
   modalInfo.value = props.layer
   openModal.value = true
 }

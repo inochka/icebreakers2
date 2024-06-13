@@ -5,6 +5,7 @@ import axios from "axios";
 import {AxiosRequestConfig, AxiosResponse} from "axios";
 import {vessels} from "../../mock/vessels.ts";
 import {icebreakers} from "../../mock/icebreakers.ts";
+import {typeTransport} from "../../types.ts";
 
 const baseURL = 'http://127.0.0.1:8000/'
 
@@ -96,20 +97,18 @@ export const useVesselsStore = defineStore<
                 console.error(e)
             }
         },
-        async getPath(vessel_id) {
+        async getPath(vessel_id: number, type: typeTransport) {
             try {
                 const {data} = await requestApi({
                     method: 'post',
                     url: '/calculate_path/',
-                    data: {vessel_id: 1}
+                    data: {vessel_id}
                 })
 
-                console.log(data)
-
-                // this.paths = path
+                this.paths.push({...data, id: vessel_id, type})
             } catch (e) {
                 console.error(e)
-                this.paths = path
+                this.paths.push({...path[vessel_id], id: vessel_id, type})
             }
         }
     },
