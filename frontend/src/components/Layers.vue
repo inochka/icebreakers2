@@ -50,9 +50,11 @@
       </div>
     </div>
 
-    <button class="btn-gantt" :disabled="!paths.length" @click="onOpenGantt">
-      Посмотреть диаграмму Гантта
-    </button>
+    <div class="footer">
+      <button class="footer_button" :disabled="!paths.length" @click="onOpenGantt">
+        Посмотреть диаграмму Гантта
+      </button>
+    </div>
   </div>
 </template>
 
@@ -184,41 +186,46 @@ const changeParentCheckbox = (type: typeTransport) => {
     }
   }
 
-  .btn-gantt {
+  .footer {
     position: absolute;
     bottom: 20px;
     border: none;
     display: flex;
-    padding: 0.75rem 1.5rem;
-    background-color: #488aec;
-    color: #ffffff;
-    font-size: 0.75rem;
-    line-height: 1rem;
-    font-weight: 700;
-    cursor: pointer;
-    text-align: center;
-    text-transform: uppercase;
-    vertical-align: middle;
-    align-items: center;
-    border-radius: 0.5rem;
-    user-select: none;
-    gap: 0.75rem;
-    box-shadow: 0 4px 6px -1px #488aec31, 0 2px 4px -1px #488aec17;
-    transition: all 0.6s ease;
-  }
+    flex-direction: column;
+    gap: 5px;
 
-  .btn-gantt:hover {
-    box-shadow: 0 10px 15px -3px #488aec4f, 0 4px 6px -2px #488aec17;
-  }
+    &_button {
+      padding: 0.75rem 1.5rem;
+      background-color: #488aec;
+      color: #ffffff;
+      font-size: 0.75rem;
+      line-height: 1rem;
+      font-weight: 700;
+      cursor: pointer;
+      text-align: center;
+      text-transform: uppercase;
+      vertical-align: middle;
+      align-items: center;
+      border-radius: 0.5rem;
+      user-select: none;
+      gap: 0.75rem;
+      box-shadow: 0 4px 6px -1px #488aec31, 0 2px 4px -1px #488aec17;
+      transition: all 0.6s ease;
 
-  .btn-gantt:focus,
-  .btn-gantt:active {
-    opacity: 0.85;
-    box-shadow: none;
-  }
+      &:hover {
+        box-shadow: 0 10px 15px -3px #488aec4f, 0 4px 6px -2px #488aec17;
+      }
 
-  .btn-gantt:disabled, .btn-gantt[disabled=disabled] {
-    background-color: gray;
+      &:focus,
+      &:active {
+        opacity: 0.85;
+        box-shadow: none;
+      }
+
+      &:disabled, &[disabled=disabled] {
+        background-color: gray;
+      }
+    }
   }
 }
 </style>

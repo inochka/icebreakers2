@@ -9,5 +9,7 @@ export namespace CommonStore {
         modalInfo: IVessel | null
 
         isLoading: boolean
+
+        animationId: null | number
     }
 }

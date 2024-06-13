@@ -14,7 +14,7 @@ import {onMounted, Ref, ref, watch} from "vue";
 import {OSM} from "ol/source";
 import 'ol/ol.css';
 import {fromLonLat, transform} from 'ol/proj';
-import {useVesselsStore} from "../store";
+import {useCommonStore, useVesselsStore} from "../store";
 import {storeToRefs} from "pinia";
 import VectorLayer from "ol/layer/Vector";
 import VectorSource from "ol/source/Vector";
@@ -22,14 +22,18 @@ import {GeoJSON} from "ol/format";
 import {IBaseEdge, IBaseNode, IPath, IVessel, IWaybill, tTypeWay} from "../types.ts";
 import {GeoJSONFeature} from "ol/format/GeoJSON";
 import {Circle, Fill, Icon, Stroke, Style} from "ol/style";
-import {FeatureLike} from "ol/Feature";
+import Feature, {FeatureLike} from "ol/Feature";
 import endPoint from '../assets/icons/anchor-icon-svgrepo-com.png'
 import {Overlay} from "ol";
-
+import {Geometry} from "ol/geom";
 const map: Ref<Map | null> = ref(null);
 const popover = ref(undefined)
 
+const vectorLayers: Ref<Record<string, VectorLayer<Feature<Geometry>>>> = ref({})
+const vectorSources: Ref<Record<string, VectorSource<Feature<Geometry>>>> = ref({})
+
 const {paths, baseNodes, vessels, baseEdges} = storeToRefs(useVesselsStore())
+const {animationId} = storeToRefs(useCommonStore())
 
 onMounted(() => {
   map.value = new Map({
@@ -161,7 +165,7 @@ const getFeatures = (waybill: IWaybill[], currentVessel: IVessel) => {
         type: 'Feature',
         geometry: {
           'type': 'Point',
-          'coordinates': coordinates[0][0],
+          'coordinates': coordinates[0],
         },
         properties: {
           ...line,
@@ -204,7 +208,7 @@ const getFeatures = (waybill: IWaybill[], currentVessel: IVessel) => {
       type: 'Feature',
       geometry: {
         type: 'LineString',
-        coordinates,
+        coordinates: coordinates,
       },
       properties: {
         ...line,
@@ -311,16 +315,18 @@ const createGeoJson = () => {
       },
       features: getFeatures(waybill, currentVessel),
     }
-
     const vectorSource = new VectorSource({
       features: new GeoJSON().readFeatures(features),
     });
+
+    vectorSources.value[id_vessel] = vectorSource
 
     const vectorLayer = new VectorLayer({
       source: vectorSource,
       style: (feature) => getStyles(feature)
     });
 
+    vectorLayers.value[id_vessel] = vectorLayer
     map.value?.addLayer(vectorLayer);
   })
 }
@@ -328,6 +334,10 @@ const createGeoJson = () => {
 watch(() => paths.value, (newPathList) => {
   if (newPathList.length) createGeoJson()
 }, {deep: true})
+
+watch(() => animationId.value, () => {
+  if (animationId.value) createAnimation()
+})
 </script>
 
 <style scoped>

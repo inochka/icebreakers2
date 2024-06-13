@@ -1,10 +1,17 @@
 <template>
   <div class="layer">
-    <Checkbox :checked="isChecked" @onChecked="onChecked" />
+    <Checkbox :checked="isChecked" @onChecked="onChecked"/>
     <div>{{ layer.name }}</div>
   </div>
-  <p class="layer_date">{{ layer.start_date}}</p>
-  <InfoIcon @click="onOpenInfoModal" class="icon"/>
+  <p class="layer_date">{{ layer.start_date }}</p>
+  <div class="icons">
+<!--    <RouteIcon-->
+<!--        @click="isChecked && (animationId = layer.id)"-->
+<!--        class="icon"-->
+<!--        :class="{disabled: !isChecked}"-->
+<!--    />-->
+    <InfoIcon @click="onOpenInfoModal" class="icon"/>
+  </div>
 </template>
 
 <script setup lang="ts">
@@ -13,11 +20,12 @@ import {storeToRefs} from "pinia";
 import {useCommonStore, useVesselsStore} from "../store";
 import Checkbox from "./UI/Checkbox.vue";
 import InfoIcon from '../assets/icons/info.svg'
+import RouteIcon from '../assets/icons/route.svg'
 import {ref, watch} from "vue";
 
-const {openModal, typeModal, modalInfo, isLoading} = storeToRefs(useCommonStore())
+const {openModal, typeModal, modalInfo, isLoading, animationId} = storeToRefs(useCommonStore())
 
-const {getPaths} = useVesselsStore()
+const {getPath} = useVesselsStore()
 
 const emits = defineEmits(['changeParentCheckbox'])
 
@@ -45,7 +53,7 @@ const loadGraph = () => {
 
   setTimeout(() => {
     isLoading.value = false
-    getPaths()
+    getPath()
   }, 1000)
 }
 
@@ -75,5 +83,10 @@ const onChecked = () => {
     font-size: 12px;
     color: #bbbbbb;
   }
+}
+
+.icons {
+  display: flex;
+  gap: 10px;
 }
 </style>
