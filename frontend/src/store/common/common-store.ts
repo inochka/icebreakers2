@@ -10,6 +10,8 @@ export const useCommonStore = defineStore<
         typeModal: null,
         modalInfo: null,
 
-        isLoading: false
+        isLoading: false,
+
+        animationId: null
     }),
 })

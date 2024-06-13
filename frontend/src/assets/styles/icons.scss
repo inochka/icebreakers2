@@ -8,4 +8,11 @@
   &:hover {
     color: black;
   }
+
+  &.disabled {
+    &:hover {
+      color: gray;
+      cursor: default;
+    }
+  }
 }

@@ -12,8 +12,10 @@ export namespace VesselStore {
     }
 
     export interface Actions {
-        getVessels(): () => void,
-        getIcebreakers(): () => void,
-        getPaths(): () => void
+        getVessels(): () => Promise<void>
+        getIcebreakers(): () => Promise<void>
+        getPath(): () => Promise<void>
+        getBaseEdges(): () => Promise<void>
+        getBaseNodes(): () => Promise<void>
     }
 }
