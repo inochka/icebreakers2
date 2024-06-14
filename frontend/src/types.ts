@@ -5,10 +5,10 @@ export enum tModal {
 }
 
 export enum tTypeWay {
-    MOVE = 'move', // самостоятельноe движение из точки
-    WAIT = 'wait', // ожидание/простой
-    FORMATION = 'formation', // проводка караваном
-    FIN = 'fin' // прибытие
+    MOVE = 'move',
+    WAIT = 'wait',
+    FORMATION = 'formation',
+    FIN = 'fin'
 }
 
 export interface IVessel {
@@ -37,8 +37,8 @@ export interface IIcebreaker {
 
 export interface IWaybill {
     "event": tTypeWay
-    "point": number //где произошло событие
-    "time": string //когда произошло событие
+    "point": number
+    "time": string
 }
 
 export interface IPath {
@@ -46,13 +46,13 @@ export interface IPath {
     "type": typeTransport
     "start_date": string
     "end_date": string
-    "source": number // Пункт начала плавания, номер вершины в маршрутном графе
-    "source_name": string // название, определяется по номеру вершины
-    "target": number //Пункт окончания плавания, номер вершины в маршрутном графе
-    "target_name": string // название, определяется по номеру вершины
-    "success": boolean // если false значит маршрут непроходим без ледокольной проводки и остальные параметры ниже отсутствуют
-    "min_ice_condition"?: number //худшие ледовые условия на маршруте
-    "speed": number //средняя скорость на маршруте
+    "source": number
+    "source_name": string
+    "target": number
+    "target_name": string
+    "success": boolean
+    "min_ice_condition"?: number
+    "speed": number
     "waybill"?: IWaybill[],
     "path_line"?: []
 }
@@ -66,11 +66,11 @@ export interface IBaseNode {
 }
 
 export interface IBaseEdge {
-    "id": number, //сурроготный ключ для фронта (если нуженб пока непонятно)
-    "start_point_id": number // начальная вершина
-    "end_point_id": number	// конечная вершина
-    "length": number // длина в морских милях
-    "rep_id": number //видимо игнорируем
+    "id": number,
+    "start_point_id": number
+    "end_point_id": number
+    "length": number
+    "rep_id": number
     "status": number
 }
 
@@ -82,4 +82,9 @@ export enum typeTransport {
 export type Select = {
     value: string
     label: string
+}
+
+export enum TypeSidebar {
+    TEMPLATES = 'templates',
+    LAYERS = 'layers',
 }

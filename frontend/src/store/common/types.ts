@@ -1,4 +1,4 @@
-import {IVessel, tModal} from "../../types.ts";
+import {IVessel, tModal, TypeSidebar} from "../../types.ts";
 
 export namespace CommonStore {
     export type Id = 'CommonStore'
@@ -7,6 +7,10 @@ export namespace CommonStore {
         openModal: boolean
         typeModal: tModal | null
         modalInfo: IVessel | null
+
+        showGraph: boolean
+
+        typeSidebar: TypeSidebar
 
         isLoading: boolean
     }

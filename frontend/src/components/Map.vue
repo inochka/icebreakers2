@@ -14,12 +14,11 @@ import {onMounted, Ref, ref, watch} from "vue";
 import {OSM} from "ol/source";
 import 'ol/ol.css';
 import {fromLonLat, transform} from 'ol/proj';
-import {useVesselsStore} from "../store";
+import {useCommonStore, useVesselsStore} from "../store";
 import {storeToRefs} from "pinia";
 import VectorLayer from "ol/layer/Vector";
 import {IBaseEdge, IBaseNode, IIcebreaker, IPath, IVessel, IWaybill, tTypeWay, typeTransport} from "../types.ts";
 import {GeoJSONFeature} from "ol/format/GeoJSON";
-import {Style} from "ol/style";
 import Feature, {FeatureLike} from "ol/Feature";
 import {Overlay} from "ol";
 import {Geometry} from "ol/geom";
@@ -29,8 +28,10 @@ const map: Ref<Map | null> = ref(null);
 const popover = ref(undefined)
 
 const vectorLayers: Ref<Record<string, VectorLayer<Feature<Geometry>>>> = ref({})
+const graph: Ref<Record<string, VectorLayer<Feature<Geometry>>>> = ref({})
 
 const {paths, baseNodes, vessels, baseEdges, icebreakers} = storeToRefs(useVesselsStore())
+const {showGraph} = storeToRefs(useCommonStore())
 
 onMounted(() => {
   map.value = new Map({
@@ -278,8 +279,18 @@ watch(() => [baseEdges.value, baseNodes.value], () => {
   if (baseEdges.value.length && baseNodes.value.length) {
     const vectorLayer = generateVectorLayer(createGraph)
     map.value?.addLayer(vectorLayer);
+    graph.value = vectorLayer
   }
 }, {deep: true})
+
+watch(() => showGraph.value, () => {
+  if (showGraph.value) {
+    map.value?.addLayer(graph.value);
+    return
+  }
+
+  map.value?.removeLayer(graph.value);
+})
 </script>
 
 <style scoped>

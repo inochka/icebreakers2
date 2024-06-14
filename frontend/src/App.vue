@@ -3,7 +3,8 @@
 
   <div class="wrapper">
     <div class="cell cell-sidebar">
-      <Layers/>
+      <Templates v-if="typeSidebar === TypeSidebar.TEMPLATES" />
+      <Layers v-else />
     </div>
     <div class="cell cell-map">
       <Map/>
@@ -26,8 +27,10 @@ import Loader from "./components/UI/Loader.vue";
 import {useCommonStore, useVesselsStore} from "./store";
 import Legend from "./components/UI/Legend.vue";
 import {onMounted} from "vue";
+import {TypeSidebar} from "./types.ts";
+import Templates from "./components/Templates.vue";
 
-const {openModal, isLoading} = storeToRefs(useCommonStore())
+const {openModal, isLoading, typeSidebar} = storeToRefs(useCommonStore())
 const {getBaseNodes, getBaseEdges, getVessels, getIcebreakers} = useVesselsStore()
 
 onMounted(async () => {

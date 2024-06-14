@@ -7,11 +7,11 @@ import {vessels} from "../../mock/vessels.json.ts";
 import {icebreakers} from "../../mock/icebreakers.json.ts";
 import {typeTransport} from "../../types.ts";
 
-const baseURL = 'http://127.0.0.1:8000/'
-
 interface IFetchData<D> extends AxiosRequestConfig<D> {
     data?: D
 }
+
+const baseURL = import.meta.env.VITE_APP_BASE_URL
 
 const requestApi = async ({method, url, params, data}: IFetchData<D>): Promise<AxiosResponse<D>> => {
     return await axios({

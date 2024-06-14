@@ -1,5 +1,6 @@
 import {defineStore} from "pinia";
 import {CommonStore} from "./types.ts";
+import {TypeSidebar} from "../../types.ts";
 
 export const useCommonStore = defineStore<
     CommonStore.Id,
@@ -9,6 +10,10 @@ export const useCommonStore = defineStore<
         openModal: false,
         typeModal: null,
         modalInfo: null,
+
+        typeSidebar: TypeSidebar.TEMPLATES,
+
+        showGraph: true,
 
         isLoading: false,
     }),

@@ -5,13 +5,12 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="e78089cb-925a-4359-a202-b5ffc0c2e52d" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/frontend/src/custom/weeks.ts" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/frontend/src/utils/createVectorLayer.ts" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/frontend/src/utils/layerStyles.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/frontend/src/components/Templates.vue" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/components/Layers.vue" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/components/Layers.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/App.vue" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/App.vue" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/frontend/src/components/Map.vue" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/components/Map.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/style.css" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/style.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/store/common/common-store.ts" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/store/common/common-store.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/store/common/types.ts" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/store/common/types.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/frontend/src/types.ts" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/types.ts" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -22,8 +21,8 @@
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
       <list>
-        <option value="Vue Composition API Component" />
         <option value="Python Script" />
+        <option value="Vue Composition API Component" />
       </list>
     </option>
   </component>
