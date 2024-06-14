@@ -121,13 +121,24 @@ class Navigator:
             else:
                 time,path,timelist = self.calc_shortest_path(base,ice_cond,v, v.start_date, v.source, v.target)
             grade.total_time = grade.total_time + time
+            """class VesselPath(CustomBaseModel):
+                vessel_id: int
+                total_time_hours: float 
+                start_date: datetime
+                end_date: datetime
+                source: int
+                source_name: str
+                target: int
+                target_name: str
+                success: bool  # если false, значит маршрут непроходим без ледокольной проводки
+                min_ice_condition: Optional[float] = None  # худшие ледовые условия на маршруте
+                speed: Optional[float] = None  # средняя скорость на маршруте
+                waybill: List[PathEvent]   # описание пути"""
             res[k] = {}
+            res[k]['total_time_hours'] = time       
             res[k]['start_date'] = v.start_date
-            if time == math.inf:
-                res[k]['end_date'] = None
-            else:
+            if time != math.inf:
                 res[k]['end_date'] = add_hours(v.start_date,time) 
-            res[k]['total_hours'] = time
             res[k]['source'] = v.source
             res[k]['source_name'] = base.graph.nodes[v.source]["point_name"]
             res[k]['target'] = v.target
@@ -135,7 +146,6 @@ class Navigator:
             res[k]['success'] = (time < math.inf) 
             #TODO min_ice_condition сделать функцию расчета худших ледовых условий на маршруте, или пока выпилить
             #TODO speed сделать метод на графе для расчета длины маршрута чтобы посчитать среднюю скорость
-            res[k]['path_line'] = path
             if time == math.inf:
                 grade.stuck_vessels = grade.stuck_vessels + 1
                 waybill = [(PathEventsType.stuck,v.source,v.start_date)]
@@ -144,11 +154,16 @@ class Navigator:
                 next_event_time = v.start_date
                 for i,n in enumerate(path):
                     if n == v.target:
-                        waybill.append((PathEventsType.fin,n,next_event_time))
+                        waybill.append({"event":PathEventsType.fin,"point":n,"time":next_event_time})
                     else:
-                        waybill.append((PathEventsType.move,n,next_event_time))
+                        waybill.append({"event":PathEventsType.move,"point":n,"time":next_event_time})
                         next_event_time = add_hours(next_event_time,timelist[i+1])
+            """class PathEvent(CustomBaseModel):
+                event: PathEventsType  # тип события (move, wait, formation, fin, stuck)
+                point: int  # где произошло событие
+                time: datetime  # когда произошло событие"""         
             res[k]['waybill'] = waybill
+            res[k]['path_line'] = path
         return grade,res
     def all_vessels_path_from(self, base:BaseGraph, ice_cond:IceCondition, context:Context):
         """Для каждого судна вычисляет стоимость достижения каждой вершины при самостоятельном движении, возвращает словарь { номер судна: {каждая конечная вершина:(время в часах,[путь],[время на пути])}"""

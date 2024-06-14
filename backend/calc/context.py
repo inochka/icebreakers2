@@ -1,7 +1,6 @@
 from vessel import Vessel,IceBreaker
 from backend.data.vessels_data import vessels_data, icebreaker_data
 from backend.data.template_data import templates_data
-from backend.models import PathEvent, ShipPath
 
 class Grade:
     """Оценка стоимости проводки"""

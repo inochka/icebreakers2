@@ -5,6 +5,7 @@ from vessel import Vessel,IceBreaker
 from backend.data.vessels_data import vessels_data, icebreaker_data
 from context import Context
 from time import time
+from computer import Computer
 
 def set_g_base2(base): #задать базовый граф 2 вершины
     # определяем список узлов (ID узлов)
@@ -104,10 +105,20 @@ def test_create_calc_cache():
     nav.create_calc_cache(base, ice_cond, context)
     print(nav.priority)    
 
+def test_compute_optimal():
+    base = BaseGraph()
+    ice_cond = IceCondition()
+    context = Context()
+    context.load_from_template('test_1')
+    base.set_base_values() 
+    comp = Computer(base,ice_cond)
+    grade, vessel_paths, icebreaker_paths = comp.optimal_timesheet(context)
+    print(vessel_paths)
+
 if __name__ == "__main__":
     start = time()
     print('===============')
-    test_create_calc_cache()
+    test_compute_optimal()
     fin = time()
     print('============'+str(fin-start))
 

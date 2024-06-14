@@ -62,10 +62,10 @@ class PathEvent(CustomBaseModel):
     time: datetime  # когда произошло событие
 
 class VesselPath(CustomBaseModel):
-    vessel_id: int
+    vessel_id: int = -1
     total_time_hours: float 
     start_date: datetime
-    end_date: datetime
+    end_date: Optional[datetime]
     source: int
     source_name: str
     target: int
