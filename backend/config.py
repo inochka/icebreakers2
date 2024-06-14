@@ -1,6 +1,9 @@
 import logging.config
 import os
+from pathlib import Path
 
+app_base_dir = Path(__file__).parent
+tiffs_dir = app_base_dir / "tiffs"
 
 LOGGING = {
     'version': 1,

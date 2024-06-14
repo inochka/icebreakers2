@@ -11,6 +11,10 @@ from scipy.interpolate import LinearNDInterpolator
 import matplotlib.pyplot as plt
 from backend.calc.base_graph import BaseGraph
 import backend.config
+import geopandas
+from geocube.api.core import make_geocube
+from backend.config import tiffs_dir
+import rioxarray
 
 logger = logging.getLogger(__name__)
 
@@ -21,6 +25,7 @@ class IceCondition:
     dfs: dict[datetime, pd.DataFrame]
     interpolators: dict[datetime, LinearNDInterpolator]
     graphs_with_conds: dict[datetime, Graph]
+    gtiffs_paths: dict[datetime, Path]
 
     def __init__(self, file_path: Path | str, graph: Graph):
         self.dfs = self.read_file(file_path)
@@ -34,6 +39,8 @@ class IceCondition:
         for dt in self.dfs.keys():
             logger.info(f"Calculating weights for base graph at {dt}")
             self.graphs_with_conds[dt] = self.obtain_condition_for_graph(graph, dt)
+
+        self.make_geotiffs_for_ice_conditions()
 
     def condition(self, base_node_u, base_node_v, dt :datetime) -> float:
         """
@@ -189,7 +196,58 @@ class IceCondition:
         plt.ylabel('Latitude')
         plt.show()
 
+    def make_geotiffs_for_ice_conditions(self):
+        self.gtiffs_paths = {}
+        for dt, df in self.dfs.items():
+            gdf = gpd.GeoDataFrame(
+                df, geometry=gpd.points_from_xy(df.longitude, df.latitude)
+            )
 
+            out_grid = make_geocube(
+                vector_data=gdf,
+                measurements=["ice_condition"],
+                resolution=(-0.1, 0.1),
+            )
+
+            filename = dt.strftime("%Y_%m_%d") + ".tif"
+
+            # Получение данных для изменения цветовой шкалы
+            ice_condition = out_grid["ice_condition"]
+
+            # Создание цветовой карты от синего до красного
+            cmap = plt.get_cmap('coolwarm')
+            norm = plt.Normalize(vmin=ice_condition.min(), vmax=ice_condition.max())
+            rgba = cmap(norm(ice_condition))
+
+            # Запись растра с новой цветовой картой
+            # Создание многоканального растра (RGB)
+            rgb = np.dstack((rgba[:, :, 0], rgba[:, :, 1], rgba[:, :, 2]))
+
+            # Запись растра с новой цветовой картой
+            filename = dt.strftime("%Y_%m_%d") + ".tif"
+            with rioxarray.open_rasterio(tiffs_dir / filename, mode='w', driver='GTiff', count=3,
+                                         dtype='uint8') as dst:
+                dst.write(rgb[:, :, 0], 1)
+                dst.write(rgb[:, :, 1], 2)
+                dst.write(rgb[:, :, 2], 3)
+
+            # Сохранение цветовой карты отдельно
+            fig, ax = plt.subplots()
+            cbar = plt.colorbar(plt.cm.ScalarMappable(norm=norm, cmap=cmap), ax=ax)
+            cbar.set_label('Ice Condition')
+            plt.savefig(tiffs_dir / (dt.strftime("%Y_%m_%d") + "_colormap.png"))
+            plt.close(fig)
+
+
+            #out_grid["ice_condition"].rio.to_raster(tiffs_dir / filename)
+            self.gtiffs_paths[dt] = tiffs_dir / filename
+
+    def get_geotiff_for_datetime(self, dt: datetime):
+        forecast_date = self.find_appropriate_conditions_date(list(self.interpolators.keys()), dt)
+        return self.gtiffs_paths[forecast_date]
+
+"""
+#examples:
 file_path = "../input_files/IntegrVelocity.xlsx"
 base_graph = BaseGraph()
 base_graph.set_base_values()
@@ -198,7 +256,7 @@ u = np.array([70, 80])
 v = np.array([75, 68])
 dt = datetime(year=2020, month=3, day=1)
 print(ice_cond.obtain_condition_for_edge(u, v, dt))
-ice_cond.plot_ice_condition_with_edge(u,v,dt)
+#ice_cond.plot_ice_condition_with_edge(u,v,dt)
 graph = BaseGraph()
 graph.set_base_values()
 new_graph = ice_cond.obtain_condition_for_graph(graph.graph, dt)
@@ -206,3 +264,7 @@ print(new_graph)
 #edge = base_graph.graph.edges[0][1]
 cond = ice_cond.condition(0, 43, dt)
 print(cond)
+
+"""
+
+
