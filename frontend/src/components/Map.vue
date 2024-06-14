@@ -17,15 +17,14 @@ import {fromLonLat, transform} from 'ol/proj';
 import {useVesselsStore} from "../store";
 import {storeToRefs} from "pinia";
 import VectorLayer from "ol/layer/Vector";
-import VectorSource from "ol/source/Vector";
-import {GeoJSON} from "ol/format";
 import {IBaseEdge, IBaseNode, IIcebreaker, IPath, IVessel, IWaybill, tTypeWay, typeTransport} from "../types.ts";
 import {GeoJSONFeature} from "ol/format/GeoJSON";
-import {Circle, Fill, Icon, Stroke, Style} from "ol/style";
+import {Style} from "ol/style";
 import Feature, {FeatureLike} from "ol/Feature";
-import endPoint from '../assets/icons/anchor-icon-svgrepo-com.png'
 import {Overlay} from "ol";
 import {Geometry} from "ol/geom";
+import {generateVectorLayer} from "../utils/createVectorLayer.ts";
+
 const map: Ref<Map | null> = ref(null);
 const popover = ref(undefined)
 
@@ -149,7 +148,11 @@ const getCoords = (point: number) => {
   ]
 }
 
-const getFeatures = (waybill: IWaybill[], currentVessel: IVessel, success: boolean) => {
+const getFeatures = ({waybill, seaTransport, success}: {
+  waybill: IWaybill[],
+  seaTransport: IVessel,
+  success: boolean
+}) => {
   const geoJsonData: GeoJSONFeature[] = []
 
   waybill.forEach((line: IWaybill, idx: number) => {
@@ -166,7 +169,7 @@ const getFeatures = (waybill: IWaybill[], currentVessel: IVessel, success: boole
         },
         properties: {
           ...line,
-          ...currentVessel,
+          ...seaTransport,
         },
       })
 
@@ -182,7 +185,7 @@ const getFeatures = (waybill: IWaybill[], currentVessel: IVessel, success: boole
         },
         properties: {
           ...line,
-          ...currentVessel
+          ...seaTransport
         },
       })
     }
@@ -196,7 +199,7 @@ const getFeatures = (waybill: IWaybill[], currentVessel: IVessel, success: boole
         },
         properties: {
           ...line,
-          ...currentVessel
+          ...seaTransport
         },
       })
     }
@@ -209,88 +212,13 @@ const getFeatures = (waybill: IWaybill[], currentVessel: IVessel, success: boole
       },
       properties: {
         ...line,
-        ...currentVessel,
+        ...seaTransport,
         success
       },
     })
   })
 
   return geoJsonData
-}
-
-const getStyles = (feature: FeatureLike) => {
-  const {event, success} = feature.getProperties()
-  const type = feature.getGeometry()?.getType()
-
-  if (type === 'Point' && event === tTypeWay.MOVE) {
-    return new Style({
-      fill: new Fill({
-        color: 'blue'
-      }),
-      stroke: new Stroke({
-        width: 3,
-        color: 'blue'
-      }),
-      image: new Circle({
-        fill: new Fill({
-          color: 'blue'
-        }),
-        stroke: new Stroke({
-          width: 5,
-          color: 'blue'
-        }),
-        radius: 5
-      }),
-    })
-  }
-
-  if (type === 'Point' && event === tTypeWay.FIN) {
-    return new Style({
-      image: new Icon({
-        height: 20,
-        width: 20,
-        src: endPoint,
-      }),
-    })
-  }
-
-  if (type === 'Point' && event === tTypeWay.WAIT) {
-    return new Style({
-      fill: new Fill({
-        color: 'gray'
-      }),
-      stroke: new Stroke({
-        width: 3,
-        color: 'gray'
-      }),
-      image: new Circle({
-        fill: new Fill({
-          color: 'gray'
-        }),
-        stroke: new Stroke({
-          width: 5,
-          color: 'gray'
-        }),
-        radius: 5
-      }),
-    })
-  }
-
-  if (event === tTypeWay.MOVE || event === tTypeWay.FIN) {
-    return new Style({
-      stroke: new Stroke({
-        color: success ? 'green' : 'red',
-        width: 2,
-      })
-    })
-  }
-
-  return new Style({
-    stroke: new Stroke({
-      color: 'blue',
-      width: 2,
-    })
-  })
 }
 
 const createGeoJson = () => {
@@ -306,26 +234,8 @@ const createGeoJson = () => {
       throw new Error(`Unknown transport: ${id}`)
     }
 
-    const features = {
-      type: 'FeatureCollection',
-      crs: {
-        type: 'lines',
-        properties: {
-          name: 'EPSG:3857',
-        },
-      },
-      features: getFeatures(waybill, seaTransport, success),
-    }
-    const vectorSource = new VectorSource({
-      features: new GeoJSON().readFeatures(features),
-    });
-
-    const vectorLayer = new VectorLayer({
-      source: vectorSource,
-      style: (feature) => getStyles(feature)
-    });
-
-    vectorLayers.value[id] = vectorLayer
+    const vectorLayer = generateVectorLayer(getFeatures, {waybill, seaTransport, success})
+    vectorLayers.value[id]
     map.value?.addLayer(vectorLayer);
   })
 }
@@ -340,6 +250,20 @@ const removeLayers = () => {
   })
 }
 
+const createGraph = () => {
+  return baseEdges.value.map((edge) => {
+    const coordinates = getCoords(edge.id)
+
+    return ({
+      type: 'Feature',
+      geometry: {
+        type: 'LineString',
+        coordinates: coordinates,
+      },
+    })
+  })
+}
+
 watch(() => paths.value, (newPathList) => {
   if (vectorLayers.value.length) removeLayers()
 
@@ -347,6 +271,13 @@ watch(() => paths.value, (newPathList) => {
     createGeoJson()
   } else if (vectorLayers.value.length) {
     vectorLayers.value.forEach((item) => map.value.removeLayer(item))
+  }
+}, {deep: true})
+
+watch(() => [baseEdges.value, baseNodes.value], () => {
+  if (baseEdges.value.length && baseNodes.value.length) {
+    const vectorLayer = generateVectorLayer(createGraph)
+    map.value?.addLayer(vectorLayer);
   }
 }, {deep: true})
 </script>

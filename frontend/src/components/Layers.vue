@@ -1,14 +1,26 @@
 <template>
   <div class="wrapper-layers">
     <div class="period">
-      <Checkbox @onChecked="showPeriod" :checked="isShowPeriod"/>
-      <p>Выбрать период</p>
+      <div class="period_checkbox">
+        <Checkbox @onChecked="showPeriod" :checked="isShowPeriod"/>
+        <p>Выбрать период</p>
+      </div>
 
-      <div v-if="showPeriod">
+      <div class="period_select" v-if="isShowPeriod">
+        <ArrowIcon
+            @click="prevDate"
+            :class="{disabled: weeks.findIndex(week => week.value === selectPeriod) === 0}"
+            class="icon arrow-left"
+        />
         <VueSelect
-            v-model="selected"
+            v-model="selectPeriod"
             :options="weeks"
-            placeholder="Select an option"
+            placeholder="Выберите неделю"
+        />
+        <ArrowIcon
+            :class="{disabled: weeks.findIndex(week => week.value === selectPeriod) === weeks.length - 1}"
+            @click="nextDate"
+            class="icon arrow-right"
         />
       </div>
     </div>
@@ -75,10 +87,12 @@
 import {storeToRefs} from "pinia";
 import Checkbox from "./UI/Checkbox.vue";
 import {useCommonStore, useVesselsStore} from "../store";
-import {computed, ref} from "vue";
+import {ref} from "vue";
 import Layer from "./Layer.vue";
 import ArrowIcon from '../assets/icons/arrow.svg'
-import {IIcebreaker, IVessel, tModal, typeTransport} from "../types.ts";
+import {IIcebreaker, IVessel, Select, tModal, typeTransport} from "../types.ts";
+import VueSelect from "vue3-select-component";
+import {weeks} from "../custom/weeks.ts";
 
 const {getPath} = useVesselsStore()
 const {vessels, icebreakers, paths} = storeToRefs(useVesselsStore())
@@ -92,13 +106,7 @@ const checkAllIcebreakers = ref(false)
 const isChangeParentVessel = ref(false)
 const isChangeParentIcebreaker = ref(false)
 const isShowPeriod = ref(false)
-
-const weeks = computed(() => {
-  const startDate = vessels.value[0].start_date
-  const endDate = vessels.value.at(-1).start_date
-
-  const weeks = 
-})
+const selectPeriod = ref('')
 
 const showPeriod = () => {
   isShowPeriod.value = !isShowPeriod.value
@@ -115,6 +123,16 @@ const loadGraph = () => {
   setTimeout(() => {
     isLoading.value = false
   }, 1000)
+}
+
+const prevDate = () => {
+  const newIdx = weeks.findIndex((week: Select) => week.value === selectPeriod.value) - 1
+  if (newIdx > 0) selectPeriod.value = weeks[weeks.findIndex((week: Select) => week.value === selectPeriod.value) - 1].value
+}
+
+const nextDate = () => {
+  const newIdx = weeks.findIndex((week: Select) => week.value === selectPeriod.value) + 1
+  if (newIdx < weeks.length) selectPeriod.value = weeks[weeks.findIndex((week: Select) => week.value === selectPeriod.value) - 1].value
 }
 
 const getUniqData = (list: IVessel[] | IIcebreaker[]) => {
@@ -177,10 +195,36 @@ const changeParentCheckbox = (type: typeTransport) => {
 @import "./src/assets/styles/icons.scss";
 
 .wrapper-layers {
-  padding: 0 30px 0 30px;
   display: flex;
   flex-direction: column;
   gap: 5px;
+  padding: 30px 30px 0;
+
+  .period {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+
+    &_checkbox {
+      display: flex;
+      gap: 5px;
+      align-items: baseline;
+    }
+
+    &_select {
+      display: flex;
+      gap: 5px;
+      align-items: center;
+
+      .arrow-right {
+        transform: rotate(-90deg);
+      }
+
+      .arrow-left {
+        transform: rotate(90deg);
+      }
+    }
+  }
 
   .title-wrapper {
     display: flex;

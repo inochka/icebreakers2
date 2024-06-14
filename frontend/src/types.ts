@@ -78,3 +78,8 @@ export enum typeTransport {
     "VESSELS" = 'vessels',
     'ICEBREAKERS' = 'icebreakers',
 }
+
+export type Select = {
+    value: string
+    label: string
+}
