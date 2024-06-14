@@ -1,5 +1,6 @@
 @import "./assets/styles/modal.scss";
 @import "./assets/styles/popup.scss";
+@import "vue3-select-component/dist/style.css";
 
 html, body {
   height: 100%;
