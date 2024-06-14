@@ -11,7 +11,7 @@ import Map from 'ol/Map';
 import View from 'ol/View';
 import TileLayer from 'ol/layer/Tile';
 import {onMounted, Ref, ref, watch} from "vue";
-import {OSM} from "ol/source";
+import {GeoTIFF, OSM} from "ol/source";
 import 'ol/ol.css';
 import {fromLonLat, transform} from 'ol/proj';
 import {useCommonStore, useVesselsStore} from "../store";
@@ -23,15 +23,17 @@ import Feature, {FeatureLike} from "ol/Feature";
 import {Overlay} from "ol";
 import {Geometry} from "ol/geom";
 import {generateVectorLayer} from "../utils/createVectorLayer.ts";
+import {WebGLTile} from "ol/layer";
 
 const map: Ref<Map | null> = ref(null);
 const popover = ref(undefined)
 
 const vectorLayers: Ref<Record<string, VectorLayer<Feature<Geometry>>>> = ref({})
 const graph: Ref<Record<string, VectorLayer<Feature<Geometry>>>> = ref({})
+const dateLayer: Ref<Record<string, VectorLayer<Feature<Geometry>>>> = ref({})
 
 const {paths, baseNodes, vessels, baseEdges, icebreakers} = storeToRefs(useVesselsStore())
-const {showGraph} = storeToRefs(useCommonStore())
+const {showGraph, date} = storeToRefs(useCommonStore())
 
 onMounted(() => {
   map.value = new Map({
@@ -40,6 +42,8 @@ onMounted(() => {
       new TileLayer({
         visible: true,
         zIndex: 0,
+        tileSize: 512,
+        maxZoom: 20,
         source: new OSM('https://{s}.tile.openstreetmap.de/{z}/{x}/{y}.png')
       }),
     ],
@@ -290,6 +294,39 @@ watch(() => showGraph.value, () => {
   }
 
   map.value?.removeLayer(graph.value);
+})
+
+
+watch(() => date.value, () => {
+  if (dateLayer.value) map.value?.removeLayer(dateLayer.value);
+
+  if (date.value) {
+    const source = new GeoTIFF({
+          sources: [
+            {
+              url: 'https://openlayers.org/en/latest/examples/data/example.tif',
+            },
+          ],
+        }
+    )
+
+    const layer = new WebGLTile({
+      source: source,
+    })
+
+    map.value.addLayer(layer)
+
+    dateLayer.value = layer
+
+    map.value.setView(source
+        .getView().then((options) => {
+          const center = options.center;
+          const resolution = options.resolutions[0];
+          const projection = options.projection;
+          return {center, resolution, projection};
+        })
+    )
+  }
 })
 </script>
 
