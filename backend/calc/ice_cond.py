@@ -246,7 +246,8 @@ class IceCondition:
         forecast_date = self.find_appropriate_conditions_date(list(self.interpolators.keys()), dt)
         return self.gtiffs_paths[forecast_date]
 
-
+"""
+#examples:
 file_path = "../input_files/IntegrVelocity.xlsx"
 base_graph = BaseGraph()
 base_graph.set_base_values()
@@ -263,4 +264,7 @@ print(new_graph)
 #edge = base_graph.graph.edges[0][1]
 cond = ice_cond.condition(0, 43, dt)
 print(cond)
+
+"""
+
 

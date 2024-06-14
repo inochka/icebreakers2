@@ -4,6 +4,7 @@ from typing import List, Optional
 from datetime import datetime
 from backend.constants import IceClass, PathEventsType
 from backend.utils import parse_dates
+from fastapi.encoders import jsonable_encoder
 
 class CustomBaseModel(BaseModel):
     class Config:
