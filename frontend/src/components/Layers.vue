@@ -1,28 +1,40 @@
 <template>
   <div class="wrapper-layers">
     <div class="period">
-      <div class="period_checkbox">
-        <Checkbox @onChecked="showPeriod" :checked="isShowPeriod"/>
-        <p>Выбрать период</p>
+      <div class="checkbox">
+        <Checkbox @onChecked="showGraph = !showGraph" :checked="showGraph"/>
+        <p>Показать маршрутный граф</p>
       </div>
 
-      <div class="period_select" v-if="isShowPeriod">
-        <ArrowIcon
-            @click="prevDate"
-            :class="{disabled: weeks.findIndex(week => week.value === selectPeriod) === 0}"
-            class="icon arrow-left"
-        />
-        <VueSelect
-            v-model="selectPeriod"
-            :options="weeks"
-            placeholder="Выберите неделю"
-        />
-        <ArrowIcon
-            :class="{disabled: weeks.findIndex(week => week.value === selectPeriod) === weeks.length - 1}"
-            @click="nextDate"
-            class="icon arrow-right"
-        />
-      </div>
+<!--      <div class="checkbox">-->
+<!--        <Checkbox @onChecked="showGraph = !showGraph" :checked="showGraph"/>-->
+<!--        <p>Показать маршрутный граф</p>-->
+<!--      </div>-->
+
+      <template>
+        <div class="checkbox">
+          <Checkbox @onChecked="showPeriod" :checked="isShowPeriod"/>
+          <p>Выбрать период</p>
+        </div>
+
+        <div class="period_select" v-if="isShowPeriod">
+          <ArrowIcon
+              @click="prevDate"
+              :class="{disabled: weeks.findIndex(week => week.value === selectPeriod) === 0}"
+              class="icon arrow-left"
+          />
+          <VueSelect
+              v-model="selectPeriod"
+              :options="weeks"
+              placeholder="Выберите неделю"
+          />
+          <ArrowIcon
+              :class="{disabled: weeks.findIndex(week => week.value === selectPeriod) === weeks.length - 1}"
+              @click="nextDate"
+              class="icon arrow-right"
+          />
+        </div>
+      </template>
     </div>
 
     <div>
@@ -79,6 +91,9 @@
       <button class="footer_button" :disabled="!paths.length" @click="onOpenGantt">
         Посмотреть диаграмму Гантта
       </button>
+      <button class="footer_button" @click="typeSidebar = TypeSidebar.TEMPLATES">
+        Изменить шаблон
+      </button>
     </div>
   </div>
 </template>
@@ -90,14 +105,14 @@ import {useCommonStore, useVesselsStore} from "../store";
 import {ref} from "vue";
 import Layer from "./Layer.vue";
 import ArrowIcon from '../assets/icons/arrow.svg'
-import {IIcebreaker, IVessel, Select, tModal, typeTransport} from "../types.ts";
+import {IIcebreaker, IVessel, Select, tModal, TypeSidebar, typeTransport} from "../types.ts";
 import VueSelect from "vue3-select-component";
 import {weeks} from "../custom/weeks.ts";
 
 const {getPath} = useVesselsStore()
 const {vessels, icebreakers, paths} = storeToRefs(useVesselsStore())
 
-const {isLoading, openModal, typeModal} = storeToRefs(useCommonStore())
+const {isLoading, openModal, typeModal, showGraph, typeSidebar} = storeToRefs(useCommonStore())
 
 const isVisibleVessels = ref(true)
 const isVisibleIcebreakers = ref(true)
@@ -205,12 +220,6 @@ const changeParentCheckbox = (type: typeTransport) => {
     flex-direction: column;
     gap: 10px;
 
-    &_checkbox {
-      display: flex;
-      gap: 5px;
-      align-items: baseline;
-    }
-
     &_select {
       display: flex;
       gap: 5px;
@@ -263,48 +272,6 @@ const changeParentCheckbox = (type: typeTransport) => {
       display: flex;
       gap: 5px;
       margin-bottom: 3px;
-    }
-  }
-
-  .footer {
-    position: absolute;
-    bottom: 20px;
-    border: none;
-    display: flex;
-    flex-direction: column;
-    gap: 5px;
-
-    &_button {
-      padding: 0.75rem 1.5rem;
-      background-color: #488aec;
-      color: #ffffff;
-      font-size: 0.75rem;
-      line-height: 1rem;
-      font-weight: 700;
-      cursor: pointer;
-      text-align: center;
-      text-transform: uppercase;
-      vertical-align: middle;
-      align-items: center;
-      border-radius: 0.5rem;
-      user-select: none;
-      gap: 0.75rem;
-      box-shadow: 0 4px 6px -1px #488aec31, 0 2px 4px -1px #488aec17;
-      transition: all 0.6s ease;
-
-      &:hover {
-        box-shadow: 0 10px 15px -3px #488aec4f, 0 4px 6px -2px #488aec17;
-      }
-
-      &:focus,
-      &:active {
-        opacity: 0.85;
-        box-shadow: none;
-      }
-
-      &:disabled, &[disabled=disabled] {
-        background-color: gray;
-      }
     }
   }
 }
