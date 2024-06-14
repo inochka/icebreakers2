@@ -6,12 +6,25 @@
         <p>Показать маршрутный граф</p>
       </div>
 
-<!--      <div class="checkbox">-->
-<!--        <Checkbox @onChecked="showGraph = !showGraph" :checked="showGraph"/>-->
-<!--        <p>Показать маршрутный граф</p>-->
-<!--      </div>-->
+      <div>
+        <div class="checkbox">
+          <Checkbox @onChecked="isShowTiff = !isShowTiff" :checked="isShowTiff"/>
+          <p>Показать ледовую обстановку</p>
+        </div>
+        <div class="datepicker" v-if="isShowTiff">
+<!--          TODO change max date-->
+          <VueDatePicker
+              v-model="date"
+              text-input
+              :enable-time-picker="false"
+              :start-date="new Date(vessels[0].start_date)"
+              :min-date="new Date(vessels[0].start_date)"
+              :max-date="new Date()"
+          />
+        </div>
+      </div>
 
-      <template>
+      <div>
         <div class="checkbox">
           <Checkbox @onChecked="showPeriod" :checked="isShowPeriod"/>
           <p>Выбрать период</p>
@@ -34,7 +47,7 @@
               class="icon arrow-right"
           />
         </div>
-      </template>
+      </div>
     </div>
 
     <div>
@@ -112,7 +125,7 @@ import {weeks} from "../custom/weeks.ts";
 const {getPath} = useVesselsStore()
 const {vessels, icebreakers, paths} = storeToRefs(useVesselsStore())
 
-const {isLoading, openModal, typeModal, showGraph, typeSidebar} = storeToRefs(useCommonStore())
+const {isLoading, openModal, typeModal, showGraph, typeSidebar, date} = storeToRefs(useCommonStore())
 
 const isVisibleVessels = ref(true)
 const isVisibleIcebreakers = ref(true)
@@ -122,6 +135,7 @@ const isChangeParentVessel = ref(false)
 const isChangeParentIcebreaker = ref(false)
 const isShowPeriod = ref(false)
 const selectPeriod = ref('')
+const isShowTiff = ref(false)
 
 const showPeriod = () => {
   isShowPeriod.value = !isShowPeriod.value
@@ -219,6 +233,10 @@ const changeParentCheckbox = (type: typeTransport) => {
     display: flex;
     flex-direction: column;
     gap: 10px;
+
+    .datepicker {
+      margin-top: 10px;
+    }
 
     &_select {
       display: flex;
