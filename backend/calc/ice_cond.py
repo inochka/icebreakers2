@@ -12,7 +12,6 @@ from dateutil import parser
 from geocube.api.core import make_geocube
 from networkx import Graph
 from scipy.interpolate import LinearNDInterpolator
-<<<<<<< HEAD
 import matplotlib.pyplot as plt
 from backend.calc.base_graph import BaseGraph
 import backend.config
@@ -20,10 +19,7 @@ import geopandas
 from geocube.api.core import make_geocube
 from backend.config import tiffs_dir
 import rioxarray
-=======
 
-from backend.config import tiffs_dir
->>>>>>> unstable
 
 logger = logging.getLogger(__name__)
 
@@ -35,10 +31,7 @@ class IceCondition:
     interpolators: dict[datetime, LinearNDInterpolator]
     graphs_with_conds: dict[datetime, Graph]
     gtiffs_paths: dict[datetime, Path]
-<<<<<<< HEAD
-=======
     num_points: int = 20
->>>>>>> unstable
 
     def __init__(self, file_path: Path | str, graph: Graph):
         self.dfs = self.read_file(file_path)
@@ -220,8 +213,6 @@ class IceCondition:
                 measurements=["ice_condition"],
                 resolution=(-0.1, 0.1),
             )
-<<<<<<< HEAD
-=======
             filename = dt.strftime("%Y_%m_%d") + ".tif"
             out_grid["ice_condition"].rio.to_raster(tiffs_dir / filename)
             self.gtiffs_paths[dt] = tiffs_dir / filename
@@ -238,7 +229,6 @@ class IceCondition:
                 measurements=["ice_condition"],
                 resolution=(-0.1, 0.1),
             )
->>>>>>> unstable
 
             filename = dt.strftime("%Y_%m_%d") + ".tif"
 

@@ -2,16 +2,11 @@ import logging.config
 import os
 from pathlib import Path
 
-<<<<<<< HEAD
-app_base_dir = Path(__file__).parent
-tiffs_dir = app_base_dir / "tiffs"
-=======
 backend_base_dir = Path(__file__).parent
 tiffs_dir = backend_base_dir.parent / "tiffs"
 json_dir = backend_base_dir / "data/json_data"
 
 recalculate_loaded = False  # нужно ли пересчитывать при старте уже имеющиеся шаблоны
->>>>>>> unstable
 
 LOGGING = {
     'version': 1,
