@@ -1,0 +1,3134 @@
+{
+    "full_1": {
+        "waybill": [
+            {
+                "event": "stuck",
+                "point": 11,
+                "dt": "2022-03-01T00:00:00"
+            }
+        ],
+        "total_time_hours": Infinity,
+        "start_date": "2022-03-01T00:00:00",
+        "end_date": null,
+        "source": 11,
+        "source_name": "Новый порт",
+        "target": 41,
+        "target_name": "Рейд Мурманска",
+        "success": false,
+        "min_ice_condition": null,
+        "speed": null,
+        "vessel_id": 1,
+        "template_name": "full",
+        "path_line": []
+    },
+    "full_2": {
+        "waybill": [
+            {
+                "event": "stuck",
+                "point": 25,
+                "dt": "2022-03-02T00:00:00"
+            }
+        ],
+        "total_time_hours": Infinity,
+        "start_date": "2022-03-02T00:00:00",
+        "end_date": null,
+        "source": 25,
+        "source_name": "Сабетта",
+        "target": 29,
+        "target_name": "Архангельск",
+        "success": false,
+        "min_ice_condition": null,
+        "speed": null,
+        "vessel_id": 2,
+        "template_name": "full",
+        "path_line": []
+    },
+    "full_3": {
+        "waybill": [
+            {
+                "event": "stuck",
+                "point": 25,
+                "dt": "2022-03-04T00:00:00"
+            }
+        ],
+        "total_time_hours": Infinity,
+        "start_date": "2022-03-04T00:00:00",
+        "end_date": null,
+        "source": 25,
+        "source_name": "Сабетта",
+        "target": 41,
+        "target_name": "Рейд Мурманска",
+        "success": false,
+        "min_ice_condition": null,
+        "speed": null,
+        "vessel_id": 3,
+        "template_name": "full",
+        "path_line": []
+    },
+    "full_4": {
+        "waybill": [
+            {
+                "event": "move",
+                "point": 4,
+                "dt": "2022-03-07T00:00:00"
+            },
+            {
+                "event": "move",
+                "point": 21,
+                "dt": "2022-03-07T19:48:36.194040"
+            },
+            {
+                "event": "move",
+                "point": 16,
+                "dt": "2022-03-09T01:17:56.220816"
+            },
+            {
+                "event": "move",
+                "point": 20,
+                "dt": "2022-03-12T04:16:00.710592"
+            },
+            {
+                "event": "move",
+                "point": 19,
+                "dt": "2022-03-16T09:26:17.203584"
+            },
+            {
+                "event": "move",
+                "point": 8,
+                "dt": "2022-03-20T19:54:05.772240"
+            },
+            {
+                "event": "move",
+                "point": 12,
+                "dt": "2022-03-25T14:29:11.277192"
+            },
+            {
+                "event": "move",
+                "point": 40,
+                "dt": "2022-03-31T11:10:14.428064"
+            },
+            {
+                "event": "move",
+                "point": 42,
+                "dt": "2022-04-06T18:00:06.046120"
+            },
+            {
+                "event": "move",
+                "point": 30,
+                "dt": "2022-04-13T12:27:31.667736"
+            },
+            {
+                "event": "move",
+                "point": 18,
+                "dt": "2022-04-22T07:23:25.965872"
+            },
+            {
+                "event": "fin",
+                "point": 27,
+                "dt": "2022-05-04T09:43:12.923208"
+            }
+        ],
+        "total_time_hours": 290.3297103711111,
+        "start_date": "2022-03-07T00:00:00",
+        "end_date": "2022-03-19T02:19:46.957336",
+        "source": 4,
+        "source_name": "Штокман",
+        "target": 27,
+        "target_name": "пролив Лонга",
+        "success": true,
+        "min_ice_condition": null,
+        "speed": null,
+        "vessel_id": 4,
+        "template_name": "full",
+        "path_line": [
+            4,
+            21,
+            16,
+            20,
+            19,
+            8,
+            12,
+            40,
+            42,
+            30,
+            18,
+            27
+        ]
+    },
+    "full_5": {
+        "waybill": [
+            {
+                "event": "stuck",
+                "point": 11,
+                "dt": "2022-03-08T00:00:00"
+            }
+        ],
+        "total_time_hours": Infinity,
+        "start_date": "2022-03-08T00:00:00",
+        "end_date": null,
+        "source": 11,
+        "source_name": "Новый порт",
+        "target": 24,
+        "target_name": "устье Лены",
+        "success": false,
+        "min_ice_condition": null,
+        "speed": null,
+        "vessel_id": 5,
+        "template_name": "full",
+        "path_line": []
+    },
+    "full_6": {
+        "waybill": [
+            {
+                "event": "stuck",
+                "point": 25,
+                "dt": "2022-03-12T00:00:00"
+            }
+        ],
+        "total_time_hours": Infinity,
+        "start_date": "2022-03-12T00:00:00",
+        "end_date": null,
+        "source": 25,
+        "source_name": "Сабетта",
+        "target": 27,
+        "target_name": "пролив Лонга",
+        "success": false,
+        "min_ice_condition": null,
+        "speed": null,
+        "vessel_id": 6,
+        "template_name": "full",
+        "path_line": []
+    },
+    "full_7": {
+        "waybill": [
+            {
+                "event": "stuck",
+                "point": 35,
+                "dt": "2022-03-13T00:00:00"
+            }
+        ],
+        "total_time_hours": Infinity,
+        "start_date": "2022-03-13T00:00:00",
+        "end_date": null,
+        "source": 35,
+        "source_name": "терминал Утренний",
+        "target": 27,
+        "target_name": "пролив Лонга",
+        "success": false,
+        "min_ice_condition": null,
+        "speed": null,
+        "vessel_id": 7,
+        "template_name": "full",
+        "path_line": []
+    },
+    "full_8": {
+        "waybill": [
+            {
+                "event": "stuck",
+                "point": 5,
+                "dt": "2022-03-07T00:00:00"
+            }
+        ],
+        "total_time_hours": Infinity,
+        "start_date": "2022-03-07T00:00:00",
+        "end_date": null,
+        "source": 5,
+        "source_name": "Окно в Европу",
+        "target": 35,
+        "target_name": "терминал Утренний",
+        "success": false,
+        "min_ice_condition": null,
+        "speed": null,
+        "vessel_id": 8,
+        "template_name": "full",
+        "path_line": []
+    },
+    "full_9": {
+        "waybill": [
+            {
+                "event": "stuck",
+                "point": 5,
+                "dt": "2022-03-07T00:00:00"
+            }
+        ],
+        "total_time_hours": Infinity,
+        "start_date": "2022-03-07T00:00:00",
+        "end_date": null,
+        "source": 5,
+        "source_name": "Окно в Европу",
+        "target": 35,
+        "target_name": "терминал Утренний",
+        "success": false,
+        "min_ice_condition": null,
+        "speed": null,
+        "vessel_id": 9,
+        "template_name": "full",
+        "path_line": []
+    },
+    "full_10": {
+        "waybill": [
+            {
+                "event": "stuck",
+                "point": 35,
+                "dt": "2022-03-15T00:00:00"
+            }
+        ],
+        "total_time_hours": Infinity,
+        "start_date": "2022-03-15T00:00:00",
+        "end_date": null,
+        "source": 35,
+        "source_name": "терминал Утренний",
+        "target": 24,
+        "target_name": "устье Лены",
+        "success": false,
+        "min_ice_condition": null,
+        "speed": null,
+        "vessel_id": 10,
+        "template_name": "full",
+        "path_line": []
+    },
+    "full_11": {
+        "waybill": [
+            {
+                "event": "stuck",
+                "point": 5,
+                "dt": "2022-03-09T00:00:00"
+            }
+        ],
+        "total_time_hours": Infinity,
+        "start_date": "2022-03-09T00:00:00",
+        "end_date": null,
+        "source": 5,
+        "source_name": "Окно в Европу",
+        "target": 35,
+        "target_name": "терминал Утренний",
+        "success": false,
+        "min_ice_condition": null,
+        "speed": null,
+        "vessel_id": 11,
+        "template_name": "full",
+        "path_line": []
+    },
+    "full_12": {
+        "waybill": [
+            {
+                "event": "stuck",
+                "point": 5,
+                "dt": "2022-03-16T00:00:00"
+            }
+        ],
+        "total_time_hours": Infinity,
+        "start_date": "2022-03-16T00:00:00",
+        "end_date": null,
+        "source": 5,
+        "source_name": "Окно в Европу",
+        "target": 35,
+        "target_name": "терминал Утренний",
+        "success": false,
+        "min_ice_condition": null,
+        "speed": null,
+        "vessel_id": 12,
+        "template_name": "full",
+        "path_line": []
+    },
+    "full_13": {
+        "waybill": [
+            {
+                "event": "stuck",
+                "point": 4,
+                "dt": "2022-03-26T00:00:00"
+            }
+        ],
+        "total_time_hours": Infinity,
+        "start_date": "2022-03-26T00:00:00",
+        "end_date": null,
+        "source": 4,
+        "source_name": "Штокман",
+        "target": 1,
+        "target_name": "Дудинка",
+        "success": false,
+        "min_ice_condition": null,
+        "speed": null,
+        "vessel_id": 13,
+        "template_name": "full",
+        "path_line": []
+    },
+    "full_14": {
+        "waybill": [
+            {
+                "event": "stuck",
+                "point": 11,
+                "dt": "2022-03-10T00:00:00"
+            }
+        ],
+        "total_time_hours": Infinity,
+        "start_date": "2022-03-10T00:00:00",
+        "end_date": null,
+        "source": 11,
+        "source_name": "Новый порт",
+        "target": 5,
+        "target_name": "Окно в Европу",
+        "success": false,
+        "min_ice_condition": null,
+        "speed": null,
+        "vessel_id": 14,
+        "template_name": "full",
+        "path_line": []
+    },
+    "full_15": {
+        "waybill": [
+            {
+                "event": "move",
+                "point": 16,
+                "dt": "2022-03-13T00:00:00"
+            },
+            {
+                "event": "move",
+                "point": 20,
+                "dt": "2022-03-15T00:43:39.067500"
+            },
+            {
+                "event": "move",
+                "point": 19,
+                "dt": "2022-03-18T05:31:48.138446"
+            },
+            {
+                "event": "move",
+                "point": 8,
+                "dt": "2022-03-21T16:00:10.147603"
+            },
+            {
+                "event": "move",
+                "point": 12,
+                "dt": "2022-03-25T11:10:37.445649"
+            },
+            {
+                "event": "fin",
+                "point": 24,
+                "dt": "2022-03-30T11:39:58.685795"
+            }
+        ],
+        "total_time_hours": 120.4892333738095,
+        "start_date": "2022-03-13T00:00:00",
+        "end_date": "2022-03-18T00:29:21.240146",
+        "source": 16,
+        "source_name": "Мыс Желания",
+        "target": 24,
+        "target_name": "устье Лены",
+        "success": true,
+        "min_ice_condition": null,
+        "speed": null,
+        "vessel_id": 15,
+        "template_name": "full",
+        "path_line": [
+            16,
+            20,
+            19,
+            8,
+            12,
+            24
+        ]
+    },
+    "full_16": {
+        "waybill": [
+            {
+                "event": "stuck",
+                "point": 11,
+                "dt": "2022-03-24T00:00:00"
+            }
+        ],
+        "total_time_hours": Infinity,
+        "start_date": "2022-03-24T00:00:00",
+        "end_date": null,
+        "source": 11,
+        "source_name": "Новый порт",
+        "target": 4,
+        "target_name": "Штокман",
+        "success": false,
+        "min_ice_condition": null,
+        "speed": null,
+        "vessel_id": 16,
+        "template_name": "full",
+        "path_line": []
+    },
+    "full_17": {
+        "waybill": [
+            {
+                "event": "stuck",
+                "point": 27,
+                "dt": "2022-03-04T00:00:00"
+            }
+        ],
+        "total_time_hours": Infinity,
+        "start_date": "2022-03-04T00:00:00",
+        "end_date": null,
+        "source": 27,
+        "source_name": "пролив Лонга",
+        "target": 25,
+        "target_name": "Сабетта",
+        "success": false,
+        "min_ice_condition": null,
+        "speed": null,
+        "vessel_id": 17,
+        "template_name": "full",
+        "path_line": []
+    },
+    "full_18": {
+        "waybill": [
+            {
+                "event": "move",
+                "point": 6,
+                "dt": "2022-03-19T00:00:00"
+            },
+            {
+                "event": "move",
+                "point": 15,
+                "dt": "2022-03-20T07:11:52.263960"
+            },
+            {
+                "event": "move",
+                "point": 2,
+                "dt": "2022-03-22T08:26:06.635976"
+            },
+            {
+                "event": "fin",
+                "point": 5,
+                "dt": "2022-03-26T12:22:08.057552"
+            }
+        ],
+        "total_time_hours": 99.93372821555556,
+        "start_date": "2022-03-19T00:00:00",
+        "end_date": "2022-03-23T03:56:01.421576",
+        "source": 6,
+        "source_name": "Победа месторождение",
+        "target": 5,
+        "target_name": "Окно в Европу",
+        "success": true,
+        "min_ice_condition": null,
+        "speed": null,
+        "vessel_id": 18,
+        "template_name": "full",
+        "path_line": [
+            6,
+            15,
+            2,
+            5
+        ]
+    },
+    "full_19": {
+        "waybill": [
+            {
+                "event": "stuck",
+                "point": 35,
+                "dt": "2022-03-19T00:00:00"
+            }
+        ],
+        "total_time_hours": Infinity,
+        "start_date": "2022-03-19T00:00:00",
+        "end_date": null,
+        "source": 35,
+        "source_name": "терминал Утренний",
+        "target": 24,
+        "target_name": "устье Лены",
+        "success": false,
+        "min_ice_condition": null,
+        "speed": null,
+        "vessel_id": 19,
+        "template_name": "full",
+        "path_line": []
+    },
+    "full_20": {
+        "waybill": [
+            {
+                "event": "stuck",
+                "point": 11,
+                "dt": "2022-03-17T00:00:00"
+            }
+        ],
+        "total_time_hours": Infinity,
+        "start_date": "2022-03-17T00:00:00",
+        "end_date": null,
+        "source": 11,
+        "source_name": "Новый порт",
+        "target": 5,
+        "target_name": "Окно в Европу",
+        "success": false,
+        "min_ice_condition": null,
+        "speed": null,
+        "vessel_id": 20,
+        "template_name": "full",
+        "path_line": []
+    },
+    "full_21": {
+        "waybill": [
+            {
+                "event": "stuck",
+                "point": 29,
+                "dt": "2022-03-24T00:00:00"
+            }
+        ],
+        "total_time_hours": Infinity,
+        "start_date": "2022-03-24T00:00:00",
+        "end_date": null,
+        "source": 29,
+        "source_name": "Архангельск",
+        "target": 1,
+        "target_name": "Дудинка",
+        "success": false,
+        "min_ice_condition": null,
+        "speed": null,
+        "vessel_id": 21,
+        "template_name": "full",
+        "path_line": []
+    },
+    "full_22": {
+        "waybill": [
+            {
+                "event": "stuck",
+                "point": 24,
+                "dt": "2022-03-08T00:00:00"
+            }
+        ],
+        "total_time_hours": Infinity,
+        "start_date": "2022-03-08T00:00:00",
+        "end_date": null,
+        "source": 24,
+        "source_name": "устье Лены",
+        "target": 11,
+        "target_name": "Новый порт",
+        "success": false,
+        "min_ice_condition": null,
+        "speed": null,
+        "vessel_id": 22,
+        "template_name": "full",
+        "path_line": []
+    },
+    "full_23": {
+        "waybill": [
+            {
+                "event": "stuck",
+                "point": 28,
+                "dt": "2022-03-20T00:00:00"
+            }
+        ],
+        "total_time_hours": Infinity,
+        "start_date": "2022-03-20T00:00:00",
+        "end_date": null,
+        "source": 28,
+        "source_name": "Восточно-Сибирское - 3 (север)",
+        "target": 41,
+        "target_name": "Рейд Мурманска",
+        "success": false,
+        "min_ice_condition": null,
+        "speed": null,
+        "vessel_id": 23,
+        "template_name": "full",
+        "path_line": []
+    },
+    "full_24": {
+        "waybill": [
+            {
+                "event": "stuck",
+                "point": 28,
+                "dt": "2022-03-16T00:00:00"
+            }
+        ],
+        "total_time_hours": Infinity,
+        "start_date": "2022-03-16T00:00:00",
+        "end_date": null,
+        "source": 28,
+        "source_name": "Восточно-Сибирское - 3 (север)",
+        "target": 29,
+        "target_name": "Архангельск",
+        "success": false,
+        "min_ice_condition": null,
+        "speed": null,
+        "vessel_id": 24,
+        "template_name": "full",
+        "path_line": []
+    },
+    "full_25": {
+        "waybill": [
+            {
+                "event": "stuck",
+                "point": 6,
+                "dt": "2022-04-01T00:00:00"
+            }
+        ],
+        "total_time_hours": Infinity,
+        "start_date": "2022-04-01T00:00:00",
+        "end_date": null,
+        "source": 6,
+        "source_name": "Победа месторождение",
+        "target": 1,
+        "target_name": "Дудинка",
+        "success": false,
+        "min_ice_condition": null,
+        "speed": null,
+        "vessel_id": 25,
+        "template_name": "full",
+        "path_line": []
+    },
+    "full_26": {
+        "waybill": [
+            {
+                "event": "stuck",
+                "point": 4,
+                "dt": "2022-04-08T00:00:00"
+            }
+        ],
+        "total_time_hours": Infinity,
+        "start_date": "2022-04-08T00:00:00",
+        "end_date": null,
+        "source": 4,
+        "source_name": "Штокман",
+        "target": 1,
+        "target_name": "Дудинка",
+        "success": false,
+        "min_ice_condition": null,
+        "speed": null,
+        "vessel_id": 26,
+        "template_name": "full",
+        "path_line": []
+    },
+    "full_27": {
+        "waybill": [
+            {
+                "event": "stuck",
+                "point": 11,
+                "dt": "2022-04-10T00:00:00"
+            }
+        ],
+        "total_time_hours": Infinity,
+        "start_date": "2022-04-10T00:00:00",
+        "end_date": null,
+        "source": 11,
+        "source_name": "Новый порт",
+        "target": 24,
+        "target_name": "устье Лены",
+        "success": false,
+        "min_ice_condition": null,
+        "speed": null,
+        "vessel_id": 27,
+        "template_name": "full",
+        "path_line": []
+    },
+    "full_28": {
+        "waybill": [
+            {
+                "event": "stuck",
+                "point": 29,
+                "dt": "2022-04-07T00:00:00"
+            }
+        ],
+        "total_time_hours": Infinity,
+        "start_date": "2022-04-07T00:00:00",
+        "end_date": null,
+        "source": 29,
+        "source_name": "Архангельск",
+        "target": 24,
+        "target_name": "устье Лены",
+        "success": false,
+        "min_ice_condition": null,
+        "speed": null,
+        "vessel_id": 28,
+        "template_name": "full",
+        "path_line": []
+    },
+    "full_29": {
+        "waybill": [
+            {
+                "event": "stuck",
+                "point": 35,
+                "dt": "2022-04-15T00:00:00"
+            }
+        ],
+        "total_time_hours": Infinity,
+        "start_date": "2022-04-15T00:00:00",
+        "end_date": null,
+        "source": 35,
+        "source_name": "терминал Утренний",
+        "target": 27,
+        "target_name": "пролив Лонга",
+        "success": false,
+        "min_ice_condition": null,
+        "speed": null,
+        "vessel_id": 29,
+        "template_name": "full",
+        "path_line": []
+    },
+    "full_30": {
+        "waybill": [
+            {
+                "event": "stuck",
+                "point": 4,
+                "dt": "2022-04-16T00:00:00"
+            }
+        ],
+        "total_time_hours": Infinity,
+        "start_date": "2022-04-16T00:00:00",
+        "end_date": null,
+        "source": 4,
+        "source_name": "Штокман",
+        "target": 35,
+        "target_name": "терминал Утренний",
+        "success": false,
+        "min_ice_condition": null,
+        "speed": null,
+        "vessel_id": 30,
+        "template_name": "full",
+        "path_line": []
+    },
+    "full_31": {
+        "waybill": [
+            {
+                "event": "stuck",
+                "point": 41,
+                "dt": "2022-04-16T00:00:00"
+            }
+        ],
+        "total_time_hours": Infinity,
+        "start_date": "2022-04-16T00:00:00",
+        "end_date": null,
+        "source": 41,
+        "source_name": "Рейд Мурманска",
+        "target": 11,
+        "target_name": "Новый порт",
+        "success": false,
+        "min_ice_condition": null,
+        "speed": null,
+        "vessel_id": 31,
+        "template_name": "full",
+        "path_line": []
+    },
+    "full_32": {
+        "waybill": [
+            {
+                "event": "stuck",
+                "point": 44,
+                "dt": "2022-04-16T00:00:00"
+            }
+        ],
+        "total_time_hours": Infinity,
+        "start_date": "2022-04-16T00:00:00",
+        "end_date": null,
+        "source": 44,
+        "source_name": "Индига",
+        "target": 6,
+        "target_name": "Победа месторождение",
+        "success": false,
+        "min_ice_condition": null,
+        "speed": null,
+        "vessel_id": 32,
+        "template_name": "full",
+        "path_line": []
+    },
+    "full_33": {
+        "waybill": [
+            {
+                "event": "stuck",
+                "point": 27,
+                "dt": "2022-04-06T00:00:00"
+            }
+        ],
+        "total_time_hours": Infinity,
+        "start_date": "2022-04-06T00:00:00",
+        "end_date": null,
+        "source": 27,
+        "source_name": "пролив Лонга",
+        "target": 4,
+        "target_name": "Штокман",
+        "success": false,
+        "min_ice_condition": null,
+        "speed": null,
+        "vessel_id": 33,
+        "template_name": "full",
+        "path_line": []
+    },
+    "full_34": {
+        "waybill": [
+            {
+                "event": "stuck",
+                "point": 25,
+                "dt": "2022-04-20T00:00:00"
+            }
+        ],
+        "total_time_hours": Infinity,
+        "start_date": "2022-04-20T00:00:00",
+        "end_date": null,
+        "source": 25,
+        "source_name": "Сабетта",
+        "target": 5,
+        "target_name": "Окно в Европу",
+        "success": false,
+        "min_ice_condition": null,
+        "speed": null,
+        "vessel_id": 34,
+        "template_name": "full",
+        "path_line": []
+    },
+    "full_35": {
+        "waybill": [
+            {
+                "event": "stuck",
+                "point": 25,
+                "dt": "2022-04-23T00:00:00"
+            }
+        ],
+        "total_time_hours": Infinity,
+        "start_date": "2022-04-23T00:00:00",
+        "end_date": null,
+        "source": 25,
+        "source_name": "Сабетта",
+        "target": 5,
+        "target_name": "Окно в Европу",
+        "success": false,
+        "min_ice_condition": null,
+        "speed": null,
+        "vessel_id": 35,
+        "template_name": "full",
+        "path_line": []
+    },
+    "full_36": {
+        "waybill": [
+            {
+                "event": "stuck",
+                "point": 5,
+                "dt": "2022-04-22T00:00:00"
+            }
+        ],
+        "total_time_hours": Infinity,
+        "start_date": "2022-04-22T00:00:00",
+        "end_date": null,
+        "source": 5,
+        "source_name": "Окно в Европу",
+        "target": 35,
+        "target_name": "терминал Утренний",
+        "success": false,
+        "min_ice_condition": null,
+        "speed": null,
+        "vessel_id": 36,
+        "template_name": "full",
+        "path_line": []
+    },
+    "full_37": {
+        "waybill": [
+            {
+                "event": "stuck",
+                "point": 41,
+                "dt": "2022-04-23T00:00:00"
+            }
+        ],
+        "total_time_hours": Infinity,
+        "start_date": "2022-04-23T00:00:00",
+        "end_date": null,
+        "source": 41,
+        "source_name": "Рейд Мурманска",
+        "target": 1,
+        "target_name": "Дудинка",
+        "success": false,
+        "min_ice_condition": null,
+        "speed": null,
+        "vessel_id": 37,
+        "template_name": "full",
+        "path_line": []
+    },
+    "full_38": {
+        "waybill": [
+            {
+                "event": "stuck",
+                "point": 4,
+                "dt": "2022-04-25T00:00:00"
+            }
+        ],
+        "total_time_hours": Infinity,
+        "start_date": "2022-04-25T00:00:00",
+        "end_date": null,
+        "source": 4,
+        "source_name": "Штокман",
+        "target": 11,
+        "target_name": "Новый порт",
+        "success": false,
+        "min_ice_condition": null,
+        "speed": null,
+        "vessel_id": 38,
+        "template_name": "full",
+        "path_line": []
+    },
+    "full_39": {
+        "waybill": [
+            {
+                "event": "stuck",
+                "point": 4,
+                "dt": "2022-04-27T00:00:00"
+            }
+        ],
+        "total_time_hours": Infinity,
+        "start_date": "2022-04-27T00:00:00",
+        "end_date": null,
+        "source": 4,
+        "source_name": "Штокман",
+        "target": 24,
+        "target_name": "устье Лены",
+        "success": false,
+        "min_ice_condition": null,
+        "speed": null,
+        "vessel_id": 39,
+        "template_name": "full",
+        "path_line": []
+    },
+    "full_40": {
+        "waybill": [
+            {
+                "event": "stuck",
+                "point": 25,
+                "dt": "2022-04-27T00:00:00"
+            }
+        ],
+        "total_time_hours": Infinity,
+        "start_date": "2022-04-27T00:00:00",
+        "end_date": null,
+        "source": 25,
+        "source_name": "Сабетта",
+        "target": 29,
+        "target_name": "Архангельск",
+        "success": false,
+        "min_ice_condition": null,
+        "speed": null,
+        "vessel_id": 40,
+        "template_name": "full",
+        "path_line": []
+    },
+    "full_41": {
+        "waybill": [
+            {
+                "event": "stuck",
+                "point": 11,
+                "dt": "2022-04-25T00:00:00"
+            }
+        ],
+        "total_time_hours": Infinity,
+        "start_date": "2022-04-25T00:00:00",
+        "end_date": null,
+        "source": 11,
+        "source_name": "Новый порт",
+        "target": 5,
+        "target_name": "Окно в Европу",
+        "success": false,
+        "min_ice_condition": null,
+        "speed": null,
+        "vessel_id": 41,
+        "template_name": "full",
+        "path_line": []
+    },
+    "full_42": {
+        "waybill": [
+            {
+                "event": "stuck",
+                "point": 41,
+                "dt": "2022-04-30T00:00:00"
+            }
+        ],
+        "total_time_hours": Infinity,
+        "start_date": "2022-04-30T00:00:00",
+        "end_date": null,
+        "source": 41,
+        "source_name": "Рейд Мурманска",
+        "target": 11,
+        "target_name": "Новый порт",
+        "success": false,
+        "min_ice_condition": null,
+        "speed": null,
+        "vessel_id": 42,
+        "template_name": "full",
+        "path_line": []
+    },
+    "solo_1": {
+        "waybill": [
+            {
+                "event": "stuck",
+                "point": 11,
+                "dt": "2022-03-01T00:00:00"
+            }
+        ],
+        "total_time_hours": Infinity,
+        "start_date": "2022-03-01T00:00:00",
+        "end_date": null,
+        "source": 11,
+        "source_name": "Новый порт",
+        "target": 41,
+        "target_name": "Рейд Мурманска",
+        "success": false,
+        "min_ice_condition": null,
+        "speed": null,
+        "vessel_id": 1,
+        "template_name": "solo",
+        "path_line": []
+    },
+    "solo_2": {
+        "waybill": [
+            {
+                "event": "stuck",
+                "point": 25,
+                "dt": "2022-03-02T00:00:00"
+            }
+        ],
+        "total_time_hours": Infinity,
+        "start_date": "2022-03-02T00:00:00",
+        "end_date": null,
+        "source": 25,
+        "source_name": "Сабетта",
+        "target": 29,
+        "target_name": "Архангельск",
+        "success": false,
+        "min_ice_condition": null,
+        "speed": null,
+        "vessel_id": 2,
+        "template_name": "solo",
+        "path_line": []
+    },
+    "solo_3": {
+        "waybill": [
+            {
+                "event": "stuck",
+                "point": 25,
+                "dt": "2022-03-04T00:00:00"
+            }
+        ],
+        "total_time_hours": Infinity,
+        "start_date": "2022-03-04T00:00:00",
+        "end_date": null,
+        "source": 25,
+        "source_name": "Сабетта",
+        "target": 41,
+        "target_name": "Рейд Мурманска",
+        "success": false,
+        "min_ice_condition": null,
+        "speed": null,
+        "vessel_id": 3,
+        "template_name": "solo",
+        "path_line": []
+    },
+    "solo_4": {
+        "waybill": [
+            {
+                "event": "move",
+                "point": 4,
+                "dt": "2022-03-07T00:00:00"
+            },
+            {
+                "event": "move",
+                "point": 21,
+                "dt": "2022-03-07T19:48:36.194040"
+            },
+            {
+                "event": "move",
+                "point": 16,
+                "dt": "2022-03-09T01:17:56.220816"
+            },
+            {
+                "event": "move",
+                "point": 20,
+                "dt": "2022-03-12T04:16:00.710592"
+            },
+            {
+                "event": "move",
+                "point": 19,
+                "dt": "2022-03-16T09:26:17.203584"
+            },
+            {
+                "event": "move",
+                "point": 8,
+                "dt": "2022-03-20T19:54:05.772240"
+            },
+            {
+                "event": "move",
+                "point": 12,
+                "dt": "2022-03-25T14:29:11.277192"
+            },
+            {
+                "event": "move",
+                "point": 40,
+                "dt": "2022-03-31T11:10:14.428064"
+            },
+            {
+                "event": "move",
+                "point": 42,
+                "dt": "2022-04-06T18:00:06.046120"
+            },
+            {
+                "event": "move",
+                "point": 30,
+                "dt": "2022-04-13T12:27:31.667736"
+            },
+            {
+                "event": "move",
+                "point": 18,
+                "dt": "2022-04-22T07:23:25.965872"
+            },
+            {
+                "event": "fin",
+                "point": 27,
+                "dt": "2022-05-04T09:43:12.923208"
+            }
+        ],
+        "total_time_hours": 290.3297103711111,
+        "start_date": "2022-03-07T00:00:00",
+        "end_date": "2022-03-19T02:19:46.957336",
+        "source": 4,
+        "source_name": "Штокман",
+        "target": 27,
+        "target_name": "пролив Лонга",
+        "success": true,
+        "min_ice_condition": null,
+        "speed": null,
+        "vessel_id": 4,
+        "template_name": "solo",
+        "path_line": [
+            4,
+            21,
+            16,
+            20,
+            19,
+            8,
+            12,
+            40,
+            42,
+            30,
+            18,
+            27
+        ]
+    },
+    "solo_5": {
+        "waybill": [
+            {
+                "event": "stuck",
+                "point": 11,
+                "dt": "2022-03-08T00:00:00"
+            }
+        ],
+        "total_time_hours": Infinity,
+        "start_date": "2022-03-08T00:00:00",
+        "end_date": null,
+        "source": 11,
+        "source_name": "Новый порт",
+        "target": 24,
+        "target_name": "устье Лены",
+        "success": false,
+        "min_ice_condition": null,
+        "speed": null,
+        "vessel_id": 5,
+        "template_name": "solo",
+        "path_line": []
+    },
+    "solo_6": {
+        "waybill": [
+            {
+                "event": "stuck",
+                "point": 25,
+                "dt": "2022-03-12T00:00:00"
+            }
+        ],
+        "total_time_hours": Infinity,
+        "start_date": "2022-03-12T00:00:00",
+        "end_date": null,
+        "source": 25,
+        "source_name": "Сабетта",
+        "target": 27,
+        "target_name": "пролив Лонга",
+        "success": false,
+        "min_ice_condition": null,
+        "speed": null,
+        "vessel_id": 6,
+        "template_name": "solo",
+        "path_line": []
+    },
+    "solo_7": {
+        "waybill": [
+            {
+                "event": "stuck",
+                "point": 35,
+                "dt": "2022-03-13T00:00:00"
+            }
+        ],
+        "total_time_hours": Infinity,
+        "start_date": "2022-03-13T00:00:00",
+        "end_date": null,
+        "source": 35,
+        "source_name": "терминал Утренний",
+        "target": 27,
+        "target_name": "пролив Лонга",
+        "success": false,
+        "min_ice_condition": null,
+        "speed": null,
+        "vessel_id": 7,
+        "template_name": "solo",
+        "path_line": []
+    },
+    "solo_8": {
+        "waybill": [
+            {
+                "event": "stuck",
+                "point": 5,
+                "dt": "2022-03-07T00:00:00"
+            }
+        ],
+        "total_time_hours": Infinity,
+        "start_date": "2022-03-07T00:00:00",
+        "end_date": null,
+        "source": 5,
+        "source_name": "Окно в Европу",
+        "target": 35,
+        "target_name": "терминал Утренний",
+        "success": false,
+        "min_ice_condition": null,
+        "speed": null,
+        "vessel_id": 8,
+        "template_name": "solo",
+        "path_line": []
+    },
+    "solo_9": {
+        "waybill": [
+            {
+                "event": "stuck",
+                "point": 5,
+                "dt": "2022-03-07T00:00:00"
+            }
+        ],
+        "total_time_hours": Infinity,
+        "start_date": "2022-03-07T00:00:00",
+        "end_date": null,
+        "source": 5,
+        "source_name": "Окно в Европу",
+        "target": 35,
+        "target_name": "терминал Утренний",
+        "success": false,
+        "min_ice_condition": null,
+        "speed": null,
+        "vessel_id": 9,
+        "template_name": "solo",
+        "path_line": []
+    },
+    "solo_10": {
+        "waybill": [
+            {
+                "event": "stuck",
+                "point": 35,
+                "dt": "2022-03-15T00:00:00"
+            }
+        ],
+        "total_time_hours": Infinity,
+        "start_date": "2022-03-15T00:00:00",
+        "end_date": null,
+        "source": 35,
+        "source_name": "терминал Утренний",
+        "target": 24,
+        "target_name": "устье Лены",
+        "success": false,
+        "min_ice_condition": null,
+        "speed": null,
+        "vessel_id": 10,
+        "template_name": "solo",
+        "path_line": []
+    },
+    "solo_11": {
+        "waybill": [
+            {
+                "event": "stuck",
+                "point": 5,
+                "dt": "2022-03-09T00:00:00"
+            }
+        ],
+        "total_time_hours": Infinity,
+        "start_date": "2022-03-09T00:00:00",
+        "end_date": null,
+        "source": 5,
+        "source_name": "Окно в Европу",
+        "target": 35,
+        "target_name": "терминал Утренний",
+        "success": false,
+        "min_ice_condition": null,
+        "speed": null,
+        "vessel_id": 11,
+        "template_name": "solo",
+        "path_line": []
+    },
+    "solo_12": {
+        "waybill": [
+            {
+                "event": "stuck",
+                "point": 5,
+                "dt": "2022-03-16T00:00:00"
+            }
+        ],
+        "total_time_hours": Infinity,
+        "start_date": "2022-03-16T00:00:00",
+        "end_date": null,
+        "source": 5,
+        "source_name": "Окно в Европу",
+        "target": 35,
+        "target_name": "терминал Утренний",
+        "success": false,
+        "min_ice_condition": null,
+        "speed": null,
+        "vessel_id": 12,
+        "template_name": "solo",
+        "path_line": []
+    },
+    "solo_13": {
+        "waybill": [
+            {
+                "event": "stuck",
+                "point": 4,
+                "dt": "2022-03-26T00:00:00"
+            }
+        ],
+        "total_time_hours": Infinity,
+        "start_date": "2022-03-26T00:00:00",
+        "end_date": null,
+        "source": 4,
+        "source_name": "Штокман",
+        "target": 1,
+        "target_name": "Дудинка",
+        "success": false,
+        "min_ice_condition": null,
+        "speed": null,
+        "vessel_id": 13,
+        "template_name": "solo",
+        "path_line": []
+    },
+    "solo_14": {
+        "waybill": [
+            {
+                "event": "stuck",
+                "point": 11,
+                "dt": "2022-03-10T00:00:00"
+            }
+        ],
+        "total_time_hours": Infinity,
+        "start_date": "2022-03-10T00:00:00",
+        "end_date": null,
+        "source": 11,
+        "source_name": "Новый порт",
+        "target": 5,
+        "target_name": "Окно в Европу",
+        "success": false,
+        "min_ice_condition": null,
+        "speed": null,
+        "vessel_id": 14,
+        "template_name": "solo",
+        "path_line": []
+    },
+    "solo_15": {
+        "waybill": [
+            {
+                "event": "move",
+                "point": 16,
+                "dt": "2022-03-13T00:00:00"
+            },
+            {
+                "event": "move",
+                "point": 20,
+                "dt": "2022-03-15T00:43:39.067500"
+            },
+            {
+                "event": "move",
+                "point": 19,
+                "dt": "2022-03-18T05:31:48.138446"
+            },
+            {
+                "event": "move",
+                "point": 8,
+                "dt": "2022-03-21T16:00:10.147603"
+            },
+            {
+                "event": "move",
+                "point": 12,
+                "dt": "2022-03-25T11:10:37.445649"
+            },
+            {
+                "event": "fin",
+                "point": 24,
+                "dt": "2022-03-30T11:39:58.685795"
+            }
+        ],
+        "total_time_hours": 120.4892333738095,
+        "start_date": "2022-03-13T00:00:00",
+        "end_date": "2022-03-18T00:29:21.240146",
+        "source": 16,
+        "source_name": "Мыс Желания",
+        "target": 24,
+        "target_name": "устье Лены",
+        "success": true,
+        "min_ice_condition": null,
+        "speed": null,
+        "vessel_id": 15,
+        "template_name": "solo",
+        "path_line": [
+            16,
+            20,
+            19,
+            8,
+            12,
+            24
+        ]
+    },
+    "solo_16": {
+        "waybill": [
+            {
+                "event": "stuck",
+                "point": 11,
+                "dt": "2022-03-24T00:00:00"
+            }
+        ],
+        "total_time_hours": Infinity,
+        "start_date": "2022-03-24T00:00:00",
+        "end_date": null,
+        "source": 11,
+        "source_name": "Новый порт",
+        "target": 4,
+        "target_name": "Штокман",
+        "success": false,
+        "min_ice_condition": null,
+        "speed": null,
+        "vessel_id": 16,
+        "template_name": "solo",
+        "path_line": []
+    },
+    "solo_17": {
+        "waybill": [
+            {
+                "event": "stuck",
+                "point": 27,
+                "dt": "2022-03-04T00:00:00"
+            }
+        ],
+        "total_time_hours": Infinity,
+        "start_date": "2022-03-04T00:00:00",
+        "end_date": null,
+        "source": 27,
+        "source_name": "пролив Лонга",
+        "target": 25,
+        "target_name": "Сабетта",
+        "success": false,
+        "min_ice_condition": null,
+        "speed": null,
+        "vessel_id": 17,
+        "template_name": "solo",
+        "path_line": []
+    },
+    "solo_18": {
+        "waybill": [
+            {
+                "event": "move",
+                "point": 6,
+                "dt": "2022-03-19T00:00:00"
+            },
+            {
+                "event": "move",
+                "point": 15,
+                "dt": "2022-03-20T07:11:52.263960"
+            },
+            {
+                "event": "move",
+                "point": 2,
+                "dt": "2022-03-22T08:26:06.635976"
+            },
+            {
+                "event": "fin",
+                "point": 5,
+                "dt": "2022-03-26T12:22:08.057552"
+            }
+        ],
+        "total_time_hours": 99.93372821555556,
+        "start_date": "2022-03-19T00:00:00",
+        "end_date": "2022-03-23T03:56:01.421576",
+        "source": 6,
+        "source_name": "Победа месторождение",
+        "target": 5,
+        "target_name": "Окно в Европу",
+        "success": true,
+        "min_ice_condition": null,
+        "speed": null,
+        "vessel_id": 18,
+        "template_name": "solo",
+        "path_line": [
+            6,
+            15,
+            2,
+            5
+        ]
+    },
+    "solo_19": {
+        "waybill": [
+            {
+                "event": "stuck",
+                "point": 35,
+                "dt": "2022-03-19T00:00:00"
+            }
+        ],
+        "total_time_hours": Infinity,
+        "start_date": "2022-03-19T00:00:00",
+        "end_date": null,
+        "source": 35,
+        "source_name": "терминал Утренний",
+        "target": 24,
+        "target_name": "устье Лены",
+        "success": false,
+        "min_ice_condition": null,
+        "speed": null,
+        "vessel_id": 19,
+        "template_name": "solo",
+        "path_line": []
+    },
+    "solo_20": {
+        "waybill": [
+            {
+                "event": "stuck",
+                "point": 11,
+                "dt": "2022-03-17T00:00:00"
+            }
+        ],
+        "total_time_hours": Infinity,
+        "start_date": "2022-03-17T00:00:00",
+        "end_date": null,
+        "source": 11,
+        "source_name": "Новый порт",
+        "target": 5,
+        "target_name": "Окно в Европу",
+        "success": false,
+        "min_ice_condition": null,
+        "speed": null,
+        "vessel_id": 20,
+        "template_name": "solo",
+        "path_line": []
+    },
+    "solo_21": {
+        "waybill": [
+            {
+                "event": "stuck",
+                "point": 29,
+                "dt": "2022-03-24T00:00:00"
+            }
+        ],
+        "total_time_hours": Infinity,
+        "start_date": "2022-03-24T00:00:00",
+        "end_date": null,
+        "source": 29,
+        "source_name": "Архангельск",
+        "target": 1,
+        "target_name": "Дудинка",
+        "success": false,
+        "min_ice_condition": null,
+        "speed": null,
+        "vessel_id": 21,
+        "template_name": "solo",
+        "path_line": []
+    },
+    "solo_22": {
+        "waybill": [
+            {
+                "event": "stuck",
+                "point": 24,
+                "dt": "2022-03-08T00:00:00"
+            }
+        ],
+        "total_time_hours": Infinity,
+        "start_date": "2022-03-08T00:00:00",
+        "end_date": null,
+        "source": 24,
+        "source_name": "устье Лены",
+        "target": 11,
+        "target_name": "Новый порт",
+        "success": false,
+        "min_ice_condition": null,
+        "speed": null,
+        "vessel_id": 22,
+        "template_name": "solo",
+        "path_line": []
+    },
+    "solo_23": {
+        "waybill": [
+            {
+                "event": "stuck",
+                "point": 28,
+                "dt": "2022-03-20T00:00:00"
+            }
+        ],
+        "total_time_hours": Infinity,
+        "start_date": "2022-03-20T00:00:00",
+        "end_date": null,
+        "source": 28,
+        "source_name": "Восточно-Сибирское - 3 (север)",
+        "target": 41,
+        "target_name": "Рейд Мурманска",
+        "success": false,
+        "min_ice_condition": null,
+        "speed": null,
+        "vessel_id": 23,
+        "template_name": "solo",
+        "path_line": []
+    },
+    "solo_24": {
+        "waybill": [
+            {
+                "event": "stuck",
+                "point": 28,
+                "dt": "2022-03-16T00:00:00"
+            }
+        ],
+        "total_time_hours": Infinity,
+        "start_date": "2022-03-16T00:00:00",
+        "end_date": null,
+        "source": 28,
+        "source_name": "Восточно-Сибирское - 3 (север)",
+        "target": 29,
+        "target_name": "Архангельск",
+        "success": false,
+        "min_ice_condition": null,
+        "speed": null,
+        "vessel_id": 24,
+        "template_name": "solo",
+        "path_line": []
+    },
+    "solo_25": {
+        "waybill": [
+            {
+                "event": "stuck",
+                "point": 6,
+                "dt": "2022-04-01T00:00:00"
+            }
+        ],
+        "total_time_hours": Infinity,
+        "start_date": "2022-04-01T00:00:00",
+        "end_date": null,
+        "source": 6,
+        "source_name": "Победа месторождение",
+        "target": 1,
+        "target_name": "Дудинка",
+        "success": false,
+        "min_ice_condition": null,
+        "speed": null,
+        "vessel_id": 25,
+        "template_name": "solo",
+        "path_line": []
+    },
+    "solo_26": {
+        "waybill": [
+            {
+                "event": "stuck",
+                "point": 4,
+                "dt": "2022-04-08T00:00:00"
+            }
+        ],
+        "total_time_hours": Infinity,
+        "start_date": "2022-04-08T00:00:00",
+        "end_date": null,
+        "source": 4,
+        "source_name": "Штокман",
+        "target": 1,
+        "target_name": "Дудинка",
+        "success": false,
+        "min_ice_condition": null,
+        "speed": null,
+        "vessel_id": 26,
+        "template_name": "solo",
+        "path_line": []
+    },
+    "solo_27": {
+        "waybill": [
+            {
+                "event": "stuck",
+                "point": 11,
+                "dt": "2022-04-10T00:00:00"
+            }
+        ],
+        "total_time_hours": Infinity,
+        "start_date": "2022-04-10T00:00:00",
+        "end_date": null,
+        "source": 11,
+        "source_name": "Новый порт",
+        "target": 24,
+        "target_name": "устье Лены",
+        "success": false,
+        "min_ice_condition": null,
+        "speed": null,
+        "vessel_id": 27,
+        "template_name": "solo",
+        "path_line": []
+    },
+    "solo_28": {
+        "waybill": [
+            {
+                "event": "stuck",
+                "point": 29,
+                "dt": "2022-04-07T00:00:00"
+            }
+        ],
+        "total_time_hours": Infinity,
+        "start_date": "2022-04-07T00:00:00",
+        "end_date": null,
+        "source": 29,
+        "source_name": "Архангельск",
+        "target": 24,
+        "target_name": "устье Лены",
+        "success": false,
+        "min_ice_condition": null,
+        "speed": null,
+        "vessel_id": 28,
+        "template_name": "solo",
+        "path_line": []
+    },
+    "solo_29": {
+        "waybill": [
+            {
+                "event": "stuck",
+                "point": 35,
+                "dt": "2022-04-15T00:00:00"
+            }
+        ],
+        "total_time_hours": Infinity,
+        "start_date": "2022-04-15T00:00:00",
+        "end_date": null,
+        "source": 35,
+        "source_name": "терминал Утренний",
+        "target": 27,
+        "target_name": "пролив Лонга",
+        "success": false,
+        "min_ice_condition": null,
+        "speed": null,
+        "vessel_id": 29,
+        "template_name": "solo",
+        "path_line": []
+    },
+    "solo_30": {
+        "waybill": [
+            {
+                "event": "stuck",
+                "point": 4,
+                "dt": "2022-04-16T00:00:00"
+            }
+        ],
+        "total_time_hours": Infinity,
+        "start_date": "2022-04-16T00:00:00",
+        "end_date": null,
+        "source": 4,
+        "source_name": "Штокман",
+        "target": 35,
+        "target_name": "терминал Утренний",
+        "success": false,
+        "min_ice_condition": null,
+        "speed": null,
+        "vessel_id": 30,
+        "template_name": "solo",
+        "path_line": []
+    },
+    "solo_31": {
+        "waybill": [
+            {
+                "event": "stuck",
+                "point": 41,
+                "dt": "2022-04-16T00:00:00"
+            }
+        ],
+        "total_time_hours": Infinity,
+        "start_date": "2022-04-16T00:00:00",
+        "end_date": null,
+        "source": 41,
+        "source_name": "Рейд Мурманска",
+        "target": 11,
+        "target_name": "Новый порт",
+        "success": false,
+        "min_ice_condition": null,
+        "speed": null,
+        "vessel_id": 31,
+        "template_name": "solo",
+        "path_line": []
+    },
+    "solo_32": {
+        "waybill": [
+            {
+                "event": "stuck",
+                "point": 44,
+                "dt": "2022-04-16T00:00:00"
+            }
+        ],
+        "total_time_hours": Infinity,
+        "start_date": "2022-04-16T00:00:00",
+        "end_date": null,
+        "source": 44,
+        "source_name": "Индига",
+        "target": 6,
+        "target_name": "Победа месторождение",
+        "success": false,
+        "min_ice_condition": null,
+        "speed": null,
+        "vessel_id": 32,
+        "template_name": "solo",
+        "path_line": []
+    },
+    "solo_33": {
+        "waybill": [
+            {
+                "event": "stuck",
+                "point": 27,
+                "dt": "2022-04-06T00:00:00"
+            }
+        ],
+        "total_time_hours": Infinity,
+        "start_date": "2022-04-06T00:00:00",
+        "end_date": null,
+        "source": 27,
+        "source_name": "пролив Лонга",
+        "target": 4,
+        "target_name": "Штокман",
+        "success": false,
+        "min_ice_condition": null,
+        "speed": null,
+        "vessel_id": 33,
+        "template_name": "solo",
+        "path_line": []
+    },
+    "solo_34": {
+        "waybill": [
+            {
+                "event": "stuck",
+                "point": 25,
+                "dt": "2022-04-20T00:00:00"
+            }
+        ],
+        "total_time_hours": Infinity,
+        "start_date": "2022-04-20T00:00:00",
+        "end_date": null,
+        "source": 25,
+        "source_name": "Сабетта",
+        "target": 5,
+        "target_name": "Окно в Европу",
+        "success": false,
+        "min_ice_condition": null,
+        "speed": null,
+        "vessel_id": 34,
+        "template_name": "solo",
+        "path_line": []
+    },
+    "solo_35": {
+        "waybill": [
+            {
+                "event": "stuck",
+                "point": 25,
+                "dt": "2022-04-23T00:00:00"
+            }
+        ],
+        "total_time_hours": Infinity,
+        "start_date": "2022-04-23T00:00:00",
+        "end_date": null,
+        "source": 25,
+        "source_name": "Сабетта",
+        "target": 5,
+        "target_name": "Окно в Европу",
+        "success": false,
+        "min_ice_condition": null,
+        "speed": null,
+        "vessel_id": 35,
+        "template_name": "solo",
+        "path_line": []
+    },
+    "solo_36": {
+        "waybill": [
+            {
+                "event": "stuck",
+                "point": 5,
+                "dt": "2022-04-22T00:00:00"
+            }
+        ],
+        "total_time_hours": Infinity,
+        "start_date": "2022-04-22T00:00:00",
+        "end_date": null,
+        "source": 5,
+        "source_name": "Окно в Европу",
+        "target": 35,
+        "target_name": "терминал Утренний",
+        "success": false,
+        "min_ice_condition": null,
+        "speed": null,
+        "vessel_id": 36,
+        "template_name": "solo",
+        "path_line": []
+    },
+    "solo_37": {
+        "waybill": [
+            {
+                "event": "stuck",
+                "point": 41,
+                "dt": "2022-04-23T00:00:00"
+            }
+        ],
+        "total_time_hours": Infinity,
+        "start_date": "2022-04-23T00:00:00",
+        "end_date": null,
+        "source": 41,
+        "source_name": "Рейд Мурманска",
+        "target": 1,
+        "target_name": "Дудинка",
+        "success": false,
+        "min_ice_condition": null,
+        "speed": null,
+        "vessel_id": 37,
+        "template_name": "solo",
+        "path_line": []
+    },
+    "solo_38": {
+        "waybill": [
+            {
+                "event": "stuck",
+                "point": 4,
+                "dt": "2022-04-25T00:00:00"
+            }
+        ],
+        "total_time_hours": Infinity,
+        "start_date": "2022-04-25T00:00:00",
+        "end_date": null,
+        "source": 4,
+        "source_name": "Штокман",
+        "target": 11,
+        "target_name": "Новый порт",
+        "success": false,
+        "min_ice_condition": null,
+        "speed": null,
+        "vessel_id": 38,
+        "template_name": "solo",
+        "path_line": []
+    },
+    "solo_39": {
+        "waybill": [
+            {
+                "event": "stuck",
+                "point": 4,
+                "dt": "2022-04-27T00:00:00"
+            }
+        ],
+        "total_time_hours": Infinity,
+        "start_date": "2022-04-27T00:00:00",
+        "end_date": null,
+        "source": 4,
+        "source_name": "Штокман",
+        "target": 24,
+        "target_name": "устье Лены",
+        "success": false,
+        "min_ice_condition": null,
+        "speed": null,
+        "vessel_id": 39,
+        "template_name": "solo",
+        "path_line": []
+    },
+    "solo_40": {
+        "waybill": [
+            {
+                "event": "stuck",
+                "point": 25,
+                "dt": "2022-04-27T00:00:00"
+            }
+        ],
+        "total_time_hours": Infinity,
+        "start_date": "2022-04-27T00:00:00",
+        "end_date": null,
+        "source": 25,
+        "source_name": "Сабетта",
+        "target": 29,
+        "target_name": "Архангельск",
+        "success": false,
+        "min_ice_condition": null,
+        "speed": null,
+        "vessel_id": 40,
+        "template_name": "solo",
+        "path_line": []
+    },
+    "solo_41": {
+        "waybill": [
+            {
+                "event": "stuck",
+                "point": 11,
+                "dt": "2022-04-25T00:00:00"
+            }
+        ],
+        "total_time_hours": Infinity,
+        "start_date": "2022-04-25T00:00:00",
+        "end_date": null,
+        "source": 11,
+        "source_name": "Новый порт",
+        "target": 5,
+        "target_name": "Окно в Европу",
+        "success": false,
+        "min_ice_condition": null,
+        "speed": null,
+        "vessel_id": 41,
+        "template_name": "solo",
+        "path_line": []
+    },
+    "solo_42": {
+        "waybill": [
+            {
+                "event": "stuck",
+                "point": 41,
+                "dt": "2022-04-30T00:00:00"
+            }
+        ],
+        "total_time_hours": Infinity,
+        "start_date": "2022-04-30T00:00:00",
+        "end_date": null,
+        "source": 41,
+        "source_name": "Рейд Мурманска",
+        "target": 11,
+        "target_name": "Новый порт",
+        "success": false,
+        "min_ice_condition": null,
+        "speed": null,
+        "vessel_id": 42,
+        "template_name": "solo",
+        "path_line": []
+    },
+    "best_1": {
+        "waybill": [
+            {
+                "event": "stuck",
+                "point": 11,
+                "dt": "2022-03-01T00:00:00"
+            }
+        ],
+        "total_time_hours": Infinity,
+        "start_date": "2022-03-01T00:00:00",
+        "end_date": null,
+        "source": 11,
+        "source_name": "Новый порт",
+        "target": 41,
+        "target_name": "Рейд Мурманска",
+        "success": false,
+        "min_ice_condition": null,
+        "speed": null,
+        "vessel_id": 1,
+        "template_name": "best",
+        "path_line": []
+    },
+    "best_2": {
+        "waybill": [
+            {
+                "event": "stuck",
+                "point": 25,
+                "dt": "2022-03-02T00:00:00"
+            }
+        ],
+        "total_time_hours": Infinity,
+        "start_date": "2022-03-02T00:00:00",
+        "end_date": null,
+        "source": 25,
+        "source_name": "Сабетта",
+        "target": 29,
+        "target_name": "Архангельск",
+        "success": false,
+        "min_ice_condition": null,
+        "speed": null,
+        "vessel_id": 2,
+        "template_name": "best",
+        "path_line": []
+    },
+    "best_3": {
+        "waybill": [
+            {
+                "event": "stuck",
+                "point": 25,
+                "dt": "2022-03-04T00:00:00"
+            }
+        ],
+        "total_time_hours": Infinity,
+        "start_date": "2022-03-04T00:00:00",
+        "end_date": null,
+        "source": 25,
+        "source_name": "Сабетта",
+        "target": 41,
+        "target_name": "Рейд Мурманска",
+        "success": false,
+        "min_ice_condition": null,
+        "speed": null,
+        "vessel_id": 3,
+        "template_name": "best",
+        "path_line": []
+    },
+    "best_4": {
+        "waybill": [
+            {
+                "event": "move",
+                "point": 4,
+                "dt": "2022-03-07T00:00:00"
+            },
+            {
+                "event": "move",
+                "point": 21,
+                "dt": "2022-03-07T19:48:36.194040"
+            },
+            {
+                "event": "move",
+                "point": 16,
+                "dt": "2022-03-09T01:17:56.220816"
+            },
+            {
+                "event": "move",
+                "point": 20,
+                "dt": "2022-03-12T04:16:00.710592"
+            },
+            {
+                "event": "move",
+                "point": 19,
+                "dt": "2022-03-16T09:26:17.203584"
+            },
+            {
+                "event": "move",
+                "point": 8,
+                "dt": "2022-03-20T19:54:05.772240"
+            },
+            {
+                "event": "move",
+                "point": 12,
+                "dt": "2022-03-25T14:29:11.277192"
+            },
+            {
+                "event": "move",
+                "point": 40,
+                "dt": "2022-03-31T11:10:14.428064"
+            },
+            {
+                "event": "move",
+                "point": 42,
+                "dt": "2022-04-06T18:00:06.046120"
+            },
+            {
+                "event": "move",
+                "point": 30,
+                "dt": "2022-04-13T12:27:31.667736"
+            },
+            {
+                "event": "move",
+                "point": 18,
+                "dt": "2022-04-22T07:23:25.965872"
+            },
+            {
+                "event": "fin",
+                "point": 27,
+                "dt": "2022-05-04T09:43:12.923208"
+            }
+        ],
+        "total_time_hours": 290.3297103711111,
+        "start_date": "2022-03-07T00:00:00",
+        "end_date": "2022-03-19T02:19:46.957336",
+        "source": 4,
+        "source_name": "Штокман",
+        "target": 27,
+        "target_name": "пролив Лонга",
+        "success": true,
+        "min_ice_condition": null,
+        "speed": null,
+        "vessel_id": 4,
+        "template_name": "best",
+        "path_line": [
+            4,
+            21,
+            16,
+            20,
+            19,
+            8,
+            12,
+            40,
+            42,
+            30,
+            18,
+            27
+        ]
+    },
+    "best_5": {
+        "waybill": [
+            {
+                "event": "stuck",
+                "point": 11,
+                "dt": "2022-03-08T00:00:00"
+            }
+        ],
+        "total_time_hours": Infinity,
+        "start_date": "2022-03-08T00:00:00",
+        "end_date": null,
+        "source": 11,
+        "source_name": "Новый порт",
+        "target": 24,
+        "target_name": "устье Лены",
+        "success": false,
+        "min_ice_condition": null,
+        "speed": null,
+        "vessel_id": 5,
+        "template_name": "best",
+        "path_line": []
+    },
+    "best_6": {
+        "waybill": [
+            {
+                "event": "stuck",
+                "point": 25,
+                "dt": "2022-03-12T00:00:00"
+            }
+        ],
+        "total_time_hours": Infinity,
+        "start_date": "2022-03-12T00:00:00",
+        "end_date": null,
+        "source": 25,
+        "source_name": "Сабетта",
+        "target": 27,
+        "target_name": "пролив Лонга",
+        "success": false,
+        "min_ice_condition": null,
+        "speed": null,
+        "vessel_id": 6,
+        "template_name": "best",
+        "path_line": []
+    },
+    "best_7": {
+        "waybill": [
+            {
+                "event": "stuck",
+                "point": 35,
+                "dt": "2022-03-13T00:00:00"
+            }
+        ],
+        "total_time_hours": Infinity,
+        "start_date": "2022-03-13T00:00:00",
+        "end_date": null,
+        "source": 35,
+        "source_name": "терминал Утренний",
+        "target": 27,
+        "target_name": "пролив Лонга",
+        "success": false,
+        "min_ice_condition": null,
+        "speed": null,
+        "vessel_id": 7,
+        "template_name": "best",
+        "path_line": []
+    },
+    "best_8": {
+        "waybill": [
+            {
+                "event": "stuck",
+                "point": 5,
+                "dt": "2022-03-07T00:00:00"
+            }
+        ],
+        "total_time_hours": Infinity,
+        "start_date": "2022-03-07T00:00:00",
+        "end_date": null,
+        "source": 5,
+        "source_name": "Окно в Европу",
+        "target": 35,
+        "target_name": "терминал Утренний",
+        "success": false,
+        "min_ice_condition": null,
+        "speed": null,
+        "vessel_id": 8,
+        "template_name": "best",
+        "path_line": []
+    },
+    "best_9": {
+        "waybill": [
+            {
+                "event": "stuck",
+                "point": 5,
+                "dt": "2022-03-07T00:00:00"
+            }
+        ],
+        "total_time_hours": Infinity,
+        "start_date": "2022-03-07T00:00:00",
+        "end_date": null,
+        "source": 5,
+        "source_name": "Окно в Европу",
+        "target": 35,
+        "target_name": "терминал Утренний",
+        "success": false,
+        "min_ice_condition": null,
+        "speed": null,
+        "vessel_id": 9,
+        "template_name": "best",
+        "path_line": []
+    },
+    "best_10": {
+        "waybill": [
+            {
+                "event": "stuck",
+                "point": 35,
+                "dt": "2022-03-15T00:00:00"
+            }
+        ],
+        "total_time_hours": Infinity,
+        "start_date": "2022-03-15T00:00:00",
+        "end_date": null,
+        "source": 35,
+        "source_name": "терминал Утренний",
+        "target": 24,
+        "target_name": "устье Лены",
+        "success": false,
+        "min_ice_condition": null,
+        "speed": null,
+        "vessel_id": 10,
+        "template_name": "best",
+        "path_line": []
+    },
+    "best_11": {
+        "waybill": [
+            {
+                "event": "stuck",
+                "point": 5,
+                "dt": "2022-03-09T00:00:00"
+            }
+        ],
+        "total_time_hours": Infinity,
+        "start_date": "2022-03-09T00:00:00",
+        "end_date": null,
+        "source": 5,
+        "source_name": "Окно в Европу",
+        "target": 35,
+        "target_name": "терминал Утренний",
+        "success": false,
+        "min_ice_condition": null,
+        "speed": null,
+        "vessel_id": 11,
+        "template_name": "best",
+        "path_line": []
+    },
+    "best_12": {
+        "waybill": [
+            {
+                "event": "stuck",
+                "point": 5,
+                "dt": "2022-03-16T00:00:00"
+            }
+        ],
+        "total_time_hours": Infinity,
+        "start_date": "2022-03-16T00:00:00",
+        "end_date": null,
+        "source": 5,
+        "source_name": "Окно в Европу",
+        "target": 35,
+        "target_name": "терминал Утренний",
+        "success": false,
+        "min_ice_condition": null,
+        "speed": null,
+        "vessel_id": 12,
+        "template_name": "best",
+        "path_line": []
+    },
+    "best_13": {
+        "waybill": [
+            {
+                "event": "stuck",
+                "point": 4,
+                "dt": "2022-03-26T00:00:00"
+            }
+        ],
+        "total_time_hours": Infinity,
+        "start_date": "2022-03-26T00:00:00",
+        "end_date": null,
+        "source": 4,
+        "source_name": "Штокман",
+        "target": 1,
+        "target_name": "Дудинка",
+        "success": false,
+        "min_ice_condition": null,
+        "speed": null,
+        "vessel_id": 13,
+        "template_name": "best",
+        "path_line": []
+    },
+    "best_14": {
+        "waybill": [
+            {
+                "event": "stuck",
+                "point": 11,
+                "dt": "2022-03-10T00:00:00"
+            }
+        ],
+        "total_time_hours": Infinity,
+        "start_date": "2022-03-10T00:00:00",
+        "end_date": null,
+        "source": 11,
+        "source_name": "Новый порт",
+        "target": 5,
+        "target_name": "Окно в Европу",
+        "success": false,
+        "min_ice_condition": null,
+        "speed": null,
+        "vessel_id": 14,
+        "template_name": "best",
+        "path_line": []
+    },
+    "best_15": {
+        "waybill": [
+            {
+                "event": "move",
+                "point": 16,
+                "dt": "2022-03-13T00:00:00"
+            },
+            {
+                "event": "move",
+                "point": 20,
+                "dt": "2022-03-15T00:43:39.067500"
+            },
+            {
+                "event": "move",
+                "point": 19,
+                "dt": "2022-03-18T05:31:48.138446"
+            },
+            {
+                "event": "move",
+                "point": 8,
+                "dt": "2022-03-21T16:00:10.147603"
+            },
+            {
+                "event": "move",
+                "point": 12,
+                "dt": "2022-03-25T11:10:37.445649"
+            },
+            {
+                "event": "fin",
+                "point": 24,
+                "dt": "2022-03-30T11:39:58.685795"
+            }
+        ],
+        "total_time_hours": 120.4892333738095,
+        "start_date": "2022-03-13T00:00:00",
+        "end_date": "2022-03-18T00:29:21.240146",
+        "source": 16,
+        "source_name": "Мыс Желания",
+        "target": 24,
+        "target_name": "устье Лены",
+        "success": true,
+        "min_ice_condition": null,
+        "speed": null,
+        "vessel_id": 15,
+        "template_name": "best",
+        "path_line": [
+            16,
+            20,
+            19,
+            8,
+            12,
+            24
+        ]
+    },
+    "best_16": {
+        "waybill": [
+            {
+                "event": "stuck",
+                "point": 11,
+                "dt": "2022-03-24T00:00:00"
+            }
+        ],
+        "total_time_hours": Infinity,
+        "start_date": "2022-03-24T00:00:00",
+        "end_date": null,
+        "source": 11,
+        "source_name": "Новый порт",
+        "target": 4,
+        "target_name": "Штокман",
+        "success": false,
+        "min_ice_condition": null,
+        "speed": null,
+        "vessel_id": 16,
+        "template_name": "best",
+        "path_line": []
+    },
+    "best_17": {
+        "waybill": [
+            {
+                "event": "stuck",
+                "point": 27,
+                "dt": "2022-03-04T00:00:00"
+            }
+        ],
+        "total_time_hours": Infinity,
+        "start_date": "2022-03-04T00:00:00",
+        "end_date": null,
+        "source": 27,
+        "source_name": "пролив Лонга",
+        "target": 25,
+        "target_name": "Сабетта",
+        "success": false,
+        "min_ice_condition": null,
+        "speed": null,
+        "vessel_id": 17,
+        "template_name": "best",
+        "path_line": []
+    },
+    "best_18": {
+        "waybill": [
+            {
+                "event": "move",
+                "point": 6,
+                "dt": "2022-03-19T00:00:00"
+            },
+            {
+                "event": "move",
+                "point": 15,
+                "dt": "2022-03-20T07:11:52.263960"
+            },
+            {
+                "event": "move",
+                "point": 2,
+                "dt": "2022-03-22T08:26:06.635976"
+            },
+            {
+                "event": "fin",
+                "point": 5,
+                "dt": "2022-03-26T12:22:08.057552"
+            }
+        ],
+        "total_time_hours": 99.93372821555556,
+        "start_date": "2022-03-19T00:00:00",
+        "end_date": "2022-03-23T03:56:01.421576",
+        "source": 6,
+        "source_name": "Победа месторождение",
+        "target": 5,
+        "target_name": "Окно в Европу",
+        "success": true,
+        "min_ice_condition": null,
+        "speed": null,
+        "vessel_id": 18,
+        "template_name": "best",
+        "path_line": [
+            6,
+            15,
+            2,
+            5
+        ]
+    },
+    "best_19": {
+        "waybill": [
+            {
+                "event": "stuck",
+                "point": 35,
+                "dt": "2022-03-19T00:00:00"
+            }
+        ],
+        "total_time_hours": Infinity,
+        "start_date": "2022-03-19T00:00:00",
+        "end_date": null,
+        "source": 35,
+        "source_name": "терминал Утренний",
+        "target": 24,
+        "target_name": "устье Лены",
+        "success": false,
+        "min_ice_condition": null,
+        "speed": null,
+        "vessel_id": 19,
+        "template_name": "best",
+        "path_line": []
+    },
+    "best_20": {
+        "waybill": [
+            {
+                "event": "stuck",
+                "point": 11,
+                "dt": "2022-03-17T00:00:00"
+            }
+        ],
+        "total_time_hours": Infinity,
+        "start_date": "2022-03-17T00:00:00",
+        "end_date": null,
+        "source": 11,
+        "source_name": "Новый порт",
+        "target": 5,
+        "target_name": "Окно в Европу",
+        "success": false,
+        "min_ice_condition": null,
+        "speed": null,
+        "vessel_id": 20,
+        "template_name": "best",
+        "path_line": []
+    },
+    "best_21": {
+        "waybill": [
+            {
+                "event": "stuck",
+                "point": 29,
+                "dt": "2022-03-24T00:00:00"
+            }
+        ],
+        "total_time_hours": Infinity,
+        "start_date": "2022-03-24T00:00:00",
+        "end_date": null,
+        "source": 29,
+        "source_name": "Архангельск",
+        "target": 1,
+        "target_name": "Дудинка",
+        "success": false,
+        "min_ice_condition": null,
+        "speed": null,
+        "vessel_id": 21,
+        "template_name": "best",
+        "path_line": []
+    },
+    "best_22": {
+        "waybill": [
+            {
+                "event": "stuck",
+                "point": 24,
+                "dt": "2022-03-08T00:00:00"
+            }
+        ],
+        "total_time_hours": Infinity,
+        "start_date": "2022-03-08T00:00:00",
+        "end_date": null,
+        "source": 24,
+        "source_name": "устье Лены",
+        "target": 11,
+        "target_name": "Новый порт",
+        "success": false,
+        "min_ice_condition": null,
+        "speed": null,
+        "vessel_id": 22,
+        "template_name": "best",
+        "path_line": []
+    },
+    "best_23": {
+        "waybill": [
+            {
+                "event": "stuck",
+                "point": 28,
+                "dt": "2022-03-20T00:00:00"
+            }
+        ],
+        "total_time_hours": Infinity,
+        "start_date": "2022-03-20T00:00:00",
+        "end_date": null,
+        "source": 28,
+        "source_name": "Восточно-Сибирское - 3 (север)",
+        "target": 41,
+        "target_name": "Рейд Мурманска",
+        "success": false,
+        "min_ice_condition": null,
+        "speed": null,
+        "vessel_id": 23,
+        "template_name": "best",
+        "path_line": []
+    },
+    "best_24": {
+        "waybill": [
+            {
+                "event": "stuck",
+                "point": 28,
+                "dt": "2022-03-16T00:00:00"
+            }
+        ],
+        "total_time_hours": Infinity,
+        "start_date": "2022-03-16T00:00:00",
+        "end_date": null,
+        "source": 28,
+        "source_name": "Восточно-Сибирское - 3 (север)",
+        "target": 29,
+        "target_name": "Архангельск",
+        "success": false,
+        "min_ice_condition": null,
+        "speed": null,
+        "vessel_id": 24,
+        "template_name": "best",
+        "path_line": []
+    },
+    "best_25": {
+        "waybill": [
+            {
+                "event": "stuck",
+                "point": 6,
+                "dt": "2022-04-01T00:00:00"
+            }
+        ],
+        "total_time_hours": Infinity,
+        "start_date": "2022-04-01T00:00:00",
+        "end_date": null,
+        "source": 6,
+        "source_name": "Победа месторождение",
+        "target": 1,
+        "target_name": "Дудинка",
+        "success": false,
+        "min_ice_condition": null,
+        "speed": null,
+        "vessel_id": 25,
+        "template_name": "best",
+        "path_line": []
+    },
+    "best_26": {
+        "waybill": [
+            {
+                "event": "stuck",
+                "point": 4,
+                "dt": "2022-04-08T00:00:00"
+            }
+        ],
+        "total_time_hours": Infinity,
+        "start_date": "2022-04-08T00:00:00",
+        "end_date": null,
+        "source": 4,
+        "source_name": "Штокман",
+        "target": 1,
+        "target_name": "Дудинка",
+        "success": false,
+        "min_ice_condition": null,
+        "speed": null,
+        "vessel_id": 26,
+        "template_name": "best",
+        "path_line": []
+    },
+    "best_27": {
+        "waybill": [
+            {
+                "event": "stuck",
+                "point": 11,
+                "dt": "2022-04-10T00:00:00"
+            }
+        ],
+        "total_time_hours": Infinity,
+        "start_date": "2022-04-10T00:00:00",
+        "end_date": null,
+        "source": 11,
+        "source_name": "Новый порт",
+        "target": 24,
+        "target_name": "устье Лены",
+        "success": false,
+        "min_ice_condition": null,
+        "speed": null,
+        "vessel_id": 27,
+        "template_name": "best",
+        "path_line": []
+    },
+    "best_28": {
+        "waybill": [
+            {
+                "event": "stuck",
+                "point": 29,
+                "dt": "2022-04-07T00:00:00"
+            }
+        ],
+        "total_time_hours": Infinity,
+        "start_date": "2022-04-07T00:00:00",
+        "end_date": null,
+        "source": 29,
+        "source_name": "Архангельск",
+        "target": 24,
+        "target_name": "устье Лены",
+        "success": false,
+        "min_ice_condition": null,
+        "speed": null,
+        "vessel_id": 28,
+        "template_name": "best",
+        "path_line": []
+    },
+    "best_29": {
+        "waybill": [
+            {
+                "event": "stuck",
+                "point": 35,
+                "dt": "2022-04-15T00:00:00"
+            }
+        ],
+        "total_time_hours": Infinity,
+        "start_date": "2022-04-15T00:00:00",
+        "end_date": null,
+        "source": 35,
+        "source_name": "терминал Утренний",
+        "target": 27,
+        "target_name": "пролив Лонга",
+        "success": false,
+        "min_ice_condition": null,
+        "speed": null,
+        "vessel_id": 29,
+        "template_name": "best",
+        "path_line": []
+    },
+    "best_30": {
+        "waybill": [
+            {
+                "event": "stuck",
+                "point": 4,
+                "dt": "2022-04-16T00:00:00"
+            }
+        ],
+        "total_time_hours": Infinity,
+        "start_date": "2022-04-16T00:00:00",
+        "end_date": null,
+        "source": 4,
+        "source_name": "Штокман",
+        "target": 35,
+        "target_name": "терминал Утренний",
+        "success": false,
+        "min_ice_condition": null,
+        "speed": null,
+        "vessel_id": 30,
+        "template_name": "best",
+        "path_line": []
+    },
+    "best_31": {
+        "waybill": [
+            {
+                "event": "stuck",
+                "point": 41,
+                "dt": "2022-04-16T00:00:00"
+            }
+        ],
+        "total_time_hours": Infinity,
+        "start_date": "2022-04-16T00:00:00",
+        "end_date": null,
+        "source": 41,
+        "source_name": "Рейд Мурманска",
+        "target": 11,
+        "target_name": "Новый порт",
+        "success": false,
+        "min_ice_condition": null,
+        "speed": null,
+        "vessel_id": 31,
+        "template_name": "best",
+        "path_line": []
+    },
+    "best_32": {
+        "waybill": [
+            {
+                "event": "stuck",
+                "point": 44,
+                "dt": "2022-04-16T00:00:00"
+            }
+        ],
+        "total_time_hours": Infinity,
+        "start_date": "2022-04-16T00:00:00",
+        "end_date": null,
+        "source": 44,
+        "source_name": "Индига",
+        "target": 6,
+        "target_name": "Победа месторождение",
+        "success": false,
+        "min_ice_condition": null,
+        "speed": null,
+        "vessel_id": 32,
+        "template_name": "best",
+        "path_line": []
+    },
+    "best_33": {
+        "waybill": [
+            {
+                "event": "stuck",
+                "point": 27,
+                "dt": "2022-04-06T00:00:00"
+            }
+        ],
+        "total_time_hours": Infinity,
+        "start_date": "2022-04-06T00:00:00",
+        "end_date": null,
+        "source": 27,
+        "source_name": "пролив Лонга",
+        "target": 4,
+        "target_name": "Штокман",
+        "success": false,
+        "min_ice_condition": null,
+        "speed": null,
+        "vessel_id": 33,
+        "template_name": "best",
+        "path_line": []
+    },
+    "best_34": {
+        "waybill": [
+            {
+                "event": "stuck",
+                "point": 25,
+                "dt": "2022-04-20T00:00:00"
+            }
+        ],
+        "total_time_hours": Infinity,
+        "start_date": "2022-04-20T00:00:00",
+        "end_date": null,
+        "source": 25,
+        "source_name": "Сабетта",
+        "target": 5,
+        "target_name": "Окно в Европу",
+        "success": false,
+        "min_ice_condition": null,
+        "speed": null,
+        "vessel_id": 34,
+        "template_name": "best",
+        "path_line": []
+    },
+    "best_35": {
+        "waybill": [
+            {
+                "event": "stuck",
+                "point": 25,
+                "dt": "2022-04-23T00:00:00"
+            }
+        ],
+        "total_time_hours": Infinity,
+        "start_date": "2022-04-23T00:00:00",
+        "end_date": null,
+        "source": 25,
+        "source_name": "Сабетта",
+        "target": 5,
+        "target_name": "Окно в Европу",
+        "success": false,
+        "min_ice_condition": null,
+        "speed": null,
+        "vessel_id": 35,
+        "template_name": "best",
+        "path_line": []
+    },
+    "best_36": {
+        "waybill": [
+            {
+                "event": "stuck",
+                "point": 5,
+                "dt": "2022-04-22T00:00:00"
+            }
+        ],
+        "total_time_hours": Infinity,
+        "start_date": "2022-04-22T00:00:00",
+        "end_date": null,
+        "source": 5,
+        "source_name": "Окно в Европу",
+        "target": 35,
+        "target_name": "терминал Утренний",
+        "success": false,
+        "min_ice_condition": null,
+        "speed": null,
+        "vessel_id": 36,
+        "template_name": "best",
+        "path_line": []
+    },
+    "best_37": {
+        "waybill": [
+            {
+                "event": "stuck",
+                "point": 41,
+                "dt": "2022-04-23T00:00:00"
+            }
+        ],
+        "total_time_hours": Infinity,
+        "start_date": "2022-04-23T00:00:00",
+        "end_date": null,
+        "source": 41,
+        "source_name": "Рейд Мурманска",
+        "target": 1,
+        "target_name": "Дудинка",
+        "success": false,
+        "min_ice_condition": null,
+        "speed": null,
+        "vessel_id": 37,
+        "template_name": "best",
+        "path_line": []
+    },
+    "best_38": {
+        "waybill": [
+            {
+                "event": "stuck",
+                "point": 4,
+                "dt": "2022-04-25T00:00:00"
+            }
+        ],
+        "total_time_hours": Infinity,
+        "start_date": "2022-04-25T00:00:00",
+        "end_date": null,
+        "source": 4,
+        "source_name": "Штокман",
+        "target": 11,
+        "target_name": "Новый порт",
+        "success": false,
+        "min_ice_condition": null,
+        "speed": null,
+        "vessel_id": 38,
+        "template_name": "best",
+        "path_line": []
+    },
+    "best_39": {
+        "waybill": [
+            {
+                "event": "stuck",
+                "point": 4,
+                "dt": "2022-04-27T00:00:00"
+            }
+        ],
+        "total_time_hours": Infinity,
+        "start_date": "2022-04-27T00:00:00",
+        "end_date": null,
+        "source": 4,
+        "source_name": "Штокман",
+        "target": 24,
+        "target_name": "устье Лены",
+        "success": false,
+        "min_ice_condition": null,
+        "speed": null,
+        "vessel_id": 39,
+        "template_name": "best",
+        "path_line": []
+    },
+    "best_40": {
+        "waybill": [
+            {
+                "event": "stuck",
+                "point": 25,
+                "dt": "2022-04-27T00:00:00"
+            }
+        ],
+        "total_time_hours": Infinity,
+        "start_date": "2022-04-27T00:00:00",
+        "end_date": null,
+        "source": 25,
+        "source_name": "Сабетта",
+        "target": 29,
+        "target_name": "Архангельск",
+        "success": false,
+        "min_ice_condition": null,
+        "speed": null,
+        "vessel_id": 40,
+        "template_name": "best",
+        "path_line": []
+    },
+    "best_41": {
+        "waybill": [
+            {
+                "event": "stuck",
+                "point": 11,
+                "dt": "2022-04-25T00:00:00"
+            }
+        ],
+        "total_time_hours": Infinity,
+        "start_date": "2022-04-25T00:00:00",
+        "end_date": null,
+        "source": 11,
+        "source_name": "Новый порт",
+        "target": 5,
+        "target_name": "Окно в Европу",
+        "success": false,
+        "min_ice_condition": null,
+        "speed": null,
+        "vessel_id": 41,
+        "template_name": "best",
+        "path_line": []
+    },
+    "best_42": {
+        "waybill": [
+            {
+                "event": "stuck",
+                "point": 41,
+                "dt": "2022-04-30T00:00:00"
+            }
+        ],
+        "total_time_hours": Infinity,
+        "start_date": "2022-04-30T00:00:00",
+        "end_date": null,
+        "source": 41,
+        "source_name": "Рейд Мурманска",
+        "target": 11,
+        "target_name": "Новый порт",
+        "success": false,
+        "min_ice_condition": null,
+        "speed": null,
+        "vessel_id": 42,
+        "template_name": "best",
+        "path_line": []
+    }
+}

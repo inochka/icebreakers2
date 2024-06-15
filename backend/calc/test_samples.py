@@ -5,6 +5,14 @@ from vessel import Vessel,IceBreaker
 from backend.data.vessels_data import vessels_data, icebreaker_data
 from context import Context
 from time import time
+from computer import Computer
+from backend.config import backend_base_dir
+
+file_path = backend_base_dir / "input_files/IntegrVelocity.xlsx"
+base = BaseGraph()
+base.set_base_values()
+ice_cond = IceCondition(file_path, base.graph)
+comp = Computer(base, ice_cond)
 
 def set_g_base2(base): #задать базовый граф 2 вершины
     # определяем список узлов (ID узлов)
@@ -28,11 +36,9 @@ def set_g_base5(base): #задать базовый граф  с пятью ве
 def test_path():
     base = BaseGraph()
     base.set_base_values()
-    vessel = Vessel()
-    vessel.load_from(vessels_data[4])
+    vessel = Vessel(**vessels_data[4])
     ice_cond = IceCondition()
-    icebreaker = IceBreaker()
-    icebreaker.load_from(icebreaker_data[1])
+    icebreaker = IceBreaker(**icebreaker_data[1])
     nav = Navigator()
     paths = nav.calc_shortest_path(base,ice_cond,vessel, vessel.start_date,29,46)
     print(paths)
@@ -63,12 +69,11 @@ def test_calc_lower_grade():
     context.load_from_template('test_1')
     nav = Navigator()
     grade,paths = nav.rough_estimate(base,ice_cond,context,with_best_icebreaker=True)
-    print("stuck_vessels: ")
-    print(grade.stuck_vessels)
-    print("total_time: ")
-    print(grade.total_time)
-    print("paths: ")
-    print(paths)
+    context.res_grade = grade
+    context.res_vessels = paths
+    ship_path = context.make_list_of_models_for_res_vessels()
+    print(ship_path)
+
 
 def test_calc_lower_grade():
     base = BaseGraph()
@@ -105,10 +110,16 @@ def test_create_calc_cache():
     nav.create_calc_cache(base, ice_cond, context)
     print(nav.priority)    
 
+def test_compute_optimal():
+    context = Context()
+    context.load_from_template('test_1')
+    grade, vessel_paths, icebreaker_paths = comp.optimal_timesheet(context)
+    print(vessel_paths)
+
 if __name__ == "__main__":
     start = time()
     print('===============')
-    test_create_calc_cache()
+    test_compute_optimal()
     fin = time()
     print('============'+str(fin-start))
 

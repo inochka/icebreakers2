@@ -2,7 +2,7 @@
 from pydantic import BaseModel, field_validator
 from typing import List, Optional
 from datetime import datetime
-from backend.constants import IceClass, PathEventsType
+from backend.constants import IceClass, PathEventsType, AlgoType
 from backend.utils import parse_dates
 from fastapi.encoders import jsonable_encoder
 
@@ -58,13 +58,15 @@ class BaseEdge(CustomBaseModel):
     status: Optional[int] = None  # на сессии ответов на вопросы сказали что игнорируем
 
 class PathEvent(CustomBaseModel):
-    event: PathEventsType  # тип события (move, wait, formation, fin)
+    event: PathEventsType  # тип события (move, wait, formation, fin, stuck)
     point: int  # где произошло событие
-    time: datetime  # когда произошло событие
+    dt: datetime  # когда произошло событие
 
-class ShipPath(CustomBaseModel):
+class VesselPath(CustomBaseModel):
+    waybill: List[PathEvent] = []  # описание пути
+    total_time_hours: float 
     start_date: datetime
-    end_date: datetime
+    end_date: Optional[datetime] = None
     source: int
     source_name: str
     target: int
@@ -72,8 +74,18 @@ class ShipPath(CustomBaseModel):
     success: bool  # если false, значит маршрут непроходим без ледокольной проводки
     min_ice_condition: Optional[float] = None  # худшие ледовые условия на маршруте
     speed: Optional[float] = None  # средняя скорость на маршруте
+    vessel_id: int = -1
+    template_name: str = ""  # имя шаблона, если расчет происходит по нему
+    path_line: List[int] = []
+
+class IcebreakerPath(CustomBaseModel):
+    icebreaker_id: int
+    start_date: datetime
+    source: int
+    source_name: str
+    min_ice_condition: Optional[float] = None  # худшие ледовые условия на маршруте
     waybill: List[PathEvent]   # описание пути
-    path_line: Optional[str] = None  # маршрут для отрисовки
+
 
 class PostCalcPath(CustomBaseModel):
     vessel_id: int  # идентификатор судна
@@ -83,3 +95,10 @@ class PostCalcPathIce(CustomBaseModel):
     icebreaker_id: int
     formation_point: int  # точка начала проводки
     leave_point: int  # точка окончания проводки
+
+class Template(CustomBaseModel):
+    name: str
+    description: str = ""
+    vessels: List[int]
+    icebreakers: List[int]
+    algorythm: AlgoType
