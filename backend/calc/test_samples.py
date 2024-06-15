@@ -6,6 +6,13 @@ from backend.data.vessels_data import vessels_data, icebreaker_data
 from context import Context
 from time import time
 from computer import Computer
+from backend.config import backend_base_dir
+
+file_path = backend_base_dir / "input_files/IntegrVelocity.xlsx"
+base = BaseGraph()
+base.set_base_values()
+ice_cond = IceCondition(file_path, base.graph)
+comp = Computer(base, ice_cond)
 
 def set_g_base2(base): #задать базовый граф 2 вершины
     # определяем список узлов (ID узлов)
@@ -29,11 +36,9 @@ def set_g_base5(base): #задать базовый граф  с пятью ве
 def test_path():
     base = BaseGraph()
     base.set_base_values()
-    vessel = Vessel()
-    vessel.load_from(vessels_data[4])
+    vessel = Vessel(**vessels_data[4])
     ice_cond = IceCondition()
-    icebreaker = IceBreaker()
-    icebreaker.load_from(icebreaker_data[1])
+    icebreaker = IceBreaker(**icebreaker_data[1])
     nav = Navigator()
     paths = nav.calc_shortest_path(base,ice_cond,vessel, vessel.start_date,29,46)
     print(paths)
@@ -106,12 +111,8 @@ def test_create_calc_cache():
     print(nav.priority)    
 
 def test_compute_optimal():
-    base = BaseGraph()
-    ice_cond = IceCondition()
     context = Context()
     context.load_from_template('test_1')
-    base.set_base_values() 
-    comp = Computer(base,ice_cond)
     grade, vessel_paths, icebreaker_paths = comp.optimal_timesheet(context)
     print(vessel_paths)
 

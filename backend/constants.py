@@ -17,3 +17,8 @@ class PathEventsType(Enum):
     formation = "formation"
     fin = "fin"
     stuck = "stuck"
+
+class AlgoType(Enum):
+    default = "default"
+    best = "best"  # с лучшим ледоколом
+    solo = "solo"  # самостоятельно

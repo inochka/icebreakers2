@@ -2,19 +2,18 @@ import logging
 from datetime import datetime
 from pathlib import Path
 from typing import List
-from networkx import Graph
+
 import geopandas as gpd
+import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
-from dateutil import parser
-from scipy.interpolate import LinearNDInterpolator
-import matplotlib.pyplot as plt
-from backend.calc.base_graph import BaseGraph
-import backend.config
-import geopandas
-from geocube.api.core import make_geocube
-from backend.config import tiffs_dir
 import rioxarray
+from dateutil import parser
+from geocube.api.core import make_geocube
+from networkx import Graph
+from scipy.interpolate import LinearNDInterpolator
+
+from backend.config import tiffs_dir
 
 logger = logging.getLogger(__name__)
 
@@ -26,6 +25,7 @@ class IceCondition:
     interpolators: dict[datetime, LinearNDInterpolator]
     graphs_with_conds: dict[datetime, Graph]
     gtiffs_paths: dict[datetime, Path]
+    num_points: int = 20
 
     def __init__(self, file_path: Path | str, graph: Graph):
         self.dfs = self.read_file(file_path)
@@ -60,8 +60,7 @@ class IceCondition:
         assert v.shape == (2,)
 
         forecast_date = self.find_appropriate_conditions_date(list(self.interpolators.keys()), dt)
-
-        n_points = 10
+        n_points = self.num_points
         points = [u + (v - u) * i / 5 for i in range(n_points)]
 
         coords_y = [u[1] + (v - u)[1] * i / n_points for i in range(n_points)]
@@ -197,6 +196,22 @@ class IceCondition:
         plt.show()
 
     def make_geotiffs_for_ice_conditions(self):
+        self.gtiffs_paths = {}
+        for dt, df in self.dfs.items():
+            gdf = gpd.GeoDataFrame(
+                df, geometry=gpd.points_from_xy(df.longitude, df.latitude)
+            )
+
+            out_grid = make_geocube(
+                vector_data=gdf,
+                measurements=["ice_condition"],
+                resolution=(-0.1, 0.1),
+            )
+            filename = dt.strftime("%Y_%m_%d") + ".tif"
+            out_grid["ice_condition"].rio.to_raster(tiffs_dir / filename)
+            self.gtiffs_paths[dt] = tiffs_dir / filename
+
+    def make_geotiffs_for_ice_conditions_draft(self):
         self.gtiffs_paths = {}
         for dt, df in self.dfs.items():
             gdf = gpd.GeoDataFrame(
