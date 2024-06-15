@@ -1,6 +1,6 @@
 
 from pydantic import BaseModel, field_validator
-from typing import List, Optional
+from typing import List, Optional, Dict
 from datetime import datetime
 from backend.constants import IceClass, PathEventsType, AlgoType
 from backend.utils import parse_dates
@@ -62,9 +62,20 @@ class PathEvent(CustomBaseModel):
     point: int  # где произошло событие
     dt: datetime  # когда произошло событие
 
+class SimpleVesselPath(CustomBaseModel):
+    total_time_hours: float
+    path_line: List[int] = []
+    time_line: List[float] = []
+
+class AllSimpleVesselPath(CustomBaseModel):
+    # все пути в/из вершину
+    node: int # путь
+    paths: Dict[int, SimpleVesselPath] = {} # ключ - номер вершины, из / в которой идут пути
+
+
 class VesselPath(CustomBaseModel):
     waybill: List[PathEvent] = []  # описание пути
-    total_time_hours: float 
+    total_time_hours: float
     start_date: datetime
     end_date: Optional[datetime] = None
     source: int
@@ -77,6 +88,7 @@ class VesselPath(CustomBaseModel):
     vessel_id: int = -1
     template_name: str = ""  # имя шаблона, если расчет происходит по нему
     path_line: List[int] = []
+    time_line: List[int] = []
 
 class IcebreakerPath(CustomBaseModel):
     icebreaker_id: int
@@ -102,3 +114,12 @@ class Template(CustomBaseModel):
     vessels: List[int]
     icebreakers: List[int]
     algorythm: AlgoType
+
+class AllVesselPaths(CustomBaseModel):
+    name: str
+    description: str = ""
+    vessels: List[int]
+    icebreakers: List[int]
+    algorythm: AlgoType
+
+class Caravan(CustomBaseModel):

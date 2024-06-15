@@ -71,7 +71,7 @@ class Vessel(AbstractVessel):
         self.target_name = target_name
         self.set_move_pen()
 
-    def calc_time(self, length, ice_cond_val, icebreaker: IceBreaker):
+    def calc_time_with_icebreaker(self, length, ice_cond_val, icebreaker: IceBreaker):
         """
         Расчет времени прохождения ребра длиной length в условиях ice_cond_val ледокольной проводкой
         """
@@ -123,7 +123,7 @@ def calc_time(length, speed, move_pen_19_15, move_pen_14_10, ice_cond_val):
         move_pen = 0
     elif ice_cond_val >= 14.5:
         move_pen = move_pen_19_15
-    elif ice_cond_val >= 10:
+    elif ice_cond_val >= 3: #10:
         move_pen = move_pen_14_10
     else:
         move_pen = 1

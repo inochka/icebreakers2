@@ -20,7 +20,6 @@ from geocube.api.core import make_geocube
 from backend.config import tiffs_dir
 import rioxarray
 
-
 logger = logging.getLogger(__name__)
 
 class IceCondition:
@@ -31,7 +30,8 @@ class IceCondition:
     interpolators: dict[datetime, LinearNDInterpolator]
     graphs_with_conds: dict[datetime, Graph]
     gtiffs_paths: dict[datetime, Path]
-    num_points: int = 20
+    num_points: int = 50  # число точек на ребре при аппроксимации движения
+    bound_ice_value: float = 0.0  # граничное значение, начиная с которого учитываем точки
 
     def __init__(self, file_path: Path | str, graph: Graph):
         self.dfs = self.read_file(file_path)
@@ -55,6 +55,15 @@ class IceCondition:
         forecast_date = self.find_appropriate_conditions_date(list(self.interpolators.keys()), dt)
         return self.graphs_with_conds[forecast_date][base_node_u][base_node_v]['ice_condition']
 
+    def best_condition(self,  base_node_u, base_node_v) -> float:
+        weights = [self.graphs_with_conds[dt][base_node_u][base_node_v]['ice_condition']
+                   for dt in self.interpolators.keys()]
+        return np.max(weights)
+
+    def get_ice_condition_from_values_list(self, values: List[float]):
+        vals = np.array([val for val in values if val > self.bound_ice_value])
+        return np.mean(vals) if vals else self.bound_ice_value
+
 
     def obtain_condition_for_edge(self, u: np.ndarray, v: np.ndarray, dt: datetime)->float:
         """
@@ -75,7 +84,7 @@ class IceCondition:
         points =np.array(list(zip(coords_x, coords_y)))
 
         # берем просто среднее ледовое условие, по n_points точкам на данном отрезке
-        return np.mean(self.interpolators[forecast_date](points))
+        return self.get_ice_condition_from_values_list(self.interpolators[forecast_date](points))
 
     def obtain_condition_for_graph(self, graph: Graph, dt: datetime):
         """
@@ -114,7 +123,7 @@ class IceCondition:
         for i, (u, v) in enumerate(edge_indices):
             start_idx = i * n_points
             end_idx = (i + 1) * n_points
-            graph[u][v]['ice_condition'] = np.mean(ice_conditions[start_idx:end_idx])
+            graph[u][v]['ice_condition'] = self.get_ice_condition_from_values_list(ice_conditions[start_idx:end_idx])
 
         return graph
 

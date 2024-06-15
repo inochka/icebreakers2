@@ -10,6 +10,7 @@ class IceClass(Enum):
     Arc7 = "Arc 7"
     Arc9 = "Arc 9"
 
+
 class PathEventsType(Enum):
     #(move, wait, formation, fin, stuck)
     move = "move"

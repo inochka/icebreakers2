@@ -1,31 +1,91 @@
 from datetime import datetime, timedelta
 import math
+
+import numpy as np
+
 from backend.calc.base_graph import BaseGraph
-from backend.calc.vessel import Vessel, IceBreaker
+from backend.calc.vessel import AbstractVessel, Vessel, IceBreaker
 from queue import PriorityQueue
 from backend.calc.context import Context, Grade
 from backend.constants import PathEventsType
 from backend.utils import add_hours
 from backend.models import PathEvent
 from backend.calc.ice_cond import IceCondition
-from backend.models import VesselPath
-from typing import List
+from backend.models import VesselPath, SimpleVesselPath, AllSimpleVesselPath
+from typing import List, Dict
+import logging
 
+logger = logging.getLogger(__name__)
 
 class Navigator:
-    # сохраненные результаты расчетов
-    self_move_grade: Grade  # верхняя оценка времени для заявок, самостоятельная проводка
-    self_move_ways = {}  # список кратчайших путей
-    ice_move_grade: Grade = {}  # нижняя оценка времени для заявок, проводка идеальным ледоколом
-    ice_move_ways = {}  # список кратчайших путей
-    priority = {}  # приоритет проводки self_move_paths - ice_move_paths
-    path_to_all = {}  # кратчайшее расстояние от точек старта до каждой вершины
 
-    def get_best_ice_breaker(self, context: Context):
+    # сохраненные результаты расчетов
+
+    solo_move_grade: Grade  # верхняя оценка времени для заявок, самостоятельная проводка
+    solo_move_ways: Dict[int, VesselPath] | None = None  # список кратчайших путей при самостоятельном движении
+    ice_move_grade: Grade  # нижняя оценка времени для заявок, проводка идеальным ледоколом
+    ice_move_ways: Dict[int, VesselPath] | None = None  # список кратчайших путей при движении с ледоколом
+    priority: PriorityQueue  # приоритет проводки self_move_paths - ice_move_paths
+
+    path_to_all: Dict[int, AllSimpleVesselPath] | None = None # кратчайшее расстояние от точек старта
+                                                                  # до каждой вершины,ключ - vessel_id
+
+    path_from_all: Dict[int, AllSimpleVesselPath] | None = None
+    estimate_path_time = timedelta(days=14)
+
+    best_icebreaker_paths_times: np.ndarray  # матрица оптимальных времен между вершинами
+
+    base: BaseGraph
+    ice_cond: IceCondition
+    context: Context
+
+
+    def __init__(self,  base: BaseGraph, context: Context, ice_cond: IceCondition):
+        """Сохраняет результаты расчетов для дальнейшего использования"""
+
+        self.base = base
+        self.ice_cond = ice_cond
+        self.context = context
+
+        self.solo_move_grade, self.solo_move_ways = self.rough_estimate()
+        self.ice_move_grade, self.ice_move_ways = self.rough_estimate(with_best_icebreaker=True)
+
+        self.priority = PriorityQueue()
+
+        for k, sm in self.solo_move_ways.items():
+            self.priority.put((sm.total_hours - self.ice_move_ways[k].total_hours, k))
+
+        # считаем пути во все точки из начала
+        self.path_to_all = {}
+        for k, v in self.context.vessels.items():
+            paths = self.calc_shortest_path(v)
+            self.path_to_all[k] = paths
+
+        # считаем пути из всех точек в конец
+
+        self.path_from_all = {}
+        for k, v in self.context.vessels.items():
+            # обращаем направление стрелы времени , чтобы использовать тот же алгоритм
+            paths = self.calc_shortest_path(v, source_node=v.target, time_orientation = -1,
+                                            start_time= v.start_date + self.estimate_path_time)
+            self.path_from_all[k] = paths
+
+        # считаем оптимальные времена с оптимальным ледоколом для дальнейшего откидывания нехороших вариантов
+        ice_breaker = self.get_best_ice_breaker()
+        n_vertices = len(self.base.graph.nodes)
+        best_icebreaker_paths_times = np.zeros((n_vertices, n_vertices))
+        for n in self.base.graph:
+            all_paths = self.calc_shortest_path(ice_breaker, use_best_ice_condition=True)
+            for m, simple_path in all_paths.paths.items():
+                best_icebreaker_paths_times[n][m] = simple_path.total_time_hours
+                best_icebreaker_paths_times[m][n] = simple_path.total_time_hours
+
+
+    def get_best_ice_breaker(self):
         best_speed = 0
         min_move_pen_19_15 = 1
         min_move_pen_14_10 = 1
-        for k, i in context.icebreakers.items():
+        for k, i in self.context.icebreakers.items():
             if i.speed > best_speed:
                 best_speed = i.speed
             if i.move_pen_19_15 < min_move_pen_19_15:
@@ -33,18 +93,39 @@ class Navigator:
             if i.move_pen_14_10 < min_move_pen_14_10:
                 min_move_pen_14_10 = i.move_pen_14_10
 
-        args = {"name": "Ямал", "ice_class": "Arc 9", "speed": best_speed, "move_pen_19_15": min_move_pen_19_15,
-             "move_pen_14_10": min_move_pen_14_10, "source": 41, "source_name": "Рейд Мурманска",
-             "start_date": "27.02.2022"}
-        return IceBreaker(**args)
+        return IceBreaker(
+            name = "Ямал",
+            ice_class = "Arc 9",
+            speed = best_speed,
+            move_pen_19_15 = min_move_pen_19_15,
+            move_pen_14_10 = min_move_pen_14_10,
+            source = 41,
+            source_name = "Рейд Мурманска",
+            start_date = "27.02.2022"
+        )
 
-    def calc_shortest_path(self, base: BaseGraph, ice_cond: IceCondition, vessel: Vessel, time: datetime, source_node,
-                           target_node=None, icebreaker: IceBreaker = None):
+
+    @staticmethod
+    def unfold_path(n, source_node, node_prev, node_time):
+        path = [n]
+        time = [node_time[n]]
+        i = n
+        while node_prev[i] != source_node:
+            path.insert(0, node_prev[i])
+            time.insert(0, node_time[node_prev[i]])
+            i = node_prev[i]
+        path.insert(0, source_node)
+        time.insert(0, 0)
+        return path, time
+
+    def calc_shortest_path(self, vessel: AbstractVessel, start_time: datetime | None = None,
+                           time_orientation: int = +1, use_best_ice_condition: bool = False,
+                           source_node: int | None = None, target_node=None, icebreaker: IceBreaker = None):
         """
         base - опорный граф
         ice_cond - ледовые условия
         vessel - судно для расчета
-        time - время начала движения
+        start_time - время начала движения
         source_node - пункт отправки
         target_node - пункт назначения (указывается при расчете пути до конкретной точки)
         icebreaker - ледокол (указывается при расчете движения под проводкой)
@@ -55,57 +136,65 @@ class Navigator:
         """
         node_time = {}  # время достижения вершины по кратчайшему пути
         node_prev = {}  # из какой вершины попали по кратчайшему пути
-        for n in base.graph:
+
+        if not start_time:
+            start_time = vessel.start_date
+
+        if not source_node:
+            source_node = vessel.source
+
+        for n in self.base.graph:
             node_time[n] = math.inf
         node_time[source_node] = 0
         next_nodes = PriorityQueue()
         next_nodes.put((0, source_node))
         seen = []
-        while not next_nodes.empty() and not (target_node != None and target_node in seen):
+        while not next_nodes.empty() and not ((target_node is not None) and (target_node in seen)):
             current_node = next_nodes.get()[1]
             seen.append(current_node)
-            for n in base.graph.neighbors(current_node):
-                length = base.graph.get_edge_data(current_node, n)["length"]
-                ice_cond_time = vessel.start_date + timedelta(hours=node_time[current_node])
-                ice = ice_cond.condition(current_node, n, ice_cond_time)
-                new_time = node_time[current_node] + vessel.calc_time(length, ice, icebreaker)
+            for n in self.base.graph.neighbors(current_node):
+                length = self.base.graph.get_edge_data(current_node, n)["length"]
+                if not use_best_ice_condition:
+                    ice_cond_time = start_time + time_orientation * timedelta(hours=node_time[current_node])
+                    ice = self.ice_cond.condition(current_node, n, ice_cond_time)
+                else:
+                    ice = self.ice_cond.best_condition(current_node, n)
+
+                if icebreaker:
+                    if not hasattr(vessel, "calc_time_with_icebreaker"):
+                        logger.info(f"Something wrong with call calc_time_with_icebreaker_method")
+                        new_time = node_time[current_node] + vessel.calc_time(length, ice)
+                    else:
+                        new_time = node_time[current_node] + vessel.calc_time_with_icebreaker(length, ice, icebreaker)
+                else:
+                    new_time = node_time[current_node] + vessel.calc_time(length, ice)
+
                 if node_time[n] > new_time:
                     node_time[n] = new_time
                     node_prev[n] = current_node
                     next_nodes.put((new_time, n))
-        res = {}
-
-        def calc_path(n, source_node, node_prev, node_time):
-            path = [n]
-            time = [node_time[n]]
-            i = n
-            while node_prev[i] != source_node:
-                path.insert(0, node_prev[i])
-                time.insert(0, node_time[node_prev[i]])
-                i = node_prev[i]
-            path.insert(0, source_node)
-            time.insert(0, 0)
-            return path, time
 
         if target_node:
             if node_time[target_node] < math.inf:
-                path, time = calc_path(target_node, source_node, node_prev, node_time)
+                path, time = self.unfold_path(target_node, source_node, node_prev, node_time)
             else:
                 path = []
                 time = []
-            res = (node_time[target_node], path, time)
+            return SimpleVesselPath(total_time_hours=node_time[target_node], path_line=path, time_line=time) #(node_time[target_node], path, time)
         else:
+            simple_paths = {}
             for n in node_time:
                 if n != source_node:
                     if node_time[n] < math.inf:
-                        path, time = calc_path(n, source_node, node_prev, node_time)
+                        path, time = self.unfold_path(n, source_node, node_prev, node_time)
                     else:
                         path = []
                         time = []
-                    res[n] = (node_time[n], path, time)
-        return res
+                    simple_paths[n] = SimpleVesselPath(total_time_hours=node_time[n], path_line=path, time_line=time) #(node_time[n], path, time)
+            all_paths = AllSimpleVesselPath(node=source_node, paths=simple_paths)
+            return all_paths
 
-    def rough_estimate(self, base: BaseGraph, ice_cond: IceCondition, context: Context, with_best_icebreaker=False) -> (Grade, List[VesselPath]):
+    def rough_estimate(self, with_best_icebreaker=False) -> (Grade, List[VesselPath]):
         """Приближенная оценка, возвращает общую оценку самостоятельного движения или движения под проводкой и маршруты Возвращает объект Grade и описания маршрутов виде структуры в виде словаря с ключами = идентификатор судна
         {4: {'start_date': datetime.datetime(2022, 3, 7, 0, 0),
         'end_date': datetime.datetime(2022, 4, 16, 8, 7, 57, 477552),
@@ -120,15 +209,15 @@ class Navigator:
         grade = Grade()
         res = {}
         if with_best_icebreaker:  # создаем идеальный ледокол для нижней оценки
-            best_icebreaker = self.get_best_ice_breaker(context)
+            best_icebreaker = self.get_best_ice_breaker()
 
-        for k, v in context.vessels.items():
+        for k, v in self.context.vessels.items():
             if with_best_icebreaker:
-                time, path, timelist = self.calc_shortest_path(base, ice_cond, v, v.start_date, v.source, v.target,
-                                                               best_icebreaker)
+                simple_path = self.calc_shortest_path(v, icebreaker = best_icebreaker)
             else:
-                time, path, timelist = self.calc_shortest_path(base, ice_cond, v, v.start_date, v.source, v.target)
+                simple_path = self.calc_shortest_path(v)
 
+            time = simple_path.total_time_hours
             grade.total_time = grade.total_time + time
             end_date = add_hours(v.start_date, time) if time != math.inf else None
             # TODO min_ice_condition сделать функцию расчета худших ледовых условий на маршруте, или пока выпилить
@@ -141,43 +230,28 @@ class Navigator:
                 waybill = []
                 next_event_time = v.start_date
 
-                for i, n in enumerate(path):
+                for i, n in enumerate(simple_path.path):
                     if n == v.target:
                         waybill.append(PathEvent(event=PathEventsType.fin, point=n, dt=next_event_time))
                     else:
                         waybill.append(PathEvent(event=PathEventsType.move, point=n, dt=next_event_time))
-                        next_event_time = add_hours(next_event_time, timelist[i + 1])
+                        next_event_time = add_hours(next_event_time, simple_path.time_line[i + 1])
 
             res[k] = VesselPath(
                 total_time_hours = time,
                 start_date = v.start_date,
                 end_date = end_date,
                 source = v.source,
-                source_name = base.graph.nodes[v.source]["point_name"],
+                source_name = self.base.graph.nodes[v.source]["point_name"],
                 target = v.target,
-                target_name = base.graph.nodes[v.target]["point_name"],
+                target_name = self.base.graph.nodes[v.target]["point_name"],
                 success = time < math.inf,
                 waybill = waybill,
-                path_line = path,
-                template_name = context.template_name,
-                vessel_id = k
+                path_line = simple_path.path_line,
+                template_name = self.context.template_name,
+                vessel_id = k,
+                time_line = simple_path.time_line
             )
 
         return grade, res
 
-    def all_vessels_path_from(self, base: BaseGraph, ice_cond: IceCondition, context: Context):
-        """Для каждого судна вычисляет стоимость достижения каждой вершины при самостоятельном движении, возвращает словарь { номер судна: {каждая конечная вершина:(время в часах,[путь],[время на пути])}"""
-        res = {}
-        for k, v in context.vessels.items():
-            paths = self.calc_shortest_path(base, ice_cond, v, v.start_date, v.source)
-            res[k] = paths
-        return res
-
-    def create_calc_cache(self, base: BaseGraph, ice_cond: IceCondition, context: Context):
-        """Сохраняет результаты расчетов для дальнейшего использования"""
-        self.self_move_grade, self.self_move_ways = self.rough_estimate(base, ice_cond, context)
-        self.ice_move_grade, self.ice_move_ways = self.rough_estimate(base, ice_cond, context,
-                                                                      with_best_icebreaker=True)
-        self.priority = {}
-        for k, sm in self.self_move_ways.items():
-            self.priority[k] = sm['total_hours'] - self.ice_move_ways[k]['total_hours']
