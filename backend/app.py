@@ -12,9 +12,19 @@ from backend.crud.crud_types import TemplatesCRUD, VesselPathCRUD
 from backend.calculate_timetable import computator, ice_cond
 from backend.calc.context import Context
 from backend.utils import replace_inf_nan
+from fastapi.middleware.cors import CORSMiddleware
 import json
 
 app = FastAPI()
+
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],  # Разрешить все адреса
+    allow_credentials=True,
+    allow_methods=["*"],  # Разрешить все методы (GET, POST, PUT, DELETE и т.д.)
+    allow_headers=["*"],  # Разрешить все заголовки
+)
 
 @app.middleware("http")
 async def replace_inf_middleware(request, call_next):
@@ -70,7 +80,10 @@ async def get_template(template_name: str = ""):
     """
     crud = TemplatesCRUD()
     if template_name:
-        return JSONResponse(jsonable_encoder(crud.get(template_name)))
+        item = crud.get(template_name)
+        if not item:
+            raise HTTPException(status_code=404, detail="Template not found")
+        return JSONResponse(jsonable_encoder(item))
     else:
         return JSONResponse(jsonable_encoder(crud.get_all()))
 
@@ -80,7 +93,10 @@ async def delete_template(template_name: str):
         Удаление шаблона
     """
     crud = TemplatesCRUD()
-    return JSONResponse(jsonable_encoder(crud.delete(template_name)))
+    item = crud.delete(template_name)
+    if not item:
+        raise HTTPException(status_code=404, detail="Template not found")
+    return JSONResponse(jsonable_encoder(item))
 
 @app.post("/template/", response_model=Template)
 async def post_template(template: Template):
@@ -101,8 +117,10 @@ async def post_calculation_request(template_name: str):
     if not template:
         raise HTTPException(status_code=404, detail="Template not found")
 
-    context = Context().load_from_template_obj(template)
-    computator.optimal_timesheet(context)\
+    context = Context(template)
+    computator.optimal_timesheet(context)
+
+    return JSONResponse(content=None, status_code=200)
 
 @app.get("/calculation_request/", response_model=Template)
 async def get_calculation_request_results(template_name: str, vessel_id: int | None = None):
