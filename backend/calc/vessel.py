@@ -46,6 +46,21 @@ class IceBreaker(AbstractVessel):
         self.start_date = parse_dates(start_date)
         self.source_name = source_name
 
+    def calc_time(self, length, ice_cond_val):
+        """
+        Расчет времени прохождения ребра длиной length в условиях ice_cond_val
+        """
+        # определяем тяжесть ледовых условий
+        if ice_cond_val >= 19.5:
+            speed = self.speed
+        elif ice_cond_val >= 14.5:
+            speed = ice_cond_val * (1-move_pen_19_15)
+        elif ice_cond_val >= 3: #10:
+            speed = ice_cond_val * (1-move_pen_14_10)
+        else:
+            return math.inf
+        return length / speed
+
 
 class Vessel(AbstractVessel):
     api_class = VesselModel
