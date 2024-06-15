@@ -99,7 +99,7 @@ class Vessel(AbstractVessel):
         elif self.ice_class in ["Arc 7"]:
             self.move_pen_19_15 = 0.4
             self.move_pen_19_15_ice = 0
-            self.move_pen_14_10 = 0.85
+            self.move_pen_14_10 = 1
             self.move_pen_14_10_ice = 0.2
         elif self.ice_class in ["Arc 9"]:
             raise ValueError("Для Arc 9 нужно использовать отдельный конструктор IceBreaker ")

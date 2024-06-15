@@ -5,3 +5,5 @@ print (sys.path)
 
 #export PYTHONPATH='/Users/casper/hakaton/git/the_system_for_nuclear_icebreaker'
 #export PYTHONPATH=$PYTHONPATH:/Users/casper/hakaton/git/the_system_for_nuclear_icebreaker
+#python -m venv venv
+#source venv/bin/activate
