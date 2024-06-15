@@ -103,7 +103,7 @@ class Vessel(AbstractVessel):
         """
         if self.ice_class in ["NO", "Arc 1", "Arc 2", "Arc 3"]:
             self.move_pen_19_15 = 1
-            self.move_pen_19_15_ice = 0
+            self.move_pen_19_15_ice = 0.5
             self.move_pen_14_10 = 1
             self.move_pen_14_10_ice = 1
         elif self.ice_class in ["Arc 4", "Arc 5", "Arc 6"]:
