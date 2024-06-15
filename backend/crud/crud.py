@@ -35,7 +35,7 @@ class CRUD:
         return str(uuid4())
 
     def get(self, item_id: Any) -> Optional[T]:
-        return self.data.get(item_id)
+        return self.data.get(item_id, None)
 
     def get_all(self) -> List[T]:
         return list(self.data.values())

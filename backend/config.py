@@ -6,7 +6,7 @@ backend_base_dir = Path(__file__).parent
 tiffs_dir = backend_base_dir.parent / "tiffs"
 json_dir = backend_base_dir / "data/json_data"
 
-recalculate_loaded = False  # нужно ли пересчитывать при старте уже имеющиеся шаблоны
+recalculate_loaded = True  # нужно ли пересчитывать при старте уже имеющиеся шаблоны
 
 LOGGING = {
     'version': 1,
