@@ -91,12 +91,18 @@ class VesselPath(CustomBaseModel):
     time_line: List[int] = []
 
 class IcebreakerPath(CustomBaseModel):
-    icebreaker_id: int
+    waybill: List[PathEvent] = []  # описание пути
     start_date: datetime
+    end_date: Optional[datetime] = None
     source: int
     source_name: str
-    min_ice_condition: Optional[float] = None  # худшие ледовые условия на маршруте
-    waybill: List[PathEvent]   # описание пути
+    target: int
+    target_name: str
+    speed: Optional[float] = None  # средняя скорость на маршруте
+    icebreaker_id: int = -1
+    path_line: List[int] = []
+    time_line: List[float] = []
+    template_name: str = ""  # имя шаблона, если расчет происходит по нему
 
 
 class PostCalcPath(CustomBaseModel):
@@ -123,4 +129,8 @@ class AllVesselPaths(CustomBaseModel):
     algorythm: AlgoType
 
 class Caravan(CustomBaseModel):
-    id:int = -1
+    id: int = -1
+    start_node: int = 0
+    end_node: int = 0
+    vessels: List[int] = []
+    icebreaker_id: int = -1

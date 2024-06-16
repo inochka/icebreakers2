@@ -6,7 +6,7 @@ from backend.models import VesselModel, IcebreakerModel, CustomBaseModel
 
 
 class AbstractVessel:
-    # id
+    idx: int
     api_class: type(CustomBaseModel)
     name: str  # Наименование судна
     ice_class: str  # Ледовый класс, допустимые значения "NO","Arc 1","Arc 2","Arc 3", "Arc 4","Arc 5","Arc 7","Arc 9"
@@ -30,13 +30,14 @@ class AbstractVessel:
 class IceBreaker(AbstractVessel):
     api_class = IcebreakerModel
 
-    def __init__(self, name: str, ice_class: str, speed: float, move_pen_19_15: float,
+    def __init__(self, idx: int, name: str, ice_class: str, speed: float, move_pen_19_15: float,
                  move_pen_14_10: float, source: int, source_name: str, start_date: str, **kwargs):
         """
         Инициализация экземпляра IceBreaker с использованием явных аргументов.
         {"name":"Ямал","ice_class":"Arc 9","speed":21,"move_pen_19_15":0.15, "move_pen_14_10":0.35,"source":41,"source_name":"Рейд Мурманска","start_date":"27.02.2022"}
 
         """
+        self.idx = idx
         self.name = name
         self.ice_class = ice_class
         self.speed = speed
@@ -54,9 +55,10 @@ class IceBreaker(AbstractVessel):
         if ice_cond_val >= 19.5:
             speed = self.speed
         elif ice_cond_val >= 14.5:
-            speed = ice_cond_val * (1-move_pen_19_15)
+            # правки по итогам встречи с оргами
+            speed = ice_cond_val * (1-self.move_pen_19_15)
         elif ice_cond_val >= 3: #10:
-            speed = ice_cond_val * (1-move_pen_14_10)
+            speed = ice_cond_val * (1-self.move_pen_14_10)
         else:
             return math.inf
         return length / speed
@@ -69,13 +71,14 @@ class Vessel(AbstractVessel):
     move_pen_19_15_ice: float  # штраф при движении под проводкой, если запрещено то 1
     move_pen_14_10_ice: float  # штраф при движении под проводкой, если запрещено то 1
 
-    def __init__(self, name: str, ice_class: str, speed: float, source: int, source_name: str,
+    def __init__(self, idx: int, name: str, ice_class: str, speed: float, source: int, source_name: str,
                  target: int, target_name: str, start_date: str):
         """
         Инициализация экземпляра Vessel с использованием явных аргументов.
          {"name":"CLEAN VISION","ice_class":"Arc 4","speed":14,"source":4,"source_name":"Штокман","target":24,"target_name":"устье Лены","start_date":"27.04.2022"},
 
         """
+        self.idx = idx
         self.name = name
         self.ice_class = ice_class
         self.speed = speed
