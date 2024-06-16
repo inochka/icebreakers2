@@ -30,6 +30,12 @@ class Navigator:
     path_to_all: Dict[int, AllSimpleVesselPath] | None = None # кратчайшее расстояние от точек старта
                                                                   # до каждой вершины,ключ - vessel_id
 
+    reachable_vertices_from_start: Dict[int, List[int]] | None = None  # список достижимых вершин для данного судна,
+                                                                       # из точки старта, ключ - vessel_id
+
+    reachable_vertices_from_end: Dict[int, List[int]] | None = None  # список достижимых вершин для данного судна,
+                                                                       # ключ - vessel_id
+
     path_from_all: Dict[int, AllSimpleVesselPath] | None = None
     estimate_path_time = timedelta(days=14)
 
@@ -53,32 +59,44 @@ class Navigator:
         self.priority = {}
 
         for k, sm in self.solo_move_ways.items():
-            self.priority[k] = sm.total_hours - self.ice_move_ways[k].total_hours
+            self.priority[k] = sm.total_time_hours - self.ice_move_ways[k].total_time_hours
 
         # считаем пути во все точки из начала
         self.path_to_all = {}
+        self.reachable_vertices_from_start = {}
         for k, v in self.context.vessels.items():
             paths = self.calc_shortest_path(v)
             self.path_to_all[k] = paths
 
+            self.reachable_vertices_from_start[k] = [node for node, simple_v_path in paths.paths.items()
+                                                     if simple_v_path.total_time_hours < math.inf]
+
         # считаем пути из всех точек в конец
 
         self.path_from_all = {}
+        self.reachable_vertices_from_end = {}
         for k, v in self.context.vessels.items():
             # обращаем направление стрелы времени , чтобы использовать тот же алгоритм
             paths = self.calc_shortest_path(v, source_node=v.target, time_orientation = -1,
                                             start_time= v.start_date + self.estimate_path_time)
             self.path_from_all[k] = paths
 
+            self.reachable_vertices_from_end[k] = [node for node, simple_v_path in paths.paths.items()
+                                                     if simple_v_path.total_time_hours < math.inf]
+
+
         # считаем оптимальные времена с оптимальным ледоколом для дальнейшего откидывания нехороших вариантов
         ice_breaker = self.get_best_ice_breaker()
         n_vertices = len(self.base.graph.nodes)
+
         best_icebreaker_paths_times = np.zeros((n_vertices, n_vertices))
         for n in self.base.graph:
             all_paths = self.calc_shortest_path(ice_breaker, use_best_ice_condition=True)
             for m, simple_path in all_paths.paths.items():
                 best_icebreaker_paths_times[n][m] = simple_path.total_time_hours
                 best_icebreaker_paths_times[m][n] = simple_path.total_time_hours
+
+        self.best_icebreaker_paths_times = best_icebreaker_paths_times
 
 
     def get_best_ice_breaker(self):
@@ -101,7 +119,8 @@ class Navigator:
             move_pen_14_10 = min_move_pen_14_10,
             source = 41,
             source_name = "Рейд Мурманска",
-            start_date = "27.02.2022"
+            start_date = "27.02.2022",
+            idx = 0
         )
 
 
@@ -191,6 +210,9 @@ class Navigator:
                         path = []
                         time = []
                     simple_paths[n] = SimpleVesselPath(total_time_hours=node_time[n], path_line=path, time_line=time) #(node_time[n], path, time)
+
+            # TODO: првоерить, не отъебывает ли
+            simple_paths[source_node] = SimpleVesselPath(total_time_hours=0, path_line=[], time_line=[])
             all_paths = AllSimpleVesselPath(node=source_node, paths=simple_paths)
             return all_paths
 
@@ -213,9 +235,9 @@ class Navigator:
 
         for k, v in self.context.vessels.items():
             if with_best_icebreaker:
-                simple_path = self.calc_shortest_path(v, icebreaker = best_icebreaker)
+                simple_path = self.calc_shortest_path(v, target_node=v.target, icebreaker = best_icebreaker)
             else:
-                simple_path = self.calc_shortest_path(v)
+                simple_path = self.calc_shortest_path(v, target_node=v.target)
 
             time = simple_path.total_time_hours
             grade.total_time = grade.total_time + time
@@ -230,7 +252,7 @@ class Navigator:
                 waybill = []
                 next_event_time = v.start_date
 
-                for i, n in enumerate(simple_path.path):
+                for i, n in enumerate(simple_path.path_line):
                     if n == v.target:
                         waybill.append(PathEvent(event=PathEventsType.fin, point=n, dt=next_event_time))
                     else:

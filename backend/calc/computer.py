@@ -1,14 +1,20 @@
+import math
+from functools import reduce
 from backend.calc.base_graph import BaseGraph
 from backend.calc.ice_cond import IceCondition
 from backend.calc.navigator import Navigator
 from backend.calc.context import Context, Grade
-from backend.models import Caravan, VesselPath, IcebreakerPath
+from backend.models import Caravan, VesselPath, IcebreakerPath, SimpleVesselPath, AllSimpleVesselPath, CaravanConfiguration
 from queue import PriorityQueue
 from vessel import Vessel,IceBreaker
 from time import time
 from datetime import datetime, timedelta
 from typing import List, Dict, Any
 from pathlib import Path
+import logging
+
+logger = logging.getLogger(__name__)
+
 
 class Computer:
     base:BaseGraph
@@ -17,14 +23,33 @@ class Computer:
     navigator: Navigator
 
     planing_horizon: timedelta = timedelta(days=7)
+    max_ships_per_icebreaker: int = 3
+    solo_stuck_time: float = 1e6
 
     def __init__(self, base, ice_cond, context):
         self.base = base
         self.ice_cond = ice_cond
         self.navigator = Navigator(base=base, ice_cond=ice_cond, context=context)
+        self.context = context
 
     def init_app(self):
         pass
+
+    def generate_distributions(self, n_icebrs: int, ships: List[int]):
+        def distribute(remaining_ships, current_distribution):
+            distributions.append([list(group) for group in current_distribution])
+            if not remaining_ships:
+                return
+            for i in range(n_icebrs):
+                if len(current_distribution[i]) < self.max_ships_per_icebreaker:
+                    new_distribution = [list(group) for group in current_distribution]
+                    new_distribution[i].append(remaining_ships[0])
+                    distribute(remaining_ships[1:], new_distribution)
+
+        distributions = []
+        distribute(ships, [[] for _ in range(n_icebrs)])
+        return distributions
+
 
     def merge_icebreakers_paths(self, paths_old: List[IcebreakerPath], paths_new: List[IcebreakerPath]):
         """
@@ -55,15 +80,117 @@ class Computer:
 
         return list(old_dict.values())
 
-    def estimate_caravan_profit(self, caravan: Caravan) -> Grade:
-        pass
+    def estimate_solo_move(self, vessel_ids: List[int]) -> float:
+        if not vessel_ids:
+            return 0
+        return sum([self.navigator.solo_move_ways[idx].total_time_hours for idx in vessel_ids])
+
+    def estimate_caravan_profit(self, vessel_ids: List[int], icebreaker_path_times_to_all: AllSimpleVesselPath,
+                                icebreaker: IceBreaker) -> (float, int, int):
+
+        best_caravan_time = math.inf  # в часах
+        a_best = None
+        b_best = None
+
+        if not vessel_ids:
+            return 0, a_best, b_best
+
+        vessels_obj = {idx: self.context.vessels[idx] for idx in vessel_ids}
+
+        admissible_vertices_from_starts = [self.navigator.reachable_vertices_from_start[v] for v in vessel_ids]
+        possible_caravan_starts = list(reduce(set.intersection, map(set, admissible_vertices_from_starts)))
+
+        admissible_vertices_from_ends = [self.navigator.reachable_vertices_from_end[v] for v in vessel_ids]
+        possible_caravan_ends = list(reduce(set.intersection, map(set, admissible_vertices_from_ends)))
+
+        # предполагая, что караван собирается и расходится в одной точке
+        if not possible_caravan_starts or not possible_caravan_ends:
+            return best_caravan_time, a_best, b_best
 
 
-    def compute_optimal_track_for_caravan(self, caravan: Caravan) -> (List[VesselPath], IcebreakerPath, Grade):
-        pass
+        for a in possible_caravan_starts:
+            for b in possible_caravan_ends:
+                if a == b:
+                    continue
 
-    def optimal_timesheet_for_planing_horizon(self, vessels: List[Vessel], icebreakers: List[IceBreaker]) -> \
-            (List[VesselPath], List[IcebreakerPath], List[IceBreaker]):
+                # считаем затраты на то, чтобы все суда собрались в точке старта
+                caravan_start_time = max([timedelta(hours=self.navigator.path_to_all[idx].paths[a].total_time_hours)
+                                    + vessels_obj[idx].start_date for idx in vessel_ids])
+
+                caravan_start_time = max(caravan_start_time, icebreaker.start_date +
+                                         timedelta(hours=icebreaker_path_times_to_all.paths[a].total_time_hours))
+
+                total_move_time = sum([(caravan_start_time - vessel.start_date).seconds for vessel in vessels_obj.values()])
+                total_move_time = total_move_time / 3600
+
+                # оцениваем время проводки, грубо, посредством идеального ледокола
+
+                total_move_time += self.navigator.best_icebreaker_paths_times[a][b]
+
+                total_move_time += sum([self.navigator.path_from_all[idx].paths[b].total_time_hours for idx in vessel_ids])
+
+                if best_caravan_time > total_move_time:
+                    a_best = a
+                    b_best = b
+                    best_caravan_time = total_move_time
+
+        return best_caravan_time, a_best, b_best
+
+    def estimate_possible_caravans(self, vessel_ids: List[int], icebreaker_ids: List[int]):
+        logger.info(f"Estimating possible caravans for vessels {vessel_ids} and icebreakers {icebreaker_ids}")
+        paths = {idx: comp.navigator.calc_shortest_path(context.icebreakers[idx]) for idx in icebreaker_ids}
+        distributions = comp.generate_distributions(len(icebreaker_ids), vessel_ids)
+
+        logger.info(f"Found {len(distributions)} variants!")
+
+        caravans_configurations = []
+
+        for j in range(len(distributions)):
+            times = []
+            caravans = []
+            form_caravan = True
+            for i in range(len(icebreaker_ids)):
+                icebreaker_id = icebreaker_ids[i]
+                icebreaker = context.icebreakers[icebreaker_id]
+                t1, a, b = comp.estimate_caravan_profit(distributions[j][i], paths[icebreaker_id], icebreaker)
+
+                if t1 == math.inf:
+                    form_caravan = False
+                    break
+
+                caravans.append(
+                    Caravan(start_node=a, end_node=b, time_estimate=t1, vessel_ids=distributions[j][i],
+                            icebreaker_id=icebreaker_id)
+                )
+
+            if not form_caravan:
+                continue
+
+            caravans_vessels_ids = reduce(set.union, map(set, distributions[j]))
+            caravan_vessels_solo_move_time = min(comp.estimate_solo_move(list(caravans_vessels_ids)),
+                                                 self.solo_stuck_time)
+
+            solo_move_vessels_ids = list(set(vessel_ids).difference(caravans_vessels_ids))
+
+            caravan_vessels_move_time = sum(times)
+
+            solo_move_vessels_time = min(comp.estimate_solo_move(solo_move_vessels_ids), self.solo_stuck_time)
+
+            # считаем выгодность каравана
+
+            caravans_configurations.append(
+                CaravanConfiguration(caravans=caravans, solo_vessel_ids=solo_move_vessels_ids,
+                                     time_estimate=caravan_vessels_move_time + solo_move_vessels_time,
+                                     configuration_grade = caravan_vessels_solo_move_time - caravan_vessels_move_time
+                                     )
+            )
+
+        return caravans_configurations
+
+
+
+    def optimal_timesheet_for_planing_horizon(self, vessels: List[Vessel], icebreakers: List[IceBreaker]) \
+            -> (List[VesselPath], List[IcebreakerPath], List[IceBreaker]):
         """
             Распределение судов по ледоколам внутри окна планирования
         """
@@ -78,6 +205,7 @@ class Computer:
         for v in vessels:
             vessels_queue.put((self.navigator.priority[v.idx], v))
 
+        """
         while vessels_queue.not_empty:
             v = vessels_queue.get()[1]
 
@@ -85,7 +213,7 @@ class Computer:
                                      for idx, all_paths in icebreakers_paths_from_current_pos.items()}
 
             opt_icebreaker_id = min(icebreaker_times_to_v, key=icebreaker_times_to_v.get)
-
+        """
 
 
 
@@ -110,7 +238,6 @@ class Computer:
         result_vessels_paths = []
 
         while current_time < max_time:
-
             vessels = self.get_possible_vessels(current_time, current_time+self.planing_horizon)
             possible_icebreakers = self.get_possible_icebreakers(icebreakers, current_time, current_time+self.planing_horizon)
 

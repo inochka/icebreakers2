@@ -57,7 +57,7 @@ class IceBreaker(AbstractVessel):
         elif ice_cond_val >= 14.5:
             # правки по итогам встречи с оргами
             speed = ice_cond_val * (1-self.move_pen_19_15)
-        elif ice_cond_val >= 3: #10:
+        elif ice_cond_val >= 10: #10:
             speed = ice_cond_val * (1-self.move_pen_14_10)
         else:
             return math.inf

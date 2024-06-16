@@ -2,20 +2,21 @@ import logging
 from datetime import datetime
 from pathlib import Path
 from typing import List
-
+import pickle
 import geopandas as gpd
 import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
 import rioxarray
 from dateutil import parser
+import os
 from geocube.api.core import make_geocube
 from networkx import Graph
 from scipy.interpolate import LinearNDInterpolator
 import matplotlib.pyplot as plt
-plt.ion() #macOS problem
+#plt.ion() #macOS problem
 from backend.calc.base_graph import BaseGraph
-import backend.config
+from backend.config import data_dir
 import geopandas
 from geocube.api.core import make_geocube
 from backend.config import tiffs_dir
@@ -34,37 +35,66 @@ class IceCondition:
     num_points: int = 50  # число точек на ребре при аппроксимации движения
     bound_ice_value: float = 0.0  # граничное значение, начиная с которого учитываем точки
 
+    ports_ice_cond: float = 10.
+    ports = [1, 35, 4, 5, 6, 41, 11, 44, 16, 24, 25, 27, 28, 29]  # вершины, в которых расположены порты
+
+    graph_filename = "graphs_dict.pkl"
+
+    base_graph: BaseGraph
+
     def __init__(self, file_path: Path | str, graph: Graph):
-        self.dfs = self.read_file(file_path)
-        interpolators = {}
-        for dt, df in self.dfs.items():
-          interpolators[dt] =  self.make_interpolator(df)
-        self.interpolators = interpolators
+        if os.path.exists(data_dir / self.graph_filename):
+            with open(data_dir / self.graph_filename, "rb") as f:
+                self.graphs_with_conds = pickle.load(f)
+            # TODO: поправить геотиффы тут!!!
+        else:
+            self.dfs = self.read_file(file_path)
+            interpolators = {}
+            for dt, df in self.dfs.items():
+              interpolators[dt] =  self.make_interpolator(df)
+            self.interpolators = interpolators
 
-        # просчитываем граф весов
-        self.graphs_with_conds = {}
-        for dt in self.dfs.keys():
-            logger.info(f"Calculating weights for base graph at {dt}")
-            self.graphs_with_conds[dt] = self.obtain_condition_for_graph(graph, dt)
+            # просчитываем граф весов
+            self.graphs_with_conds = {}
+            for dt in self.dfs.keys():
+                logger.info(f"Calculating weights for base graph at {dt}")
+                self.graphs_with_conds[dt] = self.obtain_condition_for_graph(graph, dt)
 
-        self.make_geotiffs_for_ice_conditions()
+            self.make_geotiffs_for_ice_conditions()
 
-    def condition(self, base_node_u, base_node_v, dt :datetime) -> float:
+            # кэшируем расчеты
+            with open(data_dir / self.graph_filename, "wb") as f:
+                pickle.dump(self.graphs_with_conds, f)
+
+
+
+    def condition(self, base_node_u, base_node_v, dt: datetime) -> float:
         """
         Метод для получения ледовых условий на ребре по заданным идентификаторам его вершин
         """
-        forecast_date = self.find_appropriate_conditions_date(list(self.interpolators.keys()), dt)
-        return self.graphs_with_conds[forecast_date][base_node_u][base_node_v]['ice_condition']
+        forecast_date = self.find_appropriate_conditions_date(list(self.graphs_with_conds.keys()), dt)
+        cond = self.graphs_with_conds[forecast_date][base_node_u][base_node_v]['ice_condition']
+
+        if base_node_v in self.ports or base_node_u in self.ports:
+            cond = max(cond, self.ports_ice_cond)
+
+        return cond
 
     def best_condition(self,  base_node_u, base_node_v) -> float:
+        # TODO: переделать, с учетом, что в реальности мы не знаем будущих значений
         weights = [self.graphs_with_conds[dt][base_node_u][base_node_v]['ice_condition']
-                   for dt in self.interpolators.keys()]
-        return np.max(weights)
+                   for dt in self.graphs_with_conds.keys()]
+
+        cond = np.max(weights)
+        if base_node_v in self.ports or base_node_u in self.ports:
+            cond = max(cond, self.ports_ice_cond)
+
+        return cond
+
 
     def get_ice_condition_from_values_list(self, values: List[float]):
         vals = np.array([val for val in values if val > self.bound_ice_value])
-        return np.mean(vals) if vals else self.bound_ice_value
-
+        return np.mean(vals) if len(vals) > 0 else self.bound_ice_value
 
     def obtain_condition_for_edge(self, u: np.ndarray, v: np.ndarray, dt: datetime)->float:
         """
@@ -75,7 +105,7 @@ class IceCondition:
         assert u.shape == (2,)
         assert v.shape == (2,)
 
-        forecast_date = self.find_appropriate_conditions_date(list(self.interpolators.keys()), dt)
+        forecast_date = self.find_appropriate_conditions_date(list(self.graphs_with_conds.keys()), dt)
         n_points = self.num_points
         points = [u + (v - u) * i / 5 for i in range(n_points)]
 
@@ -94,7 +124,7 @@ class IceCondition:
         dt: время (берем ближайшее к нему время прогноза)
         """
 
-        forecast_date = self.find_appropriate_conditions_date(list(self.interpolators.keys()), dt)
+        forecast_date = self.find_appropriate_conditions_date(list(self.dfs.keys()), dt)
 
         n_points = 10
         all_points = []
@@ -190,7 +220,7 @@ class IceCondition:
 
     def plot_ice_condition_with_edge(self, u, v, dt):
 
-        forecast_date = self.find_appropriate_conditions_date(list(self.interpolators.keys()), dt)
+        forecast_date = self.find_appropriate_conditions_date(list(self.graphs_with_conds.keys()), dt)
         df = self.dfs[forecast_date]
         df = df[df.ice_condition > 0]
         gdf = gpd.GeoDataFrame(

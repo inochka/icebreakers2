@@ -69,7 +69,7 @@ class SimpleVesselPath(CustomBaseModel):
 
 class AllSimpleVesselPath(CustomBaseModel):
     # все пути в/из вершину
-    node: int # путь
+    node: int # общая точка путей
     paths: Dict[int, SimpleVesselPath] = {} # ключ - номер вершины, из / в которой идут пути
 
 
@@ -88,7 +88,7 @@ class VesselPath(CustomBaseModel):
     vessel_id: int = -1
     template_name: str = ""  # имя шаблона, если расчет происходит по нему
     path_line: List[int] = []
-    time_line: List[int] = []
+    time_line: List[float] = []
 
 class IcebreakerPath(CustomBaseModel):
     waybill: List[PathEvent] = []  # описание пути
@@ -129,8 +129,14 @@ class AllVesselPaths(CustomBaseModel):
     algorythm: AlgoType
 
 class Caravan(CustomBaseModel):
-    id: int = -1
     start_node: int = 0
     end_node: int = 0
-    vessels: List[int] = []
+    vessel_ids: List[int] = []
     icebreaker_id: int = -1
+    time_estimate: float = 0
+
+class CaravanConfiguration(CustomBaseModel):
+    caravans: List[Caravan]
+    solo_vessel_ids: List[int]
+    time_estimate: float
+    configuration_grade: float
