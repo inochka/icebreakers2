@@ -1,6 +1,5 @@
 <template>
   <div class="scroll-gantt">
-    {{getEndDate}}
     <g-gantt-chart
         :chart-start="date(vessels[0].start_date)"
         :chart-end="getEndDate"
