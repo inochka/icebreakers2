@@ -25,7 +25,7 @@ class Navigator:
     solo_move_ways: Dict[int, VesselPath] | None = None  # список кратчайших путей при самостоятельном движении
     ice_move_grade: Grade  # нижняя оценка времени для заявок, проводка идеальным ледоколом
     ice_move_ways: Dict[int, VesselPath] | None = None  # список кратчайших путей при движении с ледоколом
-    priority: PriorityQueue  # приоритет проводки self_move_paths - ice_move_paths
+    priority: Dict[int, float] | None = None  # приоритет проводки self_move_paths - ice_move_paths
 
     path_to_all: Dict[int, AllSimpleVesselPath] | None = None # кратчайшее расстояние от точек старта
                                                                   # до каждой вершины,ключ - vessel_id
@@ -50,10 +50,10 @@ class Navigator:
         self.solo_move_grade, self.solo_move_ways = self.rough_estimate()
         self.ice_move_grade, self.ice_move_ways = self.rough_estimate(with_best_icebreaker=True)
 
-        self.priority = PriorityQueue()
+        self.priority = {}
 
         for k, sm in self.solo_move_ways.items():
-            self.priority.put((sm.total_hours - self.ice_move_ways[k].total_hours, k))
+            self.priority[k] = sm.total_hours - self.ice_move_ways[k].total_hours
 
         # считаем пути во все точки из начала
         self.path_to_all = {}

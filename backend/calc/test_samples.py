@@ -1,6 +1,7 @@
 from backend.calc.navigator import Navigator,IceCondition,Grade
 from base_graph import BaseGraph
 import matplotlib.pyplot as plt
+plt.ion() #macOS problem
 from vessel import Vessel,IceBreaker
 from backend.data.vessels_data import vessels_data, icebreaker_data
 from context import Context

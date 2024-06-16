@@ -13,6 +13,7 @@ from geocube.api.core import make_geocube
 from networkx import Graph
 from scipy.interpolate import LinearNDInterpolator
 import matplotlib.pyplot as plt
+plt.ion() #macOS problem
 from backend.calc.base_graph import BaseGraph
 import backend.config
 import geopandas

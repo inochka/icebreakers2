@@ -123,3 +123,4 @@ class AllVesselPaths(CustomBaseModel):
     algorythm: AlgoType
 
 class Caravan(CustomBaseModel):
+    id:int = -1
