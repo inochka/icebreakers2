@@ -41,7 +41,7 @@ type Props = {
 
 const props = defineProps<Props>()
 
-const {vessels, paths, vesselPoints} = storeToRefs(useIceTransportStore())
+const {vessels, pathsVessels, vesselPoints} = storeToRefs(useIceTransportStore())
 
 const isVisibleVessels = ref(true)
 
@@ -55,7 +55,7 @@ const onCheckAll = async () => {
   checkAllVessels.value = !checkAllVessels.value
 
   if (!checkAllVessels.value) {
-    props.typeLayer === TypeLayersForMap.PATH ? paths.value = [] : vesselPoints.value = []
+    props.typeLayer === TypeLayersForMap.PATH ? pathsVessels.value = [] : vesselPoints.value = []
     isChangeParentVessel.value = true
     return;
   }

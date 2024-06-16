@@ -36,10 +36,10 @@ const styleLine = (color: string) => {
 }
 
 export const getStyles = (feature: FeatureLike) => {
-    const {event, success, point, transport} = feature.getProperties()
+    const {event, point, transport} = feature.getProperties()
     const type = feature.getGeometry()?.getType()
 
-    if (type === 'Point' && point === 'start' && transport === typeTransport.ICEBREAKERS) {
+    if (type === 'Point' && transport === typeTransport.ICEBREAKERS) {
         return new Style({
             image: new Icon({
                 height: 20,
@@ -71,10 +71,19 @@ export const getStyles = (feature: FeatureLike) => {
         return stylePoint('gray')
     }
 
+    if ((event === tTypeWay.MOVE || event === tTypeWay.FIN) && transport === typeTransport.ICEBREAKERS) {
+        return new Style({
+            stroke: new Stroke({
+                color: 'deepskyblue',
+                width: 2,
+            })
+        })
+    }
+
     if (event === tTypeWay.MOVE || event === tTypeWay.FIN) {
         return new Style({
             stroke: new Stroke({
-                color: success ? 'green' : 'red',
+                color: 'green',
                 width: 2,
             })
         })

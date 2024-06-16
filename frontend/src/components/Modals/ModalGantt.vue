@@ -23,6 +23,10 @@
         <div class="square wait"></div>
         <p>Ожидание</p>
       </div>
+      <div class="legend_elem">
+        <div class="square icebreaker-path"></div>
+        <p>Ледокол</p>
+      </div>
     </div>
   </div>
 </template>

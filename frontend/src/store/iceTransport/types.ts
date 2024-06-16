@@ -10,7 +10,8 @@ export namespace IceTransportStore {
         allVessels: IVessel[]
         allIcebreakers: IIcebreaker[]
 
-        paths: IPath[]
+        pathsVessels: IPath[]
+        pathsIcebreakers: IIcebreaker[]
 
         baseNodes: IBaseNode[]
         baseEdges: IBaseEdge[]
@@ -24,7 +25,8 @@ export namespace IceTransportStore {
     export interface Actions {
         getVessels(): (idVessel?: number) => Promise<void>
         getIcebreakers(): (id?: number) => Promise<void>
-        getPath(): (args: PathArgs) => Promise<void>
+        getPathVessels(): (args: PathArgs) => Promise<void>
+        getPathIcebreakers(): (args: PathArgs) => Promise<void>
         getBaseEdges(): () => Promise<void>
         getBaseNodes(): () => Promise<void>
         calculatePath(): (template: string) => Promise<void>

@@ -1,14 +1,18 @@
 <template>
   <div class="scroll-gantt">
     <g-gantt-chart
-        :chart-start="date(vessels[0].start_date)"
-        :chart-end="getEndDate"
+        :chart-start="startDate"
+        :chart-end="endDate"
         precision="day"
         width="100%"
         bar-start="start_date"
         bar-end="end_date"
     >
-      <g-gantt-row v-for="(path, idx) in rowBarList" :bars="path.bars" :key="idx" :label="path.label"/>
+      <div v-if="rowBarListVessels.length" class="section">Суда</div>
+      <g-gantt-row v-for="(path, idx) in rowBarListVessels" :bars="path.bars" :key="idx" :label="path.label"/>
+
+      <div v-if="rowBarListIcebreakers.length" class="section">Ледоколы</div>
+      <g-gantt-row v-for="(path, idx) in rowBarListIcebreakers" :bars="path.bars" :key="idx" :label="path.label"/>
     </g-gantt-chart>
   </div>
 </template>
@@ -17,24 +21,59 @@
 import {computed, onMounted, Ref, ref} from "vue"
 import {GanttBarObject, GGanttChart, GGanttRow} from "@infectoone/vue-ganttastic";
 import {useIceTransportStore} from "../../store";
-import {IPath, IWaybill, tTypeWay} from "../../types.ts";
+import {IIcebreaker, IPath, IVessel, IWaybill, tTypeWay, typeTransport} from "../../types.ts";
 import {storeToRefs} from "pinia";
 import {DateTime} from "luxon";
 import {getDate} from "../../utils/getDate.ts";
 
-const {vessels, paths} = storeToRefs(useIceTransportStore())
+const {vessels, pathsVessels, icebreakers, pathsIcebreakers} = storeToRefs(useIceTransportStore())
 
 interface IRowBar {
   label: string
   bars: GanttBarObject[]
 }
 
-const rowBarList: Ref<IRowBar[]> = ref([])
+const rowBarListVessels: Ref<IRowBar[]> = ref([])
+const rowBarListIcebreakers: Ref<IRowBar[]> = ref([])
+const startDate = ref()
+const endDate = ref()
 
 onMounted(() => {
-  rowBarList.value = paths.value.map(path => {
+  rowBarListVessels.value = createRows(pathsVessels.value, vessels.value, 'vessel_id', typeTransport.VESSELS)
+  rowBarListIcebreakers.value = createRows(pathsIcebreakers.value, icebreakers.value, 'icebreaker_id', typeTransport.ICEBREAKERS)
+
+  startDate.value = getStartDate()
+  endDate.value = getEndDate()
+})
+
+const getStartDate = () => {
+  const minDate = [...pathsVessels.value, ...pathsIcebreakers.value]
+      .reduce((acc, date) => {
+        return acc && new Date(acc) < new Date(date.start_date) ? acc : date.start_date
+      }, '')
+
+  return date.value(minDate)
+}
+
+const getEndDate = () => {
+  const maxDate = [...pathsVessels.value, ...pathsIcebreakers.value]
+      .reduce((acc, date) => {
+        return acc && new Date(acc) > new Date(date.end_date || date.start_date) ? acc : date.end_date || date.start_date
+      }, '')
+
+  return `${date.value(maxDate, "yyyy-MM-dd")} 23:59`
+}
+
+const date = computed(() => {
+  return ((date: string, format: string = 'yyyy-MM-dd HH:mm') => {
+    return getDate(date, format)
+  })
+})
+
+const createRows = (paths: IPath[], listTransport: IVessel[] | IIcebreaker[], keyIdx: string, type: typeTransport) => {
+  return paths.map(path => {
     return {
-      label: vessels.value?.find(vessel => vessel.id === path.vessel_id)?.name || '',
+      label: listTransport?.find(transport => transport.id === path[keyIdx])?.name || '',
       bars: path.waybill.map((way, idx) => {
         const {start_date, end_date} = getDates(way, path, idx)
 
@@ -42,41 +81,23 @@ onMounted(() => {
           start_date,
           end_date,
           ganttBarConfig: {
-            id: `${path.vessel_id}_${way.point}_${way.event}`,
+            id: `${path[keyIdx]}_${way.point}_${way.event}`,
             style: {
-              background: getBackground(way.event),
+              background: getBackground(way.event, type),
             }
           }
         }
       })
     }
   })
-})
-
-const getEndDate = computed(() => {
-  const maxDate = paths.value
-      .reduce((acc, date) => {
-        return acc && new Date(acc) > new Date(date.end_date || date.start_date) ? acc : date.end_date || date.start_date
-      }, '')
-
-  const endDate = `${date.value(maxDate, "yyyy-MM-dd")} 23:59`
-  const startDate = date.value(vessels.value[0].start_date)
-
-  return startDate !== endDate ? endDate : date.value(DateTime.fromISO(vessels.value[0].start_date).plus({hours: 1}))
-})
-
-const date = computed(() => {
-  return ((date: string, format: string) => {
-    return getDate(date, format || 'yyyy-MM-dd HH:mm')
-  })
-})
+}
 
 const getDates = (way: IWaybill, path: IPath, idx: number) => {
   const start_date = date.value(way.dt)
 
   let end_date
 
-  if (path.success && way.event === tTypeWay.FIN) {
+  if (way.event === tTypeWay.FIN) {
     end_date = date.value(way.dt)
   } else if (way.event === tTypeWay.STUCK) {
     end_date = date.value(DateTime.fromISO(way.dt).plus({hours: 1}))
@@ -90,8 +111,9 @@ const getDates = (way: IWaybill, path: IPath, idx: number) => {
   }
 }
 
-const getBackground = (event: tTypeWay) => {
-  if (event === tTypeWay.MOVE || event === tTypeWay.FIN) return 'green'
+const getBackground = (event: tTypeWay, type: typeTransport) => {
+  if ((event === tTypeWay.MOVE || event === tTypeWay.FIN) && type === typeTransport.VESSELS) return 'green'
+  if (type === typeTransport.ICEBREAKERS) return 'deepskyblue'
   if (event === tTypeWay.STUCK) return 'red'
   if (event === tTypeWay.FORMATION) return 'blue'
   return 'gray'
@@ -105,15 +127,11 @@ const getBackground = (event: tTypeWay) => {
   overflow: auto;
   min-width: 100%;
   max-height: 500px;
-}
 
-::v-deep {
-  //.g-gantt-bar:not(:hover), .g-gantt-bar:not(:focus) {
-  //  pointer-events: none;
-  //
-  //  &:hover, &:focus, &:target {
-  //    pointer-events: auto !important;
-  //  }
-  //}
+  .section {
+    padding-bottom: 10px;
+    padding-top: 10px;
+    font-weight: bold;
+  }
 }
 </style>

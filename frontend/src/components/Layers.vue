@@ -26,16 +26,16 @@
 
     <Icebreakers
         :typeLayer="TypeLayersForMap.PATH"
-        @getAllData="list => getAllData(list, typeTransport.ICEBREAKERS)"
+        @getAllData="list => getAllData(list, typeTransport.ICEBREAKERS, 'icebreaker_id', pathsIcebreakers)"
     />
 
     <Vessels
         :typeLayer="TypeLayersForMap.PATH"
-        @getAllData="list => getAllData(list, typeTransport.VESSELS)"
+        @getAllData="list => getAllData(list, typeTransport.VESSELS, 'vessel_id', pathsVessels)"
     />
 
     <div class="footer">
-      <button class="footer_button" :disabled="!paths.length" @click="onOpenGantt">
+      <button class="footer_button" :disabled="!pathsVessels.length && !pathsIcebreakers.length" @click="onOpenGantt">
         Посмотреть диаграмму Гантта
       </button>
       <button class="footer_button" @click="changeTemplate">
@@ -50,14 +50,14 @@ import {storeToRefs} from "pinia";
 import Checkbox from "./UI/Checkbox.vue";
 import {useCommonStore, useTemplateStore, useIceTransportStore} from "../store";
 import {ref, toRaw} from "vue";
-import {IIcebreaker, IVessel, tModal, TypeLayersForMap, TypeSidebar, typeTransport} from "../types.ts";
+import {IIcebreaker, IPath, IVessel, tModal, TypeLayersForMap, TypeSidebar, typeTransport} from "../types.ts";
 import Icebreakers from "./Icebreakers.vue";
 import Vessels from "./Vessels.vue";
 
-const {getPath, getTiffDate} = useIceTransportStore()
-const {vessels, paths, tiffDate} = storeToRefs(useIceTransportStore())
+const {getPathVessels, getTiffDate, getPathIcebreakers} = useIceTransportStore()
+const {vessels, pathsVessels, tiffDate, pathsIcebreakers} = storeToRefs(useIceTransportStore())
 
-const {isLoading, openModal, typeModal, showGraph, typeSidebar} = storeToRefs(useCommonStore())
+const {openModal, typeModal, showGraph, typeSidebar} = storeToRefs(useCommonStore())
 
 const {selectTemplate} = storeToRefs(useTemplateStore())
 
@@ -73,27 +73,33 @@ const onOpenGantt = () => {
 
 const changeTemplate = () => {
   typeSidebar.value = TypeSidebar.TEMPLATES
-  paths.value = []
+  pathsVessels.value = []
+  pathsIcebreakers.value = []
 }
 
-const getAllData = async (list: IVessel[] | IIcebreaker[], type: typeTransport) => {
-  isLoading.value = true
+const getAllData = async (
+    list: IVessel[] | IIcebreaker[],
+    type: typeTransport,
+    keyIdx: 'vessel_id' | 'icebreaker_id',
+    paths: IPath[]
+) => {
+  await Promise.all(getUniqData(list, keyIdx, paths).map(async (seaTransport: IVessel | IIcebreaker) => {
+    if (type === typeTransport.VESSELS) {
+      return await getPathVessels({vessel_id: seaTransport.id, template_name: selectTemplate.value?.name})
+    }
 
-  await Promise.all(getUniqData(list).map(async (seaTransport: IVessel | IIcebreaker) => {
-    await getPath({vessel_id: seaTransport.id, template_name: selectTemplate.value?.name})
+    return await getPathIcebreakers({icebreaker_id: seaTransport.id, template_name: selectTemplate.value?.name})
   }))
-
-  isLoading.value = false
 }
 
-const getUniqData = (list: IVessel[] | IIcebreaker[]) => {
+const getUniqData = (list: IVessel[] | IIcebreaker[], keyIdx: 'vessel_id' | 'icebreaker_id', paths: IPath[]) => {
   return list.reduce((accumulator, item2) => {
     if (!accumulator.some(item1 =>
-        item1.vessel_id === item2.id)) {
+        item1[keyIdx] === item2.id)) {
       accumulator.push(item2);
     }
     return accumulator;
-  }, structuredClone(toRaw(paths.value)));
+  }, structuredClone(toRaw(paths)));
 }
 
 const onCheckedTiff = () => {

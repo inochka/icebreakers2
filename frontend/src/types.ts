@@ -101,7 +101,8 @@ export interface ITemplate {
 }
 
 export type PathArgs = {
-    vessel_id: number
+    vessel_id?: number
+    icebreaker_id?: number
     template_name: string
 }
 

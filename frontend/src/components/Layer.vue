@@ -18,10 +18,16 @@ import InfoIcon from '../assets/icons/info.svg'
 import {computed, ref, watch} from "vue";
 import {getDate} from "../utils/getDate.ts";
 
-const {openModal, typeModal, modalInfo, isLoading} = storeToRefs(useCommonStore())
+const {openModal, typeModal, modalInfo} = storeToRefs(useCommonStore())
 
-const {getPath} = useIceTransportStore()
-const {paths, icebreakerPoints, vesselPoints} = storeToRefs(useIceTransportStore())
+const {getPathVessels, getPathIcebreakers} = useIceTransportStore()
+const {
+  pathsVessels,
+  pathsIcebreakers,
+
+  icebreakerPoints,
+  vesselPoints
+} = storeToRefs(useIceTransportStore())
 
 const {selectTemplate} = storeToRefs(useTemplateStore())
 
@@ -51,12 +57,15 @@ const date = computed(() => {
   return getDate(props.layer.start_date, 'yyyy-MM-dd')
 })
 
-const loadGraph =  async() => {
-  isLoading.value = true
+const loadGraph = async () => {
+  if (!isChecked.value) return
+  if (props.type === typeTransport.VESSELS) {
+    await getPathVessels({vessel_id: props.layer.id, template_name: selectTemplate.value.name})
 
-  if (isChecked.value) await getPath({vessel_id: props.layer.id, template_name: selectTemplate.value.name})
+    return
+  }
 
-  isLoading.value = false
+  await getPathIcebreakers({icebreaker_id: props.layer.id, template_name: selectTemplate.value.name})
 }
 
 const onOpenInfoModal = () => {
@@ -87,8 +96,11 @@ const createDataForPaths = () => {
   if (props.isCheckParent && !isChecked.value) {
     emits('changeParentCheckbox')
   } else if (!isChecked.value) {
-    const idx = paths.value.findIndex(path => path.vessel_id === props.layer.id)
-    paths.value.splice(idx, 1)
+    const list = props.type === typeTransport.VESSELS ? pathsVessels.value : pathsIcebreakers.value
+    const keyId = props.type === typeTransport.VESSELS ? 'vessel_id' : 'icebreaker_id'
+
+    const idx = list.findIndex(path => path[keyId] === props.layer.id)
+    if (idx !== -1) list.splice(idx, 1)
   }
 
   loadGraph()
@@ -102,7 +114,7 @@ const onChecked = () => {
     return
   }
 
- createDataForPaths()
+  createDataForPaths()
 }
 </script>
 

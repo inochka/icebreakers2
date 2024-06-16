@@ -51,7 +51,7 @@
           Добавить шаблон
         </button>
         <button :disabled="!selectTemplate" class="footer_button" @click="applySettings">
-          Принять настройки
+          Рассчитать
         </button>
       </div>
     </div>

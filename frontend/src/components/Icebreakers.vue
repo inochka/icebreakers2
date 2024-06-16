@@ -41,7 +41,7 @@ type Props = {
 
 const props = defineProps<Props>()
 
-const {icebreakers, paths, icebreakerPoints} = storeToRefs(useIceTransportStore())
+const {icebreakers, icebreakerPoints, pathsIcebreakers} = storeToRefs(useIceTransportStore())
 
 const isVisibleIcebreakers = ref(true)
 
@@ -56,7 +56,7 @@ const onCheckAll = async () => {
 
   if (!checkAllIcebreakers.value) {
     if (props.typeLayer === TypeLayersForMap.PATH) {
-      createTemplate = []
+      pathsIcebreakers.value = []
     } else {
       icebreakerPoints.value = []
     }

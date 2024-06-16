@@ -9,6 +9,10 @@
       <p>Проводка караваном</p>
     </div>
     <div class="legend_elem">
+      <div class="square icebreaker-path"></div>
+      <p>Движение ледокола</p>
+    </div>
+    <div class="legend_elem">
       <div class="circle without-formation"></div>
       <p>Движение невозможно</p>
     </div>

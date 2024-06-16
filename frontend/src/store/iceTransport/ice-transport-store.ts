@@ -16,7 +16,8 @@ export const useIceTransportStore = defineStore<
         allVessels: [],
         allIcebreakers: [],
 
-        paths: [],
+        pathsVessels: [],
+        pathsIcebreakers: [],
 
         baseNodes: [],
         baseEdges: [],
@@ -97,15 +98,28 @@ export const useIceTransportStore = defineStore<
                 console.error(e)
             }
         },
-        async getPath({vessel_id, template_name}: PathArgs) {
+        async getPathVessels({vessel_id, template_name}: PathArgs) {
             try {
                 const {data} = await requestApi({
                     method: 'get',
-                    url: '/calculation_request/',
+                    url: '/calculation_request/vessels/',
                     params: {vessel_id, template_name}
                 })
 
-                this.paths.push(data[0])
+                if (data[0]) this.pathsVessels.push(data[0])
+            } catch (e) {
+                console.error(e)
+            }
+        },
+        async getPathIcebreakers({icebreaker_id, template_name}: PathArgs) {
+            try {
+                const {data} = await requestApi({
+                    method: 'get',
+                    url: '/calculation_request/icebreakers/',
+                    params: {icebreaker_id, template_name}
+                })
+
+                if (data[0]) this.pathsIcebreakers.push(data[0])
             } catch (e) {
                 console.error(e)
             }
