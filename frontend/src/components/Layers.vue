@@ -39,7 +39,7 @@
         Посмотреть диаграмму Гантта
       </button>
       <button class="footer_button" @click="changeTemplate">
-        Изменить шаблон
+        Сменить шаблон
       </button>
     </div>
   </div>

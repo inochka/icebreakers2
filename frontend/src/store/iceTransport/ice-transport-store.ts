@@ -36,7 +36,7 @@ export const useIceTransportStore = defineStore<
                     data: {template_name},
                 })
             } catch (e) {
-                console.error(e)
+                await this.calculatePath(template_name)
             }
         },
         async getVessels(id?: number) {

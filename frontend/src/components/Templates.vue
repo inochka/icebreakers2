@@ -45,7 +45,7 @@
 
       <div class="footer">
         <button v-if="!isChoosingTemplate" class="footer_button" @click="isChoosingTemplate = true">
-          Изменить шаблон
+          Сменить шаблон
         </button>
         <button class="footer_button" @click="onOpenModalCreating">
           Добавить шаблон
