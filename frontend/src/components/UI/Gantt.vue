@@ -1,9 +1,10 @@
 <template>
   <div class="scroll-gantt">
+    {{getEndDate}}
     <g-gantt-chart
         :chart-start="date(vessels[0].start_date)"
         :chart-end="getEndDate"
-        precision="hour"
+        precision="day"
         :no-overlap="true"
         width="100%"
         bar-start="start_date"
@@ -57,14 +58,18 @@ onMounted(() => {
 const getEndDate = computed(() => {
   const maxDate = paths.value
       .reduce((acc, date) => {
-        return acc && new Date(acc) > new Date(date.end_date) ? acc : date.end_date
+        return acc && new Date(acc) > new Date(date.end_date || date.start_date) ? acc : date.end_date || date.start_date
       }, '')
-  return date.value(maxDate)
+
+  const endDate = `${date.value(maxDate, "yyyy-MM-dd")} 23:59`
+  const startDate = date.value(vessels.value[0].start_date)
+
+  return startDate !== endDate ? endDate : date.value(DateTime.fromISO(vessels.value[0].start_date).plus({hours: 1}))
 })
 
 const date = computed(() => {
-  return ((date: string) => {
-    return getDate(date, 'yyyy-MM-dd HH:mm')
+  return ((date: string, format: string) => {
+    return getDate(date, format || 'yyyy-MM-dd HH:mm')
   })
 })
 
@@ -96,10 +101,10 @@ const getBackground = (event: tTypeWay) => {
 </script>
 
 <style lang="scss" scoped>
-.scroll-gantt {
-  display: flex !important;
-  flex-wrap: nowrap !important;
-  overflow: auto;
-  overflow-y: hidden;
-}
+//.scroll-gantt {
+//  display: flex !important;
+//  flex-wrap: nowrap !important;
+//  overflow: auto;
+//  overflow-y: hidden;
+//}
 </style>
