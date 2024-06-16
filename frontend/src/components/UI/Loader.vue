@@ -67,7 +67,7 @@ onBeforeUnmount(() => {
 
     p {
       position: absolute;
-      font-size: 20px;
+      font-size: 18px;
       top: 70%;
     }
   }
