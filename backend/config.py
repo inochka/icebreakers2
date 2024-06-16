@@ -5,6 +5,7 @@ from pathlib import Path
 backend_base_dir = Path(__file__).parent
 tiffs_dir = backend_base_dir.parent / "tiffs"
 json_dir = backend_base_dir / "data/json_data"
+data_dir = backend_base_dir / "data"
 
 recalculate_loaded = True  # нужно ли пересчитывать при старте уже имеющиеся шаблоны
 

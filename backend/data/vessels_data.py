@@ -43,7 +43,7 @@ vessels_data = {
     42:{"name":"ТАЙБОЛА","ice_class":"Arc 4","speed":16,"source":41,"source_name":"Рейд Мурманска","target":11,"target_name":"Новый порт","start_date":"30.04.2022"}
 }
 
-icebreaker_data = {1:{"name":"50 лет Победы","ice_class":"Arc 9","speed":22,"move_pen_19_15":0.15, "move_pen_14_10":0.35,"source":27,"source_name":"Пролив Лонга","start_date":"27.02.2022"},
-    2:{"name":"Ямал","ice_class":"Arc 9","speed":21,"move_pen_19_15":0.15, "move_pen_14_10":0.35,"source":41,"source_name":"Рейд Мурманска","start_date":"27.02.2022"},
+icebreaker_data = {1:{"name":"50 лет Победы","ice_class":"Arc 9","speed":22,"move_pen_19_15":0, "move_pen_14_10":0,"source":27,"source_name":"Пролив Лонга","start_date":"27.02.2022"},
+    2:{"name":"Ямал","ice_class":"Arc 9","speed":21,"move_pen_19_15":0, "move_pen_14_10":0,"source":41,"source_name":"Рейд Мурманска","start_date":"27.02.2022"},
     3:{"name":"Таймыр","ice_class":"Arc 9","speed":18.5,"move_pen_19_15":0.1, "move_pen_14_10":0.25,"source":16,"source_name":"Мыс Желания","start_date":"27.02.2022"},
     4:{"name":"Вайгач","ice_class":"Arc 9","speed":18.5,"move_pen_19_15":0.1, "move_pen_14_10":0.25,"source":6,"source_name":"Победа месторождение","start_date":"27.02.2022"}}

@@ -12,10 +12,12 @@ contourpy==1.2.1
 cycler==0.12.1
 dnspython==2.6.1
 email_validator==2.1.1
+environs==11.0.0
 et-xmlfile==1.1.0
 exceptiongroup==1.2.1
 fastapi==0.111.0
 fastapi-cli==0.0.4
+fastapi_cors==0.0.6
 fiona==1.9.6
 fonttools==4.53.0
 geocube==0.5.2
@@ -29,6 +31,7 @@ Jinja2==3.1.4
 kiwisolver==1.4.5
 markdown-it-py==3.0.0
 MarkupSafe==2.1.5
+marshmallow==3.21.3
 matplotlib==3.9.0
 mdurl==0.1.2
 networkx==3.3
