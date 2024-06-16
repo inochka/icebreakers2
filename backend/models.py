@@ -90,6 +90,7 @@ class VesselPath(CustomBaseModel):
     path_line: List[int] = []
     time_line: List[float] = []
 
+
 class IcebreakerPath(CustomBaseModel):
     waybill: List[PathEvent] = []  # описание пути
     start_date: datetime

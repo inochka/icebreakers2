@@ -48,7 +48,8 @@ def test_path():
     #base.draw_geo()
     #base.draw_path(paths[1])
     #plt.show()
-
+    
+    
 def test_calc_upper_grade():
     base = BaseGraph()
     ice_cond = IceCondition()

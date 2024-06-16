@@ -20,6 +20,8 @@ from fastapi.encoders import jsonable_encoder
 import logging
 
 logger = logging.getLogger(__name__)
+from backend.models import IcebreakerPath
+from backend.constants import icebreake1_params, icebreake2_params
 
 
 class Computer:
@@ -473,6 +475,3 @@ if __name__ == "__main__":
     comp.optimal_timesheet()
     fin = time()
     print('============'+str(fin-start))
-
-
-

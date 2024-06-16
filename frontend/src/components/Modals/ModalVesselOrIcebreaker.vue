@@ -27,7 +27,7 @@
       </div>
       <div class="value">
         <p class="title">Дата начала плавания:</p>
-        <p>{{ modalInfo.start_date }}</p>
+        <p>{{ date }}</p>
       </div>
     </div>
   </div>
@@ -35,6 +35,12 @@
 
 <script setup lang="ts">
 import {useCommonStore} from "../../store";
+import {getDate} from "../../utils/getDate.ts";
+import {computed} from "vue";
 
 const {modalInfo} = useCommonStore();
+
+const date = computed(() => {
+  return getDate(modalInfo?.start_date, 'yyyy-MM-dd')
+})
 </script>

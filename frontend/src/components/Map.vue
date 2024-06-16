@@ -11,10 +11,10 @@ import Map from 'ol/Map';
 import View from 'ol/View';
 import TileLayer from 'ol/layer/Tile';
 import {onMounted, Ref, ref, watch} from "vue";
-import {GeoTIFF, OSM} from "ol/source";
+import {OSM} from "ol/source";
 import 'ol/ol.css';
 import {fromLonLat, transform} from 'ol/proj';
-import {useCommonStore, useVesselsStore} from "../store";
+import {useCommonStore, useIceTransportStore} from "../store";
 import {storeToRefs} from "pinia";
 import VectorLayer from "ol/layer/Vector";
 import {IBaseEdge, IBaseNode, IIcebreaker, IPath, IVessel, IWaybill, tTypeWay, typeTransport} from "../types.ts";
@@ -23,17 +23,36 @@ import Feature, {FeatureLike} from "ol/Feature";
 import {Overlay} from "ol";
 import {Geometry} from "ol/geom";
 import {generateVectorLayer} from "../utils/createVectorLayer.ts";
-import {WebGLTile} from "ol/layer";
+import {getDate} from "../utils/getDate.ts";
 
 const map: Ref<Map | null> = ref(null);
 const popover = ref(undefined)
 
-const vectorLayers: Ref<Record<string, VectorLayer<Feature<Geometry>>>> = ref({})
-const graph: Ref<Record<string, VectorLayer<Feature<Geometry>>>> = ref({})
-const dateLayer: Ref<Record<string, VectorLayer<Feature<Geometry>>>> = ref({})
+const vectorLayersVessels: Ref<Record<string, VectorLayer<Feature<Geometry>>>> = ref({})
+const vectorLayersIcebreakers: Ref<Record<string, VectorLayer<Feature<Geometry>>>> = ref({})
 
-const {paths, baseNodes, vessels, baseEdges, icebreakers} = storeToRefs(useVesselsStore())
-const {showGraph, date} = storeToRefs(useCommonStore())
+const graph: Ref<Record<string, VectorLayer<Feature<Geometry>>>> = ref({})
+
+// const dateLayer: Ref<Record<string, VectorLayer<Feature<Geometry>>>> = ref({})
+
+const vesselMarkers: Ref<Record<string, VectorLayer<Feature<Geometry>>>> = ref({})
+const icebreakerMarkers: Ref<Record<string, VectorLayer<Feature<Geometry>>>> = ref({})
+
+const {
+  pathsVessels,
+  pathsIcebreakers,
+
+  baseNodes,
+  baseEdges,
+
+  vessels,
+  icebreakers,
+
+  vesselPoints,
+  icebreakerPoints,
+} = storeToRefs(useIceTransportStore())
+
+const {showGraph} = storeToRefs(useCommonStore())
 
 onMounted(() => {
   map.value = new Map({
@@ -42,8 +61,10 @@ onMounted(() => {
       new TileLayer({
         visible: true,
         zIndex: 0,
+        // @ts-ignore
         tileSize: 512,
         maxZoom: 20,
+        // @ts-ignore
         source: new OSM('https://{s}.tile.openstreetmap.de/{z}/{x}/{y}.png')
       }),
     ],
@@ -74,70 +95,60 @@ onMounted(() => {
   map.value.addOverlay(popup);
 
   map.value.on('click', (evt) => {
-    const feature = map.value?.forEachFeatureAtPixel(evt.pixel, (feature) => feature);
-
     disposePopover();
 
-    if (!feature) return
+    const features: FeatureLike[] = []
 
-    popup.setPosition(evt.coordinate);
+    map.value?.forEachFeatureAtPixel(evt.pixel, (feature) => {
+          const properties = feature.getProperties()
+          const {graph} = properties
 
-    content.innerHTML = getFeature(feature);
+          if (feature && !graph) features.push(feature)
+        }
+    )
+
+    if (features.length) {
+      popup.setPosition(evt.coordinate);
+      const strings = features.map((feature, idx) => getFeature(feature, features.length, idx))
+      content.innerHTML = strings.join('\n')
+    }
   });
 
   map.value.on('pointermove', (e) => {
     const pixel = map.value?.getEventPixel(e.originalEvent);
     const hit = map.value?.hasFeatureAtPixel(pixel!);
+    // @ts-ignore
     map.value.getTarget().style.cursor = hit ? 'pointer' : '';
   });
 
   map.value.on('movestart', disposePopover);
 })
 
-const getFeature = (feature: FeatureLike) => {
+const getFeature = (feature: FeatureLike, length: number, idx: number) => {
   const properties = feature.getProperties()
-  const type = feature.getGeometry()?.getType()
+  if (!properties.name) return ''
 
   return `
   <p><span style="color: gray">Название: </span>${properties.name}</p>
   <p><span style="color: gray">Ледовый класс: </span>${properties.ice_class}</p>
   <p><span style="color: gray">Скорость в узлах по чистой воде: </span>${properties.speed}</p>
   <p><span style="color: gray">Исходный порт: </span>${properties.source_name}</p>
-  ${properties.target_name && `<p><span style="color: gray">Конечный порт: </span>${properties.target_name}</p>`}
-  <p><span style="color: gray">Дата начала плавания: </span>${properties.start_date}</p>
-  <p><span style="color: gray">Текущая точка: </span>${getTypePoint(properties.event, type)}</p>
-  <p><span style="color: gray">Текущая дата: </span>${properties.time}</p>
-  `
-}
-
-const getTypePoint = (event: tTypeWay, type: 'Point' | 'LineString') => {
-  if (tTypeWay.MOVE === event && type === 'Point') {
-    return 'Исходная точка'
-  }
-
-  if (tTypeWay.MOVE === event || (tTypeWay.FIN === event && type !== 'Point')) {
-    return 'Судно в пути'
-  }
-
-  if (tTypeWay.WAIT === event) {
-    return 'Остановка движения'
-  }
-
-  if (tTypeWay.FORMATION === event) {
-    return 'Проводка караваном'
-  }
-
-  return 'Конечная точка'
+  ${properties.target_name ? `<p><span style="color: gray">Конечный порт: </span>${properties.target_name}</p>` : ''}
+  ${properties.start_date ? `<p><span style="color: gray">Дата начала плавания: </span>${getDate(properties.start_date, 'yyyy-MM-dd')}</p>` : ''}
+  ${properties.dt ? `<p><span style="color: gray">Текущая дата: </span>${getDate(properties.dt, 'yyyy-MM-dd')}</p>` : ''}
+  ${length > 1 && idx !== length - 1 ? '<div style="height: 10px"></div>' : ''}
+ `
 }
 
 const disposePopover = () => {
   if (popover.value) {
+    // @ts-ignore
     popover.value.dispose();
     popover.value = undefined;
   }
 }
 
-const getCoords = (point: number) => {
+const getCoordsByEdge = (point: number) => {
   const currentBaseEdge = baseEdges.value.find((edge: IBaseEdge) => edge.id === point)
 
   if (!currentBaseEdge) return []
@@ -153,28 +164,63 @@ const getCoords = (point: number) => {
   ]
 }
 
-const getFeatures = ({waybill, seaTransport, success}: {
+const getCoordsByNode = (point: number, nextWay: IWaybill) => {
+  const currentBaseNode = baseNodes.value.find((node: IBaseNode) => node.id === point)
+
+  const endBaseNode = nextWay ? baseNodes.value.find((node: IBaseNode) => node.id === nextWay.point) : null
+
+  if (endBaseNode && currentBaseNode) {
+    return [
+      [fromLonLat([currentBaseNode.lon, currentBaseNode.lat])],
+      [fromLonLat([endBaseNode.lon, endBaseNode.lat])],
+    ]
+  }
+
+  // @ts-ignore
+  return fromLonLat([currentBaseNode.lon, currentBaseNode.lat])
+}
+
+const getFeatures = ({waybill, seaTransport, type}: {
   waybill: IWaybill[],
-  seaTransport: IVessel,
-  success: boolean
+  seaTransport: IVessel | IIcebreaker,
+  type: typeTransport
 }) => {
   const geoJsonData: GeoJSONFeature[] = []
-
   waybill.forEach((line: IWaybill, idx: number) => {
     const {point, event} = line
 
-    const coordinates = getCoords(point)
+    // @ts-ignore
+    const coordinates = getCoordsByNode(point, waybill[idx + 1])
 
     if (event === tTypeWay.WAIT) {
       geoJsonData.push({
         type: 'Feature',
         geometry: {
           'type': 'Point',
+          // @ts-ignore
           'coordinates': coordinates[0][0],
         },
         properties: {
           ...line,
           ...seaTransport,
+          transport: type
+        },
+      })
+
+      return
+    }
+
+    if (event === tTypeWay.STUCK) {
+      geoJsonData.push({
+        type: 'Feature',
+        geometry: {
+          'type': 'Point',
+          'coordinates': coordinates,
+        },
+        properties: {
+          ...line,
+          ...seaTransport,
+          transport: type
         },
       })
 
@@ -186,25 +232,28 @@ const getFeatures = ({waybill, seaTransport, success}: {
         type: 'Feature',
         geometry: {
           'type': 'Point',
+          // @ts-ignore
           'coordinates': coordinates[0][0],
         },
         properties: {
           ...line,
-          ...seaTransport
+          ...seaTransport,
+          transport: type
         },
       })
     }
 
-    if (idx === waybill.length - 1) {
+    if (event === tTypeWay.FIN) {
       geoJsonData.push({
         type: 'Feature',
         geometry: {
           type: 'Point',
-          coordinates: coordinates[1][0],
+          coordinates: coordinates,
         },
         properties: {
           ...line,
-          ...seaTransport
+          ...seaTransport,
+          transport: type
         },
       })
     }
@@ -218,7 +267,7 @@ const getFeatures = ({waybill, seaTransport, success}: {
       properties: {
         ...line,
         ...seaTransport,
-        success
+        transport: type
       },
     })
   })
@@ -226,38 +275,36 @@ const getFeatures = ({waybill, seaTransport, success}: {
   return geoJsonData
 }
 
-const createGeoJson = () => {
-  paths.value.forEach((item: IPath) => {
-    const {waybill, id, type, success} = item
-
-    if (vectorLayers.value[id]) return
+const createGeoJson = (
+    layers: IPath[],
+    vectorLayers: Ref<Record<string, VectorLayer<Feature<Geometry>>>>[],
+    keyIdx: 'vessel_id' | 'icebreaker_id',
+    type: typeTransport
+) => {
+  layers.forEach((item: IPath) => {
+    const {waybill} = item
 
     const listTransport = type === typeTransport.VESSELS ? vessels.value : icebreakers.value
-    const seaTransport = listTransport.find((transport: IVessel | IIcebreaker) => transport.id === id)
+    // @ts-ignore
+    const seaTransport = listTransport.find((transport: IVessel | IIcebreaker) => transport.id === item[keyIdx])
 
     if (!seaTransport) {
-      throw new Error(`Unknown transport: ${id}`)
+      // @ts-ignore
+      throw new Error(`Unknown transport: ${item[keyIdx]}`)
     }
-
-    const vectorLayer = generateVectorLayer(getFeatures, {waybill, seaTransport, success})
-    vectorLayers.value[id]
+    // @ts-ignore
+    const vectorLayer = generateVectorLayer(getFeatures,
+        {waybill, seaTransport, type}
+    )
+    // @ts-ignore
+    vectorLayers[item[keyIdx]] = vectorLayer
     map.value?.addLayer(vectorLayer);
-  })
-}
-
-const removeLayers = () => {
-  const ids = structuredClone(Object.keys(vectorLayers.value))
-  ids.forEach(key => {
-    if (paths.value.find(path => path.id === key)) {
-      map.value?.removeLayer(vectorLayers[key])
-      delete vectorLayers[key]
-    }
   })
 }
 
 const createGraph = () => {
   return baseEdges.value.map((edge) => {
-    const coordinates = getCoords(edge.id)
+    const coordinates = getCoordsByEdge(edge.id)
 
     return ({
       type: 'Feature',
@@ -265,18 +312,151 @@ const createGraph = () => {
         type: 'LineString',
         coordinates: coordinates,
       },
+      properties: {
+        graph: true
+      }
     })
   })
 }
 
-watch(() => paths.value, (newPathList) => {
-  if (vectorLayers.value.length) removeLayers()
+const createPointLayer = ({baseEdgeStart, baseEdgeEnd, currentTransport, type}: {
+  baseEdgeStart: IBaseEdge, baseEdgeEnd: IBaseEdge, currentTransport: IVessel | IIcebreaker, type: typeTransport
+}) => {
+  const jsonList = []
 
-  if (newPathList.length) {
-    createGeoJson()
-  } else if (vectorLayers.value.length) {
-    vectorLayers.value.forEach((item) => map.value.removeLayer(item))
+  jsonList.push({
+    type: 'Feature',
+    geometry: {
+      'type': 'Point',
+      'coordinates': getCoordsByEdge(baseEdgeStart.id)[0][0],
+    },
+    properties: {
+      ...currentTransport,
+      point: 'start',
+      transport: type
+    }
+  })
+
+  if (baseEdgeEnd) jsonList.push({
+    type: 'Feature',
+    geometry: {
+      'type': 'Point',
+      'coordinates': getCoordsByEdge(baseEdgeEnd.id)[1][0],
+    },
+    properties: {
+      ...currentTransport,
+      point: 'end'
+    }
+  })
+
+  return jsonList
+}
+
+const drawPoints = (points: number[], type: typeTransport) => {
+  points.forEach(point => {
+    const transportList = type === typeTransport.VESSELS ? vessels.value : icebreakers.value
+    const markerList = type === typeTransport.VESSELS ? vesselMarkers.value : icebreakerMarkers.value
+    const currentTransport = transportList.find((transport) => transport.id === point)
+
+    const baseEdgeStart = baseEdges.value.find(edge => edge.id === currentTransport?.source)
+    const baseEdgeEnd = baseEdges.value.find(edge => edge.id === currentTransport?.target)
+
+    // @ts-ignore
+    const vectorLayer = generateVectorLayer(createPointLayer,
+        {baseEdgeStart, baseEdgeEnd, currentTransport, type}
+    )
+
+    markerList[point] = vectorLayer
+
+    map.value?.addLayer(vectorLayer)
+  })
+}
+
+const removeLayers = (listLayers: Record<string, VectorLayer<Feature<Geometry>>>) => {
+  Object.keys(listLayers).forEach((layerKey: string) => {
+    const layer = listLayers[layerKey]
+    delete listLayers[layerKey]
+    map.value?.removeLayer(layer)
+  })
+  return
+}
+
+const generateVectorLayers = (
+    vectorLayers: Ref<Record<string, VectorLayer<Feature<Geometry>>>>[],
+    paths: IPath[],
+    keyIdx: 'vessel_id' | 'icebreaker_id',
+    type: typeTransport
+) => {
+  if (Object.keys(vectorLayers).length && !paths.length) {
+    // @ts-ignore
+    removeLayers(vectorLayers)
+    return
   }
+
+  if (Object.keys(vectorLayers).length) {
+    const removingLayers = Object.keys(vectorLayers).filter(layer => {
+      const path = paths.find(path => {
+        // @ts-ignore
+        return path[keyIdx] === Number(layer)
+      })
+      return !path
+    })
+
+    removingLayers.forEach(layer => {
+      // @ts-ignore
+      const currentLayer = vectorLayers[layer]
+      // @ts-ignore
+      delete vectorLayers[layer]
+
+      map.value?.removeLayer(currentLayer)
+    })
+  }
+  // @ts-ignore
+  const newLayers = paths.filter(path => !vectorLayers[path[keyIdx]])
+  createGeoJson(newLayers, vectorLayers, keyIdx, type)
+}
+
+const changeMarkersVisibility = (
+    points: number[],
+    markers: Record<string, VectorLayer<Feature<Geometry>>>[],
+    type: typeTransport
+) => {
+  if (!points.length && Object.keys(markers).length) {
+    removeLayers(markers)
+    return
+  }
+
+  if (Object.keys(markers).length) {
+    const removingPoints = Object.keys(markers).filter(point => {
+      return !points.includes(Number(point))
+    })
+    removingPoints.forEach(point => {
+      // @ts-ignore
+      const currentPoint = markers[point]
+      // @ts-ignore
+      delete markers[point]
+
+      map.value?.removeLayer(currentPoint)
+    })
+  }
+
+  const newPoints = points.filter(point => !markers[point])
+  drawPoints(newPoints, type)
+}
+
+watch(() => pathsVessels.value, () => {
+  // @ts-ignore
+  generateVectorLayers(vectorLayersVessels.value, pathsVessels.value, 'vessel_id', typeTransport.VESSELS)
+}, {deep: true})
+
+watch(() => pathsIcebreakers.value, () => {
+  generateVectorLayers(
+      // @ts-ignore
+      vectorLayersIcebreakers.value,
+      pathsIcebreakers.value,
+      'icebreaker_id',
+      typeTransport.ICEBREAKERS
+  )
 }, {deep: true})
 
 watch(() => [baseEdges.value, baseNodes.value], () => {
@@ -289,45 +469,61 @@ watch(() => [baseEdges.value, baseNodes.value], () => {
 
 watch(() => showGraph.value, () => {
   if (showGraph.value) {
+    // @ts-ignore
     map.value?.addLayer(graph.value);
     return
   }
-
+  // @ts-ignore
   map.value?.removeLayer(graph.value);
 })
 
+watch(() => vesselPoints.value, () => {
+  // @ts-ignore
+  changeMarkersVisibility(vesselPoints.value, vesselMarkers.value, typeTransport.VESSELS)
+}, {deep: true})
 
-watch(() => date.value, () => {
-  if (dateLayer.value) map.value?.removeLayer(dateLayer.value);
+watch(() => icebreakerPoints.value, () => {
+  // @ts-ignore
+  changeMarkersVisibility(icebreakerPoints.value, icebreakerMarkers.value, typeTransport.ICEBREAKERS)
+}, {deep: true})
 
-  if (date.value) {
-    const source = new GeoTIFF({
-          sources: [
-            {
-              url: 'https://openlayers.org/en/latest/examples/data/example.tif',
-            },
-          ],
-        }
-    )
+// watch(() => tiffDate.value, () => {
+//   if (dateLayer.value) map.value?.removeLayer(dateLayer.value);
+//
+  // fetch(`../../../tiffs/${tiffDate.value}.tif`)
 
-    const layer = new WebGLTile({
-      source: source,
-    })
-
-    map.value.addLayer(layer)
-
-    dateLayer.value = layer
-
-    map.value.setView(source
-        .getView().then((options) => {
-          const center = options.center;
-          const resolution = options.resolutions[0];
-          const projection = options.projection;
-          return {center, resolution, projection};
-        })
-    )
-  }
-})
+  //   fetch('./example.tiff')
+  //       .then((response) => {
+  //         response.blob()
+  //       })
+  //       .then((blob) => {
+  //         const source = new GeoTIFF({
+  //           sources: [
+  //             {
+  //               blob,
+  //             },
+  //           ],
+  //         });
+  //
+  //         const layer = new WebGLTile({
+  //           source: source,
+  //         })
+  //
+  //         map.value.addLayer(layer)
+  //
+  //         dateLayer.value = layer
+  //
+  //         map.value.setView(source
+  //             .getView().then((options) => {
+  //               const center = options.center;
+  //               const resolution = options.resolutions[0];
+  //               const projection = options.projection;
+  //               return {center, resolution, projection};
+  //             })
+  //         )
+  //       })
+  // }
+// })
 </script>
 
 <style scoped>

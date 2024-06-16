@@ -1,8 +1,8 @@
 from fastapi import FastAPI, HTTPException
 from fastapi.responses import JSONResponse
 from fastapi.encoders import jsonable_encoder
-from typing import List
-from backend.models import (VesselModel, IcebreakerModel, BaseNode, BaseEdge, Template,
+from typing import List, Dict
+from backend.models import (VesselModel, IcebreakerModel, BaseNode, BaseEdge, Template, IcebreakerPath,
                             VesselPath, PostCalcPath, PostCalcPathIce)
 from datetime import datetime
 from backend.calc.base_graph import BaseGraph
@@ -117,7 +117,7 @@ async def post_template(template: Template):
     return JSONResponse(jsonable_encoder(crud.post(template)))
 
 
-@app.post("/calculation_request/", response_model=Template)
+@app.post("/calculation_request/", response_model=Dict[str, List[IcebreakerPath | VesselPath]])
 async def post_calculation_request(template_name: str):
     """
     Заявка на расчет по шаблону template_name
@@ -126,12 +126,24 @@ async def post_calculation_request(template_name: str):
     if not template:
         raise HTTPException(status_code=404, detail="Template not found")
 
+
     context = Context(template)
-    computator.optimal_timesheet(context)
+    vessel_paths_crud = VesselPathCRUD()
+    icebreaker_paths_crud = IcebreakerPathCRUD()
 
-    return JSONResponse(content=None, status_code=200)
+    real_grade, real_vessel_paths, real_icebreaker_paths = computator.optimal_timesheet(context)
 
-@app.get("/calculation_request/", response_model=Template)
+    vessel_paths_crud.post_or_put_list(real_vessel_paths)
+    icebreaker_paths_crud.post_or_put_list(real_icebreaker_paths)
+
+    return_dict = {
+        "vessels": real_vessel_paths,
+        "icebreakers": real_icebreaker_paths
+    }
+
+    return JSONResponse(replace_inf_nan(jsonable_encoder(return_dict)))
+
+@app.get("/calculation_request/vessels/", response_model=List[VesselPath])
 async def get_calculation_request_results(template_name: str, vessel_id: int | None = None):
     """
     Получение результатов расчета для судна vessel_id по шаблону template_name
@@ -146,6 +158,25 @@ async def get_calculation_request_results(template_name: str, vessel_id: int | N
 
     if vessel_id:
         filter_conds["vessel_id"] = vessel_id
+
+    return JSONResponse(replace_inf_nan(jsonable_encoder(crud.get_by_filter_conds(filter_conds))))
+
+
+@app.get("/calculation_request/icebreakers/", response_model=List[IcebreakerModel])
+async def get_calculation_request_results(template_name: str, icebreaker_id: int | None = None):
+    """
+    Получение результатов расчета для судна vessel_id по шаблону template_name
+    """
+    template: Template =  TemplatesCRUD().get(template_name)
+    if not template:
+        raise HTTPException(status_code=404, detail="Template not found")
+
+    crud = IcebreakerPathCRUD()
+
+    filter_conds = {"template_name": template_name}
+
+    if icebreaker_id:
+        filter_conds["icebreaker_id"] = icebreaker_id
 
     return JSONResponse(replace_inf_nan(jsonable_encoder(crud.get_by_filter_conds(filter_conds))))
 
