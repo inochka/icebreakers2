@@ -136,6 +136,28 @@ class Navigator:
         path.insert(0, source_node)
         time.insert(0, 0)
         return path, time
+    
+    def convert_simple_path_to_waybill(self, simple_path: SimpleVesselPath, start_time: datetime, source: int,
+                                       end_type: PathEventsType = PathEventsType.fin):
+        time = simple_path.total_time_hours
+        # TODO min_ice_condition сделать функцию расчета худших ледовых условий на маршруте, или пока выпилить
+        # TODO speed сделать метод на графе для расчета длины маршрута чтобы посчитать среднюю скорость
+        if time == math.inf:
+            path_event = PathEvent(event=PathEventsType.stuck, point=source, dt=start_time)
+            waybill = [path_event]
+        else:
+            waybill = []
+            next_event_time = start_time
+
+            for i, n in enumerate(simple_path.path_line):
+                if n == simple_path.path_line[-1]:
+                    waybill.append(PathEvent(event=end_type, point=n, dt=next_event_time))
+                else:
+                    waybill.append(PathEvent(event=PathEventsType.move, point=n, dt=next_event_time))
+                    next_event_time = add_hours(next_event_time, simple_path.time_line[i + 1])
+
+        return waybill
+
 
     def calc_shortest_path(self, vessel: AbstractVessel, start_time: datetime | None = None,
                            time_orientation: int = +1, use_best_ice_condition: bool = False,
@@ -156,10 +178,10 @@ class Navigator:
         node_time = {}  # время достижения вершины по кратчайшему пути
         node_prev = {}  # из какой вершины попали по кратчайшему пути
 
-        if not start_time:
+        if start_time is None:
             start_time = vessel.start_date
 
-        if not source_node:
+        if source_node is None:
             source_node = vessel.source
 
         for n in self.base.graph:
@@ -193,7 +215,7 @@ class Navigator:
                     node_prev[n] = current_node
                     next_nodes.put((new_time, n))
 
-        if target_node:
+        if target_node is not None:
             if node_time[target_node] < math.inf:
                 path, time = self.unfold_path(target_node, source_node, node_prev, node_time)
             else:

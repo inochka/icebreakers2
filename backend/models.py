@@ -63,7 +63,7 @@ class PathEvent(CustomBaseModel):
     dt: datetime  # когда произошло событие
 
 class SimpleVesselPath(CustomBaseModel):
-    total_time_hours: float
+    total_time_hours: float = 0
     path_line: List[int] = []
     time_line: List[float] = []
 
@@ -96,8 +96,6 @@ class IcebreakerPath(CustomBaseModel):
     end_date: Optional[datetime] = None
     source: int
     source_name: str
-    target: int
-    target_name: str
     speed: Optional[float] = None  # средняя скорость на маршруте
     icebreaker_id: int = -1
     path_line: List[int] = []
@@ -134,6 +132,7 @@ class Caravan(CustomBaseModel):
     vessel_ids: List[int] = []
     icebreaker_id: int = -1
     time_estimate: float = 0
+    start_time: datetime
 
 class CaravanConfiguration(CustomBaseModel):
     caravans: List[Caravan]

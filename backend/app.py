@@ -9,8 +9,10 @@ from backend.calc.base_graph import BaseGraph
 from backend.data.vessels_data import vessels_data, icebreaker_data
 from backend.calc.vessel import Vessel, IceBreaker
 from backend.crud.crud_types import TemplatesCRUD, VesselPathCRUD
-from backend.calculate_timetable import computator, ice_cond
+#from backend.calculate_timetable import computator, ice_cond
 from backend.calc.context import Context
+from backend.calc.computer import Computer
+from backend.config import recalculate_loaded
 from backend.utils import replace_inf_nan
 from fastapi.middleware.cors import CORSMiddleware
 import json
@@ -25,6 +27,13 @@ app.add_middleware(
     allow_methods=["*"],  # Разрешить все методы (GET, POST, PUT, DELETE и т.д.)
     allow_headers=["*"],  # Разрешить все заголовки
 )
+
+comp = Computer()
+
+@app.on_event('startup')
+def init():
+    comp.init_app(recalculate_loaded=recalculate_loaded)
+
 
 @app.middleware("http")
 async def replace_inf_middleware(request, call_next):
@@ -173,7 +182,8 @@ async def get_tiff_name(dt: datetime):
     """
     Получение имени файла с тифом (ближайшего к дате прогноза) по дате dt
     """
-    return ice_cond.find_appropriate_conditions_date(list(ice_cond.dfs.keys()), dt)
+    pass
+    #return ice_cond.find_appropriate_conditions_date(list(ice_cond.dfs.keys()), dt)
 
 #if __name__ == "__main__":
 #    import uvicorn

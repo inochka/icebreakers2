@@ -40,7 +40,7 @@ class IceCondition:
 
     graph_filename = "graphs_dict.pkl"
 
-    fine_tune_coefficient: float = 1.5
+    fine_tune_coefficient: float = 1.
 
     base_graph: BaseGraph
 

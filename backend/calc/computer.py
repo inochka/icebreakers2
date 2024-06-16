@@ -4,13 +4,19 @@ from backend.calc.base_graph import BaseGraph
 from backend.calc.ice_cond import IceCondition
 from backend.calc.navigator import Navigator
 from backend.calc.context import Context, Grade
-from backend.models import Caravan, VesselPath, IcebreakerPath, SimpleVesselPath, AllSimpleVesselPath, CaravanConfiguration
+from backend.constants import PathEventsType
+from backend.calc.context import Context, Grade
+from backend.config import backend_base_dir
+from backend.models import Caravan, VesselPath, IcebreakerPath, SimpleVesselPath, AllSimpleVesselPath, \
+    CaravanConfiguration, PathEvent
 from queue import PriorityQueue
-from vessel import Vessel,IceBreaker
+from backend.crud.crud_types import TemplatesCRUD, VesselPathCRUD
+from backend.calc.vessel import Vessel,IceBreaker
 from time import time
 from datetime import datetime, timedelta
 from typing import List, Dict, Any
 from pathlib import Path
+from fastapi.encoders import jsonable_encoder
 import logging
 
 logger = logging.getLogger(__name__)
@@ -26,14 +32,47 @@ class Computer:
     max_ships_per_icebreaker: int = 3
     solo_stuck_time: float = 1e6
 
-    def __init__(self, base, ice_cond, context):
+    def __init__(self, context: Context | None = None):
+        file_path = backend_base_dir / "input_files/IntegrVelocity.xlsx"
+        base = BaseGraph()
+        base.set_base_values()
+        ice_cond = IceCondition(file_path, base.graph)
+
+        if not context:
+            full_template_name = "full"
+            templates_crud = TemplatesCRUD()
+            context = Context(templates_crud.get(full_template_name))
+
         self.base = base
         self.ice_cond = ice_cond
         self.navigator = Navigator(base=base, ice_cond=ice_cond, context=context)
         self.context = context
 
-    def init_app(self):
-        pass
+    def init_app(self, recalculate_loaded: bool = True):
+
+        full_template_name = "full"
+        templates_crud = TemplatesCRUD()
+        vessel_paths_crud = VesselPathCRUD()
+
+        if recalculate_loaded:
+            # считаем реальные оценки
+            context = Context(templates_crud.get(full_template_name))
+            self.context = context
+            real_vessel_paths, real_icebreaker_paths, real_grade = self.optimal_timesheet()
+            vessel_paths_crud.post_or_put_list(real_vessel_paths)
+
+            # считаем самостоятельные оценки
+            context = Context(templates_crud.get("solo"))
+            self.context = context
+            solo_nav_grade, solo_vessel_paths = self.navigator.rough_estimate()
+            vessel_paths_crud.post_or_put_list(solo_vessel_paths.values())
+
+            # считаем лучшие оценки
+            context = Context(templates_crud.get("best"))
+            self.context = context
+            best_nav_grade, best_vessel_paths = self.navigator.rough_estimate(with_best_icebreaker=True)
+            vessel_paths_crud.post_or_put_list(best_vessel_paths.values())
+
 
     def generate_distributions(self, n_icebrs: int, ships: List[int]):
         def distribute(remaining_ships, current_distribution):
@@ -50,7 +89,6 @@ class Computer:
         distribute(ships, [[] for _ in range(n_icebrs)])
         return distributions
 
-
     def merge_icebreakers_paths(self, paths_old: List[IcebreakerPath], paths_new: List[IcebreakerPath]):
         """
         Метод для слияния 2 путей ледокола, мерджит waybill
@@ -58,7 +96,27 @@ class Computer:
         if not paths_old:
             return paths_new
 
-        pass
+        old_path_dict = {path.icebreaker_id: path for path in paths_old}
+        new_path_dict = {path.icebreaker_id: path for path in paths_new}
+
+        for idx in new_path_dict:
+            if idx in old_path_dict:
+                old_path_dict[idx] = IcebreakerPath(
+                    start_date=old_path_dict[idx].start_date,
+                    end_date=new_path_dict[idx].end_date,
+                    source=old_path_dict[idx].source,
+                    source_name=old_path_dict[idx].source_name,
+                    waybill = old_path_dict[idx].waybill + new_path_dict[idx].waybill,
+                    path_line = old_path_dict[idx].path_line + new_path_dict[idx].path_line,
+                    template_name=self.context.template_name,
+                    icebreaker_id=idx,
+                    time_line=old_path_dict[idx].time_line + new_path_dict[idx].time_line
+                )
+            else:
+                old_path_dict[idx] = new_path_dict[idx]
+
+        return list(old_path_dict.values())
+
 
     def calculate_total_paths_grade(self, vessels: List[VesselPath]) -> Grade:
         grade = Grade()
@@ -88,14 +146,15 @@ class Computer:
                     for idx in vessel_ids])
 
     def estimate_caravan_profit(self, vessel_ids: List[int], icebreaker_path_times_to_all: AllSimpleVesselPath,
-                                icebreaker: IceBreaker) -> (float, int, int):
+                                icebreaker: IceBreaker) -> (float, int, int, datetime):
 
         best_caravan_time = math.inf  # в часах
         a_best = None
         b_best = None
+        caravan_start_time = None
 
         if not vessel_ids:
-            return 0, a_best, b_best
+            return 0, a_best, b_best, caravan_start_time
 
         vessels_obj = {idx: self.context.vessels[idx] for idx in vessel_ids}
 
@@ -107,7 +166,7 @@ class Computer:
 
         # предполагая, что караван собирается и расходится в одной точке
         if not possible_caravan_starts or not possible_caravan_ends:
-            return best_caravan_time, a_best, b_best
+            return best_caravan_time, a_best, b_best, caravan_start_time
 
 
         for a in possible_caravan_starts:
@@ -136,7 +195,7 @@ class Computer:
                     b_best = b
                     best_caravan_time = total_move_time
 
-        return best_caravan_time, a_best, b_best
+        return best_caravan_time, a_best, b_best, caravan_start_time
 
     def estimate_possible_caravans(self, vessel_ids: List[int], icebreaker_ids: List[int]):
         logger.info(f"Estimating possible caravans for vessels {vessel_ids} and icebreakers {icebreaker_ids}")
@@ -154,15 +213,15 @@ class Computer:
             for i in range(len(icebreaker_ids)):
                 icebreaker_id = icebreaker_ids[i]
                 icebreaker = self.context.icebreakers[icebreaker_id]
-                t1, a, b = self.estimate_caravan_profit(distributions[j][i], paths[icebreaker_id], icebreaker)
+                t1, a, b, caravan_start_time = self.estimate_caravan_profit(distributions[j][i], paths[icebreaker_id], icebreaker)
 
-                if t1 == math.inf:
+                if (t1 == math.inf) or (t1 == 0) or (a is None) or (b is None):
                     form_caravan = False
                     break
 
                 caravans.append(
                     Caravan(start_node=a, end_node=b, time_estimate=t1, vessel_ids=distributions[j][i],
-                            icebreaker_id=icebreaker_id)
+                            icebreaker_id=icebreaker_id, start_time=caravan_start_time)
                 )
 
                 times.append(t1)
@@ -170,7 +229,11 @@ class Computer:
             if not form_caravan:
                 continue
 
-            caravans_vessels_ids = reduce(set.union, map(set, distributions[j]))
+            if distributions[j]:
+                caravans_vessels_ids = reduce(set.union, map(set, distributions[j]))
+            else:
+                caravans_vessels_ids = []
+
             solo_move_time_for_caravan_vessels = self.estimate_solo_move(list(caravans_vessels_ids))
 
             outside_caravan_vessels_ids = list(set(vessel_ids).difference(caravans_vessels_ids))
@@ -190,28 +253,175 @@ class Computer:
 
         return caravans_configurations
 
-
     def optimal_timesheet_for_planing_horizon(self, vessels: List[Vessel], icebreakers: List[IceBreaker]) \
             -> (List[VesselPath], List[IcebreakerPath], List[IceBreaker]):
         """
             Распределение судов по ледоколам внутри окна планирования
         """
 
+        logger.info(f"Making horizon timetable for icebreakers {jsonable_encoder(icebreakers)} and "
+                    f"vessels {jsonable_encoder(vessels)}")
+
         vessel_ids = [v.idx for v in vessels]
         icebreaker_ids = [v.idx for v in icebreakers]
-
-
         caravans_configuration = self.estimate_possible_caravans(vessel_ids=vessel_ids, icebreaker_ids=icebreaker_ids)
 
-        best_conf = max(caravans_configuration, key=lambda model: model.configuration_grade)
+        best_conf: CaravanConfiguration = max(caravans_configuration, key=lambda model: model.configuration_grade)
         # TODO: добавить несколько первых и сравнить
 
+        vessel_paths, icebreaker_paths = self.convert_caravan_conf_to_ship_paths(best_conf)
 
+        used_icebreaker_ids = [caravan.icebreaker_id for caravan in best_conf.caravans if caravan.vessel_ids]
+        updated_icebreakers = []
+
+        icebreakers_dict = {ib.idx: ib for ib in icebreakers}
+
+        for idx, icebreaker_path in icebreaker_paths.items():
+            if idx not in used_icebreaker_ids:
+                continue
+
+            updated_ib: IceBreaker = icebreakers_dict[idx]
+            updated_ib.source = icebreaker_path.waybill[-1].point
+            # TODO: подумать, мб как-то двигать ледокол к след неделе
+            updated_ib.start_date = icebreaker_path.waybill[-1].dt
+            updated_ib.source_name = self.base.graph.nodes[updated_ib.source]["point_name"]
+            updated_icebreakers.append(updated_ib)
+
+        return list(vessel_paths.values()), list(icebreaker_paths.values()), updated_icebreakers
+
+
+    def convert_caravan_conf_to_ship_paths(self, caravan_conf: CaravanConfiguration) -> (List[VesselPath], List[IcebreakerPath]):
+        # формируем пути для ледоколов
+
+        icebreaker_paths = {}
+        vessel_paths = {}
+
+        # обрабатываем самостоятелньо движущиеся суда
+        for idx in caravan_conf.solo_vessel_ids:
+            vessel_paths[idx] = self.navigator.solo_move_ways[idx]
+
+        for caravan in caravan_conf.caravans:
+
+            icebreaker = self.context.icebreakers[caravan.icebreaker_id]
+
+            # считаем ледокол
+            if not caravan.start_node:
+                logger.info(f"Invalid caravan found: {jsonable_encoder(caravan)}")
+            icebreaker_simple_path_before = self.navigator.calc_shortest_path(icebreaker,
+                                                                              source_node=icebreaker.source,
+                                                                              target_node=caravan.start_node,
+                                                                              start_time=icebreaker.start_date)
+
+            icebreaker_simple_path_in = self.navigator.calc_shortest_path(icebreaker,
+                                                                          source_node=caravan.start_node,
+                                                                          target_node=caravan.end_node,
+                                                                          start_time=caravan.start_time)
+
+            caravan_end_time = caravan.start_time + timedelta(hours=icebreaker_simple_path_in.total_time_hours)
+
+            waiting_time = 0
+            end_type = PathEventsType.formation
+            end_date = icebreaker.start_date + timedelta(hours=icebreaker_simple_path_before.total_time_hours)
+            if  end_date < caravan.start_time:
+                waiting_time = (caravan.start_time - end_date).seconds / 3600
+                end_type = PathEventsType.wait
+            
+            icebreaker_waybill_before = self.navigator.convert_simple_path_to_waybill(icebreaker_simple_path_before,
+                                                                                  icebreaker.start_date,
+                                                                                  icebreaker.source,
+                                                                                  end_type)
+
+
+            # движение в караване
+            icebreaker_waybill_in = self.navigator.convert_simple_path_to_waybill(icebreaker_simple_path_in,
+                                                                                  caravan.start_time,
+                                                                                  caravan.start_node,
+                                                                                  PathEventsType.wait)
+
+            icebreaker_paths[caravan.icebreaker_id] = IcebreakerPath(
+                    start_date=icebreaker.start_date,
+                    end_date=end_date,
+                    source=icebreaker.source,
+                    source_name=self.base.graph.nodes[icebreaker.source]["point_name"],
+                    waybill=icebreaker_waybill_before + icebreaker_waybill_in,
+                    path_line=icebreaker_simple_path_before.path_line + icebreaker_simple_path_in.path_line,
+                    template_name=self.context.template_name,
+                    icebreaker_id=caravan.icebreaker_id,
+                    time_line=icebreaker_simple_path_before.time_line + icebreaker_simple_path_in.time_line
+                )
+
+            # считаем суда
+            for idx in caravan.vessel_ids:
+                v = self.context.vessels[idx]
+                # движение до каравана
+
+                # обрабатываем случай сборки каравана в порту
+                if caravan.start_node != v.source:
+                    simple_path_before = self.navigator.path_to_all[idx].paths[caravan.start_node]
+                    time_before = simple_path_before.total_time_hours
+                    end_date = v.start_date + timedelta(hours=time_before) if time_before != math.inf else None
+
+                    waiting_time = 0
+                    end_type = PathEventsType.formation
+                    if end_date < caravan.start_time:
+                        waiting_time = (caravan.start_time - end_date).seconds / 3600
+                        end_type = PathEventsType.wait
+
+                    waybill_before = self.navigator.convert_simple_path_to_waybill(simple_path_before, v.start_date,
+                                                                                   v.source, end_type)
+                else:
+                    waybill_before = []
+                    simple_path_before = SimpleVesselPath()
+
+
+                if caravan.end_node == v.target:
+                    end_type = PathEventsType.fin
+                else:
+                    end_type = PathEventsType.move
+
+                # движение в караване
+                waybill_in = self.navigator.convert_simple_path_to_waybill(icebreaker_simple_path_in, caravan.start_time,
+                                                                           caravan.start_node, end_type)
+
+                if end_type != PathEventsType.fin:
+                    simple_path_after = self.navigator.calc_shortest_path(v, source_node=caravan.end_node,
+                                                                          target_node=v.target, start_time=caravan_end_time)
+
+                    waybill_after = self.navigator.convert_simple_path_to_waybill(simple_path_after, caravan_end_time,
+                                                                           caravan.end_node, PathEventsType.fin)
+                else:
+                    waybill_after = []
+                    simple_path_after = SimpleVesselPath()
+
+
+                # TODO: проверить, не проебаны ли смежные ребра
+                total_time_hours = (simple_path_before.total_time_hours + icebreaker_simple_path_in.total_time_hours
+                                    + simple_path_after.total_time_hours)
+
+                vessel_paths[idx] = VesselPath(
+                    total_time_hours=total_time_hours,
+                    start_date=v.start_date,
+                    end_date=end_date,
+                    source=v.source,
+                    source_name=self.base.graph.nodes[v.source]["point_name"],
+                    target=v.target,
+                    target_name=self.base.graph.nodes[v.target]["point_name"],
+                    success=True,  # мы не брали суда в караван, если они не смогут дойти
+                    waybill=waybill_before + waybill_in + waybill_after,
+                    path_line=simple_path_before.path_line + icebreaker_simple_path_in.path_line + simple_path_after.path_line,
+                    template_name=self.context.template_name,
+                    vessel_id=idx,
+                    time_line=simple_path_before.time_line + icebreaker_simple_path_in.time_line + simple_path_after.time_line
+                )
+
+
+        return vessel_paths, icebreaker_paths
 
 
 
     def get_possible_vessels(self, time_from: datetime, time_to: datetime) -> List[Vessel]:
-        return list(filter(lambda v: (v.start_date < time_to) and (v.start_date >= time_from), self.context.vessels))
+        return list(filter(lambda v: (v.start_date < time_to) and (v.start_date >= time_from),
+                           list(self.context.vessels.values())))
 
     def get_possible_icebreakers(self, icebreakers: List[IceBreaker], time_from: datetime,
                                  time_to: datetime) -> List[IceBreaker]:
@@ -223,8 +433,10 @@ class Computer:
         max_time = max([v.start_date for v in self.context.vessels.values()])
 
         current_time = min_time
-        icebreakers = context.icebreakers.values()
+        icebreakers = self.context.icebreakers.values()
         icebreaker_paths = []
+
+        logger.info(f"Computing optimal timesheet for context {self.context.to_dict()}")
 
         result_vessels_paths = []
 
@@ -236,7 +448,7 @@ class Computer:
                 self.optimal_timesheet_for_planing_horizon(vessels=vessels, icebreakers=possible_icebreakers)
 
             icebreakers = self.update_list_of_objects(icebreakers, updated_possible_icebreakers, id_field="idx")
-            result_vessels_paths.append(new_vessel_paths)
+            result_vessels_paths += new_vessel_paths
             icebreaker_paths = self.merge_icebreakers_paths(icebreaker_paths, new_icebreaker_paths)
 
             current_time += self.planing_horizon
