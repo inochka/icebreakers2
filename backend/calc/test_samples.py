@@ -125,6 +125,8 @@ def test_generate_caravans():
 
     caravan_confs = comp.estimate_possible_caravans(vessel_ids, icebreaker_ids)
 
+    caravan_confs = sorted(caravan_confs, key=lambda model: model.configuration_grade)
+
     print(caravan_confs)
 
 def test_estimate_caravan():
@@ -170,7 +172,7 @@ if __name__ == "__main__":
     start = time()
     print('===============')
     #test_compute_optimal()
-    test_path()
+    test_generate_caravans()
     #test_estimate_caravan()
     fin = time()
     print('============'+str(fin-start))

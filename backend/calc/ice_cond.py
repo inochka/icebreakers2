@@ -40,6 +40,8 @@ class IceCondition:
 
     graph_filename = "graphs_dict.pkl"
 
+    fine_tune_coefficient: float = 1.5
+
     base_graph: BaseGraph
 
     def __init__(self, file_path: Path | str, graph: Graph):
@@ -78,7 +80,7 @@ class IceCondition:
         if base_node_v in self.ports or base_node_u in self.ports:
             cond = max(cond, self.ports_ice_cond)
 
-        return cond
+        return cond * self.fine_tune_coefficient
 
     def best_condition(self,  base_node_u, base_node_v) -> float:
         # TODO: переделать, с учетом, что в реальности мы не знаем будущих значений
@@ -89,7 +91,7 @@ class IceCondition:
         if base_node_v in self.ports or base_node_u in self.ports:
             cond = max(cond, self.ports_ice_cond)
 
-        return cond
+        return cond * self.fine_tune_coefficient
 
 
     def get_ice_condition_from_values_list(self, values: List[float]):

@@ -129,8 +129,8 @@ class AllVesselPaths(CustomBaseModel):
     algorythm: AlgoType
 
 class Caravan(CustomBaseModel):
-    start_node: int = 0
-    end_node: int = 0
+    start_node: int | None = None
+    end_node: int | None = None
     vessel_ids: List[int] = []
     icebreaker_id: int = -1
     time_estimate: float = 0

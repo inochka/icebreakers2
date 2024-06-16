@@ -83,7 +83,9 @@ class Computer:
     def estimate_solo_move(self, vessel_ids: List[int]) -> float:
         if not vessel_ids:
             return 0
-        return sum([self.navigator.solo_move_ways[idx].total_time_hours for idx in vessel_ids])
+
+        return sum([min(self.navigator.solo_move_ways[idx].total_time_hours, self.solo_stuck_time)
+                    for idx in vessel_ids])
 
     def estimate_caravan_profit(self, vessel_ids: List[int], icebreaker_path_times_to_all: AllSimpleVesselPath,
                                 icebreaker: IceBreaker) -> (float, int, int):
@@ -138,8 +140,8 @@ class Computer:
 
     def estimate_possible_caravans(self, vessel_ids: List[int], icebreaker_ids: List[int]):
         logger.info(f"Estimating possible caravans for vessels {vessel_ids} and icebreakers {icebreaker_ids}")
-        paths = {idx: comp.navigator.calc_shortest_path(context.icebreakers[idx]) for idx in icebreaker_ids}
-        distributions = comp.generate_distributions(len(icebreaker_ids), vessel_ids)
+        paths = {idx: self.navigator.calc_shortest_path(self.context.icebreakers[idx]) for idx in icebreaker_ids}
+        distributions = self.generate_distributions(len(icebreaker_ids), vessel_ids)
 
         logger.info(f"Found {len(distributions)} variants!")
 
@@ -151,8 +153,8 @@ class Computer:
             form_caravan = True
             for i in range(len(icebreaker_ids)):
                 icebreaker_id = icebreaker_ids[i]
-                icebreaker = context.icebreakers[icebreaker_id]
-                t1, a, b = comp.estimate_caravan_profit(distributions[j][i], paths[icebreaker_id], icebreaker)
+                icebreaker = self.context.icebreakers[icebreaker_id]
+                t1, a, b = self.estimate_caravan_profit(distributions[j][i], paths[icebreaker_id], icebreaker)
 
                 if t1 == math.inf:
                     form_caravan = False
@@ -163,30 +165,30 @@ class Computer:
                             icebreaker_id=icebreaker_id)
                 )
 
+                times.append(t1)
+
             if not form_caravan:
                 continue
 
             caravans_vessels_ids = reduce(set.union, map(set, distributions[j]))
-            caravan_vessels_solo_move_time = min(comp.estimate_solo_move(list(caravans_vessels_ids)),
-                                                 self.solo_stuck_time)
+            solo_move_time_for_caravan_vessels = self.estimate_solo_move(list(caravans_vessels_ids))
 
-            solo_move_vessels_ids = list(set(vessel_ids).difference(caravans_vessels_ids))
+            outside_caravan_vessels_ids = list(set(vessel_ids).difference(caravans_vessels_ids))
 
             caravan_vessels_move_time = sum(times)
 
-            solo_move_vessels_time = min(comp.estimate_solo_move(solo_move_vessels_ids), self.solo_stuck_time)
+            solo_move_time_outside_caravan_vessels = self.estimate_solo_move(outside_caravan_vessels_ids)
 
             # считаем выгодность каравана
 
             caravans_configurations.append(
-                CaravanConfiguration(caravans=caravans, solo_vessel_ids=solo_move_vessels_ids,
-                                     time_estimate=caravan_vessels_move_time + solo_move_vessels_time,
-                                     configuration_grade = caravan_vessels_solo_move_time - caravan_vessels_move_time
+                CaravanConfiguration(caravans=caravans, solo_vessel_ids=outside_caravan_vessels_ids,
+                                     time_estimate=caravan_vessels_move_time + solo_move_time_outside_caravan_vessels,
+                                     configuration_grade = solo_move_time_for_caravan_vessels - caravan_vessels_move_time
                                      )
             )
 
         return caravans_configurations
-
 
 
     def optimal_timesheet_for_planing_horizon(self, vessels: List[Vessel], icebreakers: List[IceBreaker]) \
@@ -195,25 +197,14 @@ class Computer:
             Распределение судов по ледоколам внутри окна планирования
         """
 
-        vessels_queue = PriorityQueue()
-        icebreakers_paths_from_current_pos = {icebreaker.idx: self.navigator.calc_shortest_path(icebreaker)
-                                              for icebreaker in icebreakers}
+        vessel_ids = [v.idx for v in vessels]
+        icebreaker_ids = [v.idx for v in icebreakers]
 
-        icebreakers_vessels_distribution = {icebreaker.idx: [] for icebreaker in icebreakers}
-        # [icebreaker_id, [vessels_ids]]
 
-        for v in vessels:
-            vessels_queue.put((self.navigator.priority[v.idx], v))
+        caravans_configuration = self.estimate_possible_caravans(vessel_ids=vessel_ids, icebreaker_ids=icebreaker_ids)
 
-        """
-        while vessels_queue.not_empty:
-            v = vessels_queue.get()[1]
-
-            icebreaker_times_to_v = {idx: all_paths.paths[v.source].total_time_hours
-                                     for idx, all_paths in icebreakers_paths_from_current_pos.items()}
-
-            opt_icebreaker_id = min(icebreaker_times_to_v, key=icebreaker_times_to_v.get)
-        """
+        best_conf = max(caravans_configuration, key=lambda model: model.configuration_grade)
+        # TODO: добавить несколько первых и сравнить
 
 
 
