@@ -22,11 +22,11 @@
     </div>
     <div class="legend_elem">
       <div class="circle start"></div>
-      <p>Начальная точка</p>
+      <p>Начальная точка судна</p>
     </div>
     <div class="legend_elem">
       <img class="point-icon" :src="endPoint"/>
-      <p>Конечная точка</p>
+      <p>Конечная точка судна</p>
     </div>
     <div class="legend_elem">
       <img class="point-icon" :src="icebreakerIcon"/>
