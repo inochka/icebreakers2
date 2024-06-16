@@ -90,22 +90,21 @@ const onRemove = (template: ITemplate) => {
   typeModal.value = tModal.DELETE
 }
 
-const applySettings = () => {
+const applySettings = async() => {
   typeSidebar.value = TypeSidebar.LAYERS
   icebreakerPoints.value = []
   vesselPoints.value = []
+
+  isLoading.value = true
+
+  await calculatePath(selectTemplate.value?.name)
+
+  isLoading.value = false
 }
 
 const onOpenModalCreating = async () => {
   openModal.value = true
   typeModal.value = tModal.CREATE_TEMPLATE
-
-  isLoading.value = true
-
-  // TODO: раскомитить как будет готово
-  // await calculatePath(selectTemplate.value?.name)
-
-  isLoading.value = false
 }
 
 const onSelectTemplate = async (currentTemplate: ITemplate) => {

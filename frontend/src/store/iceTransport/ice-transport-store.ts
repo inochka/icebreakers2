@@ -33,7 +33,7 @@ export const useIceTransportStore = defineStore<
                 await requestApi({
                     method: 'post',
                     url: '/calculation_request/',
-                    data: {template_name},
+                    params: {template_name},
                 })
             } catch (e) {
                 await this.calculatePath(template_name)
