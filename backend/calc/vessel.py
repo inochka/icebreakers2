@@ -75,12 +75,12 @@ class Vessel(AbstractVessel):
         """
         Расчет времени прохождения ребра длиной length в условиях ice_cond_val ледокольной проводкой
         """
-        self_time = super().calc_time(length, ice_cond_val)
         if icebreaker:
+            self_time = calc_time(length, self.speed, self.move_pen_19_15_ice, self.move_pen_14_10_ice, ice_cond_val)
             icebreaker_time = icebreaker.calc_time(length, ice_cond_val)
             return max(self_time, icebreaker_time)
         else:
-            return self_time
+            return super().calc_time(length, ice_cond_val)
 
     def set_move_pen(self):
         """
