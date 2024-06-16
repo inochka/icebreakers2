@@ -1,30 +1,6 @@
-from enum import Enum
-
-class IceClass(Enum):
-    NO = "NO"
-    Arc1 = "Arc 1"
-    Arc2 = "Arc 2"
-    Arc3 = "Arc 3"
-    Arc4 = "Arc 4"
-    Arc5 = "Arc 5"
-    Arc7 = "Arc 7"
-    Arc9 = "Arc 9"
-
-class PathEventsType(Enum):
-    #(move, wait, formation, fin, stuck)
-    move = "move"
-    wait = "wait"
-    formation = "formation"
-    fin = "fin"
-    stuck = "stuck"
-
-class AlgoType(Enum):
-    default = "default"
-    best = "best"  # с лучшим ледоколом
-    solo = "solo"  # самостоятельно
-
-
-icebreake1_params = {"waybill": [
+{
+    "testtest_1": {
+        "waybill": [
             {
                 "event": "move",
                 "point": 4,
@@ -92,10 +68,8 @@ icebreake1_params = {"waybill": [
         "source_name": "Штокман",
         "target": 27,
         "target_name": "пролив Лонга",
-        "min_ice_condition": None,
-        "speed": None,
+        "speed": null,
         "icebreaker_id": 1,
-        "template_name": "full",
         "path_line": [
             4,
             21,
@@ -109,9 +83,11 @@ icebreake1_params = {"waybill": [
             30,
             18,
             27
-        ]}
-
-icebreake2_params = {
+        ],
+        "time_line": [],
+        "template_name": "testtest"
+    },
+    "testtest_2": {
         "waybill": [
             {
                 "event": "move",
@@ -150,9 +126,8 @@ icebreake2_params = {
         "source_name": "Мыс Желания",
         "target": 24,
         "target_name": "устье Лены",
-        "speed": None,
+        "speed": null,
         "icebreaker_id": 2,
-        "template_name": "full",
         "path_line": [
             16,
             20,
@@ -160,5 +135,8 @@ icebreake2_params = {
             8,
             12,
             24
-        ]
+        ],
+        "time_line": [],
+        "template_name": "testtest"
     }
+}

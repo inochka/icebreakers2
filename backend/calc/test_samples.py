@@ -34,13 +34,10 @@ def set_g_base5(base): #задать базовый граф  с пятью ве
     base.graph.add_edges_from(edges)
 
 def test_path():
-    base = BaseGraph()
-    base.set_base_values()
     vessel = Vessel(**vessels_data[4])
-    ice_cond = IceCondition()
     icebreaker = IceBreaker(**icebreaker_data[1])
     nav = Navigator()
-    paths = nav.calc_shortest_path(base,ice_cond,vessel, vessel.start_date,29,46)
+    paths = nav.calc_shortest_path(base,ice_cond,vessel, vessel.start_date,4,27)
     print(paths)
     base.draw_geo()
     base.draw_path(paths[1])
@@ -119,7 +116,8 @@ def test_compute_optimal():
 if __name__ == "__main__":
     start = time()
     print('===============')
-    test_compute_optimal()
+    #test_compute_optimal()
+    test_path()
     fin = time()
     print('============'+str(fin-start))
 
