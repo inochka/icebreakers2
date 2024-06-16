@@ -16,4 +16,4 @@ COPY .. .
 RUN npm run build
 
 EXPOSE 5173
-CMD [ "http-server", "dist" ]
+CMD ["npm", "run", "preview"]
