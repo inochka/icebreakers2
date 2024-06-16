@@ -6,22 +6,22 @@
         <p>Показать маршрутный граф</p>
       </div>
 
-      <div>
-        <div class="checkbox">
-          <Checkbox @onChecked="onCheckedTiff" :checked="isShowTiff"/>
-          <p>Показать ледовую обстановку</p>
-        </div>
-        <div class="datepicker" v-if="isShowTiff">
-          <VueDatePicker
-              v-model="date"
-              text-input
-              :enable-time-picker="false"
-              :start-date="new Date(vessels[0].start_date)"
-              :min-date="new Date(vessels[0].start_date)"
-              @update:model-value="changeDate"
-          />
-        </div>
-      </div>
+<!--      <div>-->
+<!--        <div class="checkbox">-->
+<!--          <Checkbox @onChecked="onCheckedTiff" :checked="isShowTiff"/>-->
+<!--          <p>Показать ледовую обстановку</p>-->
+<!--        </div>-->
+<!--        <div class="datepicker" v-if="isShowTiff">-->
+<!--          <VueDatePicker-->
+<!--              v-model="date"-->
+<!--              text-input-->
+<!--              :enable-time-picker="false"-->
+<!--              :start-date="new Date(vessels[0].start_date)"-->
+<!--              :min-date="new Date(vessels[0].start_date)"-->
+<!--              @update:model-value="changeDate"-->
+<!--          />-->
+<!--        </div>-->
+<!--      </div>-->
     </div>
 
     <Icebreakers

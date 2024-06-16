@@ -465,45 +465,16 @@ watch(() => icebreakerPoints.value, () => {
   changeMarkersVisibility(icebreakerPoints.value, icebreakerMarkers.value, typeTransport.ICEBREAKERS)
 }, {deep: true})
 
-watch(() => tiffDate.value, () => {
-  if (dateLayer.value) map.value?.removeLayer(dateLayer.value);
-  //
-  // if (tiffDate.value) {
-  //   fetch('../mock/vessels.json')
-  //       .then((response) => console.log(response))
-  //       .then((blob) => {
-  //         console.log(blob)
-  //         const source = new GeoTIFF({
-  //           sources: [
-  //             {
-  //               blob: blob,
-  //             },
-  //           ],
-  //         });
-  //
-  //         // const map = new Map({
-  //         //   target: 'map',
-  //         //   layers: [
-  //         //     new TileLayer({
-  //         //       source: source,
-  //         //     }),
-  //         //   ],
-  //         //   view: source.getView().then((viewConfig) => {
-  //         //     viewConfig.showFullExtent = true;
-  //         //     return viewConfig;
-  //         //   }),
-  //         // });
-  //       });
-  // }
+// watch(() => tiffDate.value, () => {
+//   if (dateLayer.value) map.value?.removeLayer(dateLayer.value);
+//
   // fetch(`../../../tiffs/${tiffDate.value}.tif`)
 
   //   fetch('./example.tiff')
   //       .then((response) => {
-  //         console.log(response)
   //         response.blob()
   //       })
   //       .then((blob) => {
-  //         console.log(blob)
   //         const source = new GeoTIFF({
   //           sources: [
   //             {
@@ -530,7 +501,7 @@ watch(() => tiffDate.value, () => {
   //         )
   //       })
   // }
-})
+// })
 </script>
 
 <style scoped>
