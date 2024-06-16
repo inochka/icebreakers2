@@ -1,0 +1,10 @@
+version: '3.3'
+
+services:
+  vue-app:
+    build: .
+    command: npm run dev
+    ports:
+      - 8001:8000
+    env_file:
+      - ./env
