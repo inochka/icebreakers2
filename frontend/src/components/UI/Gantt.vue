@@ -4,7 +4,6 @@
         :chart-start="date(vessels[0].start_date)"
         :chart-end="getEndDate"
         precision="day"
-        :no-overlap="true"
         width="100%"
         bar-start="start_date"
         bar-end="end_date"
@@ -100,10 +99,21 @@ const getBackground = (event: tTypeWay) => {
 </script>
 
 <style lang="scss" scoped>
-//.scroll-gantt {
-//  display: flex !important;
-//  flex-wrap: nowrap !important;
-//  overflow: auto;
-//  overflow-y: hidden;
-//}
+.scroll-gantt {
+  display: grid !important;
+  flex-wrap: nowrap !important;
+  overflow: auto;
+  min-width: 100%;
+  max-height: 500px;
+}
+
+::v-deep {
+  //.g-gantt-bar:not(:hover), .g-gantt-bar:not(:focus) {
+  //  pointer-events: none;
+  //
+  //  &:hover, &:focus, &:target {
+  //    pointer-events: auto !important;
+  //  }
+  //}
+}
 </style>
