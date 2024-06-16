@@ -9,7 +9,6 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "@babel/eslint-parser": "^7.24.7",
     "@infectoone/vue-ganttastic": "^2.3.2",
     "@vuepic/vue-datepicker": "^8.8.0",
     "axios": "^1.7.2",
@@ -28,18 +27,12 @@
   "devDependencies": {
     "@types/luxon": "^3.4.2",
     "@vitejs/plugin-vue": "^5.0.4",
-    "eslint-plugin-vue": "^9.26.0",
     "sass": "^1.77.4",
     "sass-loader": "^14.2.1",
     "typescript": "^5.2.2",
     "vite": "^5.2.0",
     "vite-svg-loader": "^5.1.0",
-    "vue-tsc": "^2.0.6",
-    "eslint": "^8.56.0",
-    "eslint-config-airbnb-base": "^15.0.0",
-    "eslint-import-resolver-alias": "^1.1.2",
-    "eslint-import-resolver-typescript": "^3.6.1",
-    "eslint-plugin-import": "^2.29.1"
+    "vue-tsc": "^2.0.6"
   },
   "resolutions": {
     "rollup": "npm:@rollup/wasm-node"
