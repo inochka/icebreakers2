@@ -23,7 +23,7 @@
             />
 
             <DeleteIcon
-                @click="onRemove(template)"
+                @click.prevent="onRemove(template)"
                 class="icon"/>
           </label>
         </div>
