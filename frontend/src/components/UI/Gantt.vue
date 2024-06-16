@@ -107,9 +107,11 @@ const getDates = (way: IWaybill, path: IPath, idx: number) => {
   } else if (way.event === tTypeWay.STUCK) {
     // @ts-ignore
     end_date = date.value(DateTime.fromISO(way.dt).plus({hours: 1}))
-  } else {
+  } else if (path.waybill[idx + 1]) {
     // @ts-ignore
     end_date = date.value(DateTime.fromISO(path.waybill[idx + 1].dt))
+  } else {
+    end_date = date.value(DateTime.fromISO(way.dt))
   }
 
   return {

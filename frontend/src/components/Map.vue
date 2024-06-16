@@ -186,10 +186,10 @@ const getFeatures = ({waybill, seaTransport, type}: {
   type: typeTransport
 }) => {
   const geoJsonData: GeoJSONFeature[] = []
+
   waybill.forEach((line: IWaybill, idx: number) => {
     const {point, event} = line
 
-    // @ts-ignore
     const coordinates = getCoordsByNode(point, waybill[idx + 1])
 
     if (event === tTypeWay.WAIT) {
@@ -198,7 +198,7 @@ const getFeatures = ({waybill, seaTransport, type}: {
         geometry: {
           'type': 'Point',
           // @ts-ignore
-          'coordinates': coordinates[0][0],
+          'coordinates': Array.isArray(coordinates[0]) ? coordinates[0][0] : coordinates,
         },
         properties: {
           ...line,
@@ -243,7 +243,7 @@ const getFeatures = ({waybill, seaTransport, type}: {
       })
     }
 
-    if (event === tTypeWay.FIN) {
+    if (event === tTypeWay.FIN || idx === waybill.length - 1) {
       geoJsonData.push({
         type: 'Feature',
         geometry: {
