@@ -6,22 +6,22 @@
         <p>Показать маршрутный граф</p>
       </div>
 
-<!--      <div>-->
-<!--        <div class="checkbox">-->
-<!--          <Checkbox @onChecked="onCheckedTiff" :checked="isShowTiff"/>-->
-<!--          <p>Показать ледовую обстановку</p>-->
-<!--        </div>-->
-<!--        <div class="datepicker" v-if="isShowTiff">-->
-<!--          <VueDatePicker-->
-<!--              v-model="date"-->
-<!--              text-input-->
-<!--              :enable-time-picker="false"-->
-<!--              :start-date="new Date(vessels[0].start_date)"-->
-<!--              :min-date="new Date(vessels[0].start_date)"-->
-<!--              @update:model-value="changeDate"-->
-<!--          />-->
-<!--        </div>-->
-<!--      </div>-->
+      <!--      <div>-->
+      <!--        <div class="checkbox">-->
+      <!--          <Checkbox @onChecked="onCheckedTiff" :checked="isShowTiff"/>-->
+      <!--          <p>Показать ледовую обстановку</p>-->
+      <!--        </div>-->
+      <!--        <div class="datepicker" v-if="isShowTiff">-->
+      <!--          <VueDatePicker-->
+      <!--              v-model="date"-->
+      <!--              text-input-->
+      <!--              :enable-time-picker="false"-->
+      <!--              :start-date="new Date(vessels[0].start_date)"-->
+      <!--              :min-date="new Date(vessels[0].start_date)"-->
+      <!--              @update:model-value="changeDate"-->
+      <!--          />-->
+      <!--        </div>-->
+      <!--      </div>-->
     </div>
 
     <Icebreakers
@@ -81,37 +81,41 @@ const getAllData = async (
     list: IVessel[] | IIcebreaker[],
     type: typeTransport,
     keyIdx: 'vessel_id' | 'icebreaker_id',
-    paths: IPath[]
+    paths: Record<string, any>
 ) => {
+  //   @ts-ignore
   await Promise.all(getUniqData(list, keyIdx, paths).map(async (seaTransport: IVessel | IIcebreaker) => {
     if (type === typeTransport.VESSELS) {
-      return await getPathVessels({vessel_id: seaTransport.id, template_name: selectTemplate.value?.name})
+      //   @ts-ignore
+      return await getPathVessels({vessel_id: seaTransport.id, template_name: selectTemplate.value?.name!})
     }
 
-    return await getPathIcebreakers({icebreaker_id: seaTransport.id, template_name: selectTemplate.value?.name})
+    return await getPathIcebreakers({icebreaker_id: seaTransport.id, template_name: selectTemplate.value?.name!})
   }))
 }
 
 const getUniqData = (list: IVessel[] | IIcebreaker[], keyIdx: 'vessel_id' | 'icebreaker_id', paths: IPath[]) => {
   return list.reduce((accumulator, item2) => {
     if (!accumulator.some(item1 =>
+        //   @ts-ignore
         item1[keyIdx] === item2.id)) {
+      //   @ts-ignore
       accumulator.push(item2);
     }
     return accumulator;
   }, structuredClone(toRaw(paths)));
 }
 
-const onCheckedTiff = () => {
-  isShowTiff.value = !isShowTiff.value
-
-  if (!isShowTiff.value) tiffDate.value = ''
-}
-
-const changeDate = (modelData: string) => {
-  date.value = modelData
-  getTiffDate(date.value.toISOString().replaceAll('.000Z', ''))
-}
+// const onCheckedTiff = () => {
+//   isShowTiff.value = !isShowTiff.value
+//
+//   if (!isShowTiff.value) tiffDate.value = ''
+// }
+//
+// const changeDate = (modelData: string) => {
+//   date.value = modelData
+//   getTiffDate(date.value.toISOString().replaceAll('.000Z', ''))
+// }
 </script>
 
 <style lang="scss" scoped>

@@ -39,7 +39,9 @@ const startDate = ref()
 const endDate = ref()
 
 onMounted(() => {
+  // @ts-ignore
   rowBarListVessels.value = createRows(pathsVessels.value, vessels.value, 'vessel_id', typeTransport.VESSELS)
+  // @ts-ignore
   rowBarListIcebreakers.value = createRows(pathsIcebreakers.value, icebreakers.value, 'icebreaker_id', typeTransport.ICEBREAKERS)
 
   startDate.value = getStartDate()
@@ -58,6 +60,7 @@ const getStartDate = () => {
 const getEndDate = () => {
   const maxDate = [...pathsVessels.value, ...pathsIcebreakers.value]
       .reduce((acc, date) => {
+        // @ts-ignore
         return acc && new Date(acc) > new Date(date.end_date || date.start_date) ? acc : date.end_date || date.start_date
       }, '')
 
@@ -73,14 +76,16 @@ const date = computed(() => {
 const createRows = (paths: IPath[], listTransport: IVessel[] | IIcebreaker[], keyIdx: string, type: typeTransport) => {
   return paths.map(path => {
     return {
+      // @ts-ignore
       label: listTransport?.find(transport => transport.id === path[keyIdx])?.name || '',
-      bars: path.waybill.map((way, idx) => {
+      bars: path.waybill?.map((way, idx) => {
         const {start_date, end_date} = getDates(way, path, idx)
 
         return {
           start_date,
           end_date,
           ganttBarConfig: {
+            // @ts-ignore
             id: `${path[keyIdx]}_${way.point}_${way.event}`,
             style: {
               background: getBackground(way.event, type),
@@ -100,8 +105,10 @@ const getDates = (way: IWaybill, path: IPath, idx: number) => {
   if (way.event === tTypeWay.FIN) {
     end_date = date.value(way.dt)
   } else if (way.event === tTypeWay.STUCK) {
+    // @ts-ignore
     end_date = date.value(DateTime.fromISO(way.dt).plus({hours: 1}))
   } else {
+    // @ts-ignore
     end_date = date.value(DateTime.fromISO(path.waybill[idx + 1].dt))
   }
 

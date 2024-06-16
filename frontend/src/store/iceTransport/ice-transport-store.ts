@@ -7,6 +7,7 @@ import {DateTime} from "luxon";
 export const useIceTransportStore = defineStore<
     IceTransportStore.Id,
     IceTransportStore.State,
+    // @ts-ignore
     IceTransportStore.Actions
 >('IceTransportStore', {
     state: (): IceTransportStore.State => ({

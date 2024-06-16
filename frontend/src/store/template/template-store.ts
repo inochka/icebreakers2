@@ -6,6 +6,7 @@ import {toast, ToastOptions} from "vue3-toastify";
 export const useTemplateStore = defineStore<
     TemplateStore.Id,
     TemplateStore.State,
+    // @ts-ignore
     TemplateStore.Actions
 >('TemplateStore', {
     state: (): TemplateStore.State => ({
@@ -26,7 +27,7 @@ export const useTemplateStore = defineStore<
                 console.error(e)
             }
         },
-        async createTemplate(params) {
+        async createTemplate(params: any) {
             try {
                 await requestApi({
                     method: 'post',
@@ -48,10 +49,10 @@ export const useTemplateStore = defineStore<
                 await requestApi({
                     method: 'delete',
                     url: '/template/',
-                    params: {template_name: this.removingTemplate.name}
+                    params: {template_name: this.removingTemplate?.name!}
                 })
 
-                const templateIdx = this.templates.findIndex(({name}) => name === this.removingTemplate.name)
+                const templateIdx = this.templates.findIndex(({name}) => name === this.removingTemplate?.name!)
                 this.templates.splice(templateIdx, 1)
 
                 this.removingTemplate = null

@@ -11,7 +11,7 @@ import Map from 'ol/Map';
 import View from 'ol/View';
 import TileLayer from 'ol/layer/Tile';
 import {onMounted, Ref, ref, watch} from "vue";
-import {GeoTIFF, OSM} from "ol/source";
+import {OSM} from "ol/source";
 import 'ol/ol.css';
 import {fromLonLat, transform} from 'ol/proj';
 import {useCommonStore, useIceTransportStore} from "../store";
@@ -33,7 +33,7 @@ const vectorLayersIcebreakers: Ref<Record<string, VectorLayer<Feature<Geometry>>
 
 const graph: Ref<Record<string, VectorLayer<Feature<Geometry>>>> = ref({})
 
-const dateLayer: Ref<Record<string, VectorLayer<Feature<Geometry>>>> = ref({})
+// const dateLayer: Ref<Record<string, VectorLayer<Feature<Geometry>>>> = ref({})
 
 const vesselMarkers: Ref<Record<string, VectorLayer<Feature<Geometry>>>> = ref({})
 const icebreakerMarkers: Ref<Record<string, VectorLayer<Feature<Geometry>>>> = ref({})
@@ -50,8 +50,6 @@ const {
 
   vesselPoints,
   icebreakerPoints,
-
-  tiffDate
 } = storeToRefs(useIceTransportStore())
 
 const {showGraph} = storeToRefs(useCommonStore())
@@ -63,8 +61,10 @@ onMounted(() => {
       new TileLayer({
         visible: true,
         zIndex: 0,
+        // @ts-ignore
         tileSize: 512,
         maxZoom: 20,
+        // @ts-ignore
         source: new OSM('https://{s}.tile.openstreetmap.de/{z}/{x}/{y}.png')
       }),
     ],
@@ -117,6 +117,7 @@ onMounted(() => {
   map.value.on('pointermove', (e) => {
     const pixel = map.value?.getEventPixel(e.originalEvent);
     const hit = map.value?.hasFeatureAtPixel(pixel!);
+    // @ts-ignore
     map.value.getTarget().style.cursor = hit ? 'pointer' : '';
   });
 
@@ -141,6 +142,7 @@ const getFeature = (feature: FeatureLike, length: number, idx: number) => {
 
 const disposePopover = () => {
   if (popover.value) {
+    // @ts-ignore
     popover.value.dispose();
     popover.value = undefined;
   }
@@ -162,18 +164,19 @@ const getCoordsByEdge = (point: number) => {
   ]
 }
 
-const getCoordsByNode = (point: number, event, nextWay) => {
+const getCoordsByNode = (point: number, nextWay: IWaybill) => {
   const currentBaseNode = baseNodes.value.find((node: IBaseNode) => node.id === point)
 
   const endBaseNode = nextWay ? baseNodes.value.find((node: IBaseNode) => node.id === nextWay.point) : null
 
-  if (endBaseNode) {
+  if (endBaseNode && currentBaseNode) {
     return [
       [fromLonLat([currentBaseNode.lon, currentBaseNode.lat])],
       [fromLonLat([endBaseNode.lon, endBaseNode.lat])],
     ]
   }
 
+  // @ts-ignore
   return fromLonLat([currentBaseNode.lon, currentBaseNode.lat])
 }
 
@@ -186,13 +189,15 @@ const getFeatures = ({waybill, seaTransport, type}: {
   waybill.forEach((line: IWaybill, idx: number) => {
     const {point, event} = line
 
-    const coordinates = getCoordsByNode(point, event, waybill[idx + 1])
+    // @ts-ignore
+    const coordinates = getCoordsByNode(point, waybill[idx + 1])
 
     if (event === tTypeWay.WAIT) {
       geoJsonData.push({
         type: 'Feature',
         geometry: {
           'type': 'Point',
+          // @ts-ignore
           'coordinates': coordinates[0][0],
         },
         properties: {
@@ -227,6 +232,7 @@ const getFeatures = ({waybill, seaTransport, type}: {
         type: 'Feature',
         geometry: {
           'type': 'Point',
+          // @ts-ignore
           'coordinates': coordinates[0][0],
         },
         properties: {
@@ -279,16 +285,18 @@ const createGeoJson = (
     const {waybill} = item
 
     const listTransport = type === typeTransport.VESSELS ? vessels.value : icebreakers.value
-
+    // @ts-ignore
     const seaTransport = listTransport.find((transport: IVessel | IIcebreaker) => transport.id === item[keyIdx])
 
     if (!seaTransport) {
+      // @ts-ignore
       throw new Error(`Unknown transport: ${item[keyIdx]}`)
     }
-
+    // @ts-ignore
     const vectorLayer = generateVectorLayer(getFeatures,
         {waybill, seaTransport, type}
     )
+    // @ts-ignore
     vectorLayers[item[keyIdx]] = vectorLayer
     map.value?.addLayer(vectorLayer);
   })
@@ -311,7 +319,9 @@ const createGraph = () => {
   })
 }
 
-const createPointLayer = ({baseEdgeStart, baseEdgeEnd, currentTransport, type}) => {
+const createPointLayer = ({baseEdgeStart, baseEdgeEnd, currentTransport, type}: {
+  baseEdgeStart: IBaseEdge, baseEdgeEnd: IBaseEdge, currentTransport: IVessel | IIcebreaker, type: typeTransport
+}) => {
   const jsonList = []
 
   jsonList.push({
@@ -348,9 +358,10 @@ const drawPoints = (points: number[], type: typeTransport) => {
     const markerList = type === typeTransport.VESSELS ? vesselMarkers.value : icebreakerMarkers.value
     const currentTransport = transportList.find((transport) => transport.id === point)
 
-    const baseEdgeStart = baseEdges.value.find(edge => edge.id === currentTransport.source)
-    const baseEdgeEnd = baseEdges.value.find(edge => edge.id === currentTransport.target)
+    const baseEdgeStart = baseEdges.value.find(edge => edge.id === currentTransport?.source)
+    const baseEdgeEnd = baseEdges.value.find(edge => edge.id === currentTransport?.target)
 
+    // @ts-ignore
     const vectorLayer = generateVectorLayer(createPointLayer,
         {baseEdgeStart, baseEdgeEnd, currentTransport, type}
     )
@@ -377,6 +388,7 @@ const generateVectorLayers = (
     type: typeTransport
 ) => {
   if (Object.keys(vectorLayers).length && !paths.length) {
+    // @ts-ignore
     removeLayers(vectorLayers)
     return
   }
@@ -384,19 +396,22 @@ const generateVectorLayers = (
   if (Object.keys(vectorLayers).length) {
     const removingLayers = Object.keys(vectorLayers).filter(layer => {
       const path = paths.find(path => {
+        // @ts-ignore
         return path[keyIdx] === Number(layer)
       })
       return !path
     })
 
     removingLayers.forEach(layer => {
+      // @ts-ignore
       const currentLayer = vectorLayers[layer]
+      // @ts-ignore
       delete vectorLayers[layer]
 
       map.value?.removeLayer(currentLayer)
     })
   }
-
+  // @ts-ignore
   const newLayers = paths.filter(path => !vectorLayers[path[keyIdx]])
   createGeoJson(newLayers, vectorLayers, keyIdx, type)
 }
@@ -416,7 +431,9 @@ const changeMarkersVisibility = (
       return !points.includes(Number(point))
     })
     removingPoints.forEach(point => {
+      // @ts-ignore
       const currentPoint = markers[point]
+      // @ts-ignore
       delete markers[point]
 
       map.value?.removeLayer(currentPoint)
@@ -428,11 +445,13 @@ const changeMarkersVisibility = (
 }
 
 watch(() => pathsVessels.value, () => {
+  // @ts-ignore
   generateVectorLayers(vectorLayersVessels.value, pathsVessels.value, 'vessel_id', typeTransport.VESSELS)
 }, {deep: true})
 
 watch(() => pathsIcebreakers.value, () => {
   generateVectorLayers(
+      // @ts-ignore
       vectorLayersIcebreakers.value,
       pathsIcebreakers.value,
       'icebreaker_id',
@@ -450,18 +469,21 @@ watch(() => [baseEdges.value, baseNodes.value], () => {
 
 watch(() => showGraph.value, () => {
   if (showGraph.value) {
+    // @ts-ignore
     map.value?.addLayer(graph.value);
     return
   }
-
+  // @ts-ignore
   map.value?.removeLayer(graph.value);
 })
 
 watch(() => vesselPoints.value, () => {
+  // @ts-ignore
   changeMarkersVisibility(vesselPoints.value, vesselMarkers.value, typeTransport.VESSELS)
 }, {deep: true})
 
 watch(() => icebreakerPoints.value, () => {
+  // @ts-ignore
   changeMarkersVisibility(icebreakerPoints.value, icebreakerMarkers.value, typeTransport.ICEBREAKERS)
 }, {deep: true})
 

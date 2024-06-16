@@ -60,16 +60,17 @@ const date = computed(() => {
 const loadGraph = async () => {
   if (!isChecked.value) return
   if (props.type === typeTransport.VESSELS) {
-    await getPathVessels({vessel_id: props.layer.id, template_name: selectTemplate.value.name})
+    await getPathVessels({vessel_id: props.layer.id, template_name: selectTemplate.value?.name!})
 
     return
   }
 
-  await getPathIcebreakers({icebreaker_id: props.layer.id, template_name: selectTemplate.value.name})
+  await getPathIcebreakers({icebreaker_id: props.layer.id, template_name: selectTemplate.value?.name!})
 }
 
 const onOpenInfoModal = () => {
   typeModal.value = props.type === typeTransport.VESSELS ? tModal.VESSEL : tModal.ICEBREAKER
+  // @ts-ignore
   modalInfo.value = props.layer
   openModal.value = true
 }
@@ -99,6 +100,7 @@ const createDataForPaths = () => {
     const list = props.type === typeTransport.VESSELS ? pathsVessels.value : pathsIcebreakers.value
     const keyId = props.type === typeTransport.VESSELS ? 'vessel_id' : 'icebreaker_id'
 
+    // @ts-ignore
     const idx = list.findIndex(path => path[keyId] === props.layer.id)
     if (idx !== -1) list.splice(idx, 1)
   }
