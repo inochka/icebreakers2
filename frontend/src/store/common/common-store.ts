@@ -15,8 +15,6 @@ export const useCommonStore = defineStore<
 
         showGraph: true,
 
-        date: null,
-
         isLoading: false,
     }),
 })

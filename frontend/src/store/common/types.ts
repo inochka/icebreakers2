@@ -12,8 +12,6 @@ export namespace CommonStore {
 
         typeSidebar: TypeSidebar
 
-        date: null | Date
-
         isLoading: boolean
     }
 }

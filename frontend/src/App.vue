@@ -3,8 +3,8 @@
 
   <div class="wrapper">
     <div class="cell cell-sidebar">
-      <Templates v-if="typeSidebar === TypeSidebar.TEMPLATES" />
-      <Layers v-else />
+      <Templates v-if="typeSidebar === TypeSidebar.TEMPLATES"/>
+      <Layers v-else/>
     </div>
     <div class="cell cell-map">
       <Map/>
@@ -24,21 +24,21 @@ import Layers from "./components/Layers.vue";
 import {storeToRefs} from "pinia";
 import Modal from "./components/UI/Modal.vue";
 import Loader from "./components/UI/Loader.vue";
-import {useCommonStore, useVesselsStore} from "./store";
+import {useCommonStore, useIceTransportStore} from "./store";
 import Legend from "./components/UI/Legend.vue";
 import {onMounted} from "vue";
 import {TypeSidebar} from "./types.ts";
 import Templates from "./components/Templates.vue";
 
 const {openModal, isLoading, typeSidebar} = storeToRefs(useCommonStore())
-const {getBaseNodes, getBaseEdges, getVessels, getIcebreakers} = useVesselsStore()
+const {getBaseNodes, getBaseEdges, getVessels, getIcebreakers} = useIceTransportStore()
 
 onMounted(async () => {
   await Promise.all([
     await getBaseNodes(),
-    await getIcebreakers(),
+    await getBaseEdges(),
     await getVessels(),
-    await getBaseEdges()
+    await getIcebreakers()
   ])
 })
 </script>
@@ -46,7 +46,7 @@ onMounted(async () => {
 <style scoped>
 .wrapper {
   display: grid;
-  grid-template-columns: 1fr 3fr;
+  grid-template-columns: 370px auto;
   height: 100%;
 }
 </style>

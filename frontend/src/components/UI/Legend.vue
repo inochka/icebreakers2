@@ -9,8 +9,8 @@
       <p>Проводка караваном</p>
     </div>
     <div class="legend_elem">
-      <div class="square without-formation"></div>
-      <p>Движение без каравана</p>
+      <div class="circle without-formation"></div>
+      <p>Движение невозможно</p>
     </div>
     <div class="legend_elem">
       <div class="circle wait"></div>
@@ -24,11 +24,16 @@
       <img class="point-icon" :src="endPoint"/>
       <p>Конечная точка</p>
     </div>
+    <div class="legend_elem">
+      <img class="point-icon" :src="icebreakerIcon"/>
+      <p>Ледокол</p>
+    </div>
   </div>
 </template>
 
 <script setup lang="ts">
 import endPoint from '../../assets/icons/anchor-icon-svgrepo-com.png'
+import icebreakerIcon from "../../assets/icons/ship-2-svgrepo-com.png";
 </script>
 
 <style scoped lang="scss">

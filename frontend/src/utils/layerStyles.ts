@@ -1,7 +1,8 @@
 import {Circle, Fill, Icon, Stroke, Style} from "ol/style";
 import {FeatureLike} from "ol/Feature";
-import {tTypeWay} from "../types.ts";
+import {tTypeWay, typeTransport} from "../types.ts";
 import endPoint from "../assets/icons/anchor-icon-svgrepo-com.png";
+import icebreakerIcon from "../assets/icons/ship-2-svgrepo-com.png";
 
 const stylePoint = (color: string) => {
     return new Style({
@@ -35,14 +36,28 @@ const styleLine = (color: string) => {
 }
 
 export const getStyles = (feature: FeatureLike) => {
-    const {event, success} = feature.getProperties()
+    const {event, success, point, transport} = feature.getProperties()
     const type = feature.getGeometry()?.getType()
 
-    if (type === 'Point' && event === tTypeWay.MOVE) {
+    if (type === 'Point' && point === 'start' && transport === typeTransport.ICEBREAKERS) {
+        return new Style({
+            image: new Icon({
+                height: 20,
+                width: 20,
+                src: icebreakerIcon,
+            }),
+        })
+    }
+
+    if (type === 'Point' && event === tTypeWay.STUCK) {
+        return stylePoint('red')
+    }
+
+    if ((type === 'Point' && event === tTypeWay.MOVE) || (type === 'Point' && point === 'start')) {
         return stylePoint('blue')
     }
 
-    if (type === 'Point' && event === tTypeWay.FIN) {
+    if ((type === 'Point' && event === tTypeWay.FIN) || (type === 'Point' && point === 'end')) {
         return new Style({
             image: new Icon({
                 height: 20,
@@ -52,7 +67,7 @@ export const getStyles = (feature: FeatureLike) => {
         })
     }
 
-    if (type === 'Point' && event === tTypeWay.WAIT) {
+    if (type === 'Point' && (event === tTypeWay.WAIT || event === tTypeWay.FORMATION)) {
         return stylePoint('gray')
     }
 
