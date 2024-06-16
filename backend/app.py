@@ -8,7 +8,7 @@ from datetime import datetime
 from backend.calc.base_graph import BaseGraph
 from backend.data.vessels_data import vessels_data, icebreaker_data
 from backend.calc.vessel import Vessel, IceBreaker
-from backend.crud.crud_types import TemplatesCRUD, VesselPathCRUD
+from backend.crud.crud_types import TemplatesCRUD, VesselPathCRUD, IcebreakerPathCRUD
 #from backend.calculate_timetable import computator, ice_cond
 from backend.calc.context import Context
 from backend.calc.computer import Computer
@@ -131,7 +131,8 @@ async def post_calculation_request(template_name: str):
     vessel_paths_crud = VesselPathCRUD()
     icebreaker_paths_crud = IcebreakerPathCRUD()
 
-    real_grade, real_vessel_paths, real_icebreaker_paths = computator.optimal_timesheet(context)
+    comp.context = context
+    real_vessel_paths, real_icebreaker_paths, real_grade = comp.optimal_timesheet()
 
     vessel_paths_crud.post_or_put_list(real_vessel_paths)
     icebreaker_paths_crud.post_or_put_list(real_icebreaker_paths)

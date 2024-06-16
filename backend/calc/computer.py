@@ -10,7 +10,7 @@ from backend.config import backend_base_dir
 from backend.models import Caravan, VesselPath, IcebreakerPath, SimpleVesselPath, AllSimpleVesselPath, \
     CaravanConfiguration, PathEvent
 from queue import PriorityQueue
-from backend.crud.crud_types import TemplatesCRUD, VesselPathCRUD
+from backend.crud.crud_types import TemplatesCRUD, VesselPathCRUD, IcebreakerPathCRUD
 from backend.calc.vessel import Vessel,IceBreaker
 from time import time
 from datetime import datetime, timedelta
@@ -55,6 +55,7 @@ class Computer:
         full_template_name = "full"
         templates_crud = TemplatesCRUD()
         vessel_paths_crud = VesselPathCRUD()
+        icebreaker_paths_crud = IcebreakerPathCRUD()
 
         if recalculate_loaded:
             # считаем реальные оценки
@@ -62,6 +63,7 @@ class Computer:
             self.context = context
             real_vessel_paths, real_icebreaker_paths, real_grade = self.optimal_timesheet()
             vessel_paths_crud.post_or_put_list(real_vessel_paths)
+            icebreaker_paths_crud.post_or_put_list(real_icebreaker_paths)
 
             # считаем самостоятельные оценки
             context = Context(templates_crud.get("solo"))
