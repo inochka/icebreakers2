@@ -20,9 +20,12 @@ class PathEventsType(Enum):
     stuck = "stuck"
 
 class AlgoType(Enum):
-    default = "default"
+    one_caravan_formation = "caravan_formation"
+    distributed_vessel_appending = "distributed_vessel_appending"
     best = "best"  # с лучшим ледоколом
     solo = "solo"  # самостоятельно
+
+
 
 
 icebreake1_params = {"waybill": [

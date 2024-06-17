@@ -60,6 +60,21 @@ class CRUD:
         return results
 
 
+    def post_new_delete_old(self, items: List[T] | None = None, filter_cond: Dict[str, Any] | None = None):
+        # удаляем старое
+        if filter_cond:
+            for idx, item in self.data.items():
+                matched = True
+                for cond, val in filter_cond.items():
+                    if getattr(item, cond) != val:
+                        matched = False
+                        break
+                if matched:
+                    self.data.pop(idx)
+
+        # загружаем новое
+        self.post_or_put_list(items)
+
     def post(self, item: T, item_id: Any | None = None) -> Optional[T]:
         if not item_id:
             item_id = self._make_id_by_item(item)

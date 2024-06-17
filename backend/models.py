@@ -1,7 +1,7 @@
 
 from pydantic import BaseModel, field_validator
 from typing import List, Optional, Dict
-from datetime import datetime
+from datetime import datetime, timedelta
 from backend.constants import IceClass, PathEventsType, AlgoType
 from backend.utils import parse_dates
 from fastapi.encoders import jsonable_encoder
@@ -118,14 +118,8 @@ class Template(CustomBaseModel):
     description: str = ""
     vessels: List[int]
     icebreakers: List[int]
-    algorythm: AlgoType
-
-class AllVesselPaths(CustomBaseModel):
-    name: str
-    description: str = ""
-    vessels: List[int]
-    icebreakers: List[int]
-    algorythm: AlgoType
+    algorythm: str = "default" # имя алгоритма  #AlgoType
+    # TODO: почекать, что ничего не сломалось
 
 class Caravan(CustomBaseModel):
     start_node: int | None = None
@@ -148,3 +142,15 @@ class Grade(CustomBaseModel):
     stuck_vessels:int = 0 #количество судов не достигших точки назначения
     total_time: float = 0 #общее время всех судов на маршруте в часах (на считая ледоколов) в часах
     template_name: str = ""
+
+class Algorythm(CustomBaseModel):
+    name: str # имя алгоритма (для сохранения)
+
+    formation_type: AlgoType  # тип алгоритма
+    ice_correction_coefficient: float = 1  # коэффициент улучшения ледовых условий из прогнозов
+    max_ships_per_icebreaker: int = 3  # максимальное число судов, которые может вести за собой ледокол
+    max_time_lapse_to_transfer: timedelta = timedelta(days=14)  # максимальное финальное время после старта последнего
+                        # судна, в течение которого планируем. Все недошедшие к этому момету суда считаются застрявшими
+    ports_ice_cond: float = 12.  # подгон ледовых условий в портах
+    planing_horizon: timedelta = timedelta(days=3)  # шаг планирования
+    icebreaker_time_fee: float = 3.  # насколько время ледокола ценнее времени обычного судна

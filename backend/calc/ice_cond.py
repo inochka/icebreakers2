@@ -35,7 +35,7 @@ class IceCondition:
     num_points: int = 50  # число точек на ребре при аппроксимации движения
     bound_ice_value: float = 0.0  # граничное значение, начиная с которого учитываем точки
 
-    ports_ice_cond: float = 10.
+    ports_ice_cond: float = 12.
     ports = [1, 35, 4, 5, 6, 41, 11, 44, 16, 24, 25, 27, 28, 29]  # вершины, в которых расположены порты
 
     graph_filename = "graphs_dict.pkl"

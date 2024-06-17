@@ -70,6 +70,7 @@ class Vessel(AbstractVessel):
     target: int  # Пункт окончания плавания, номер вершины в маршрутном графе
     move_pen_19_15_ice: float  # штраф при движении под проводкой, если запрещено то 1
     move_pen_14_10_ice: float  # штраф при движении под проводкой, если запрещено то 1
+    is_stucked: bool = False
 
     def __init__(self, idx: int, name: str, ice_class: str, speed: float, source: int, source_name: str,
                  target: int, target_name: str, start_date: str):

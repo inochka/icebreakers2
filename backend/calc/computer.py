@@ -30,9 +30,15 @@ class Computer:
     context: Context
     navigator: Navigator
 
-    planing_horizon: timedelta = timedelta(days=14) #timedelta(days=7)
     max_ships_per_icebreaker: int = 3
-    solo_stuck_time: float = 1e6
+    max_T: timedelta = timedelta(days=90) # максимальное забегание вперед
+
+
+    planing_horizon: timedelta = timedelta(days=3) #timedelta(days=7)
+
+            # TODO: пересчитать solo_stuck_time исходя из нач и кон точек маршрута
+    solo_stuck_time: float = 21 * 24 # вклад во время в часах, предполагая, что судно придется вести отдельным ледоколом #1e6
+    icebreaker_time_fee: float = 3.  # насколько время ледокола дороже времени обычного судна
 
     def __init__(self, context: Context | None = None):
         file_path = backend_base_dir / "input_files/IntegrVelocity.xlsx"
@@ -251,16 +257,26 @@ class Computer:
 
             solo_move_time_outside_caravan_vessels = self.estimate_solo_move(outside_caravan_vessels_ids)
 
-            # считаем выгодность каравана
+            # считаем выгодность каравана. Пытаемся оценивать вклад в полное время, которое она даст в перспективе,
+            # с учетом судов, которые придется тащить отдельно
 
             caravans_configurations.append(
                 CaravanConfiguration(caravans=caravans, solo_vessel_ids=outside_caravan_vessels_ids,
                                      time_estimate=caravan_vessels_move_time + solo_move_time_outside_caravan_vessels,
                                      configuration_grade=solo_move_time_for_caravan_vessels - caravan_vessels_move_time
+                                     #configuration_grade=solo_move_time_for_caravan_vessels - caravan_vessels_move_time
                                      )
             )
 
         return caravans_configurations
+
+    def grade_caravans_configuration(self, conf: CaravanConfiguration, current_icebreakers: List[IceBreaker]):
+        icebreakers_dict = {ib.idx: ib for ib in current_icebreakers}
+        ib_move_wait_time = sum([(caravan.start_time - icebreakers_dict[caravan.icebreaker_id].start_date).seconds
+                                 for caravan in conf.caravans]) / 3600
+        # то есть, вначале минимизируем число застрявших, и среди них выбираем конфигурацию
+        # с мин вр дввиежния и простоя ледоколов
+        return  - conf.time_estimate, - self.icebreaker_time_fee * ib_move_wait_time
 
     def optimal_timesheet_for_planing_horizon(self, vessels: List[Vessel], icebreakers: List[IceBreaker]) \
             -> (List[VesselPath], List[IcebreakerPath], List[IceBreaker], List[Caravan]):
@@ -273,9 +289,12 @@ class Computer:
 
         vessel_ids = [v.idx for v in vessels]
         icebreaker_ids = [v.idx for v in icebreakers]
-        caravans_configuration = self.estimate_possible_caravans(vessel_ids=vessel_ids, icebreaker_ids=icebreaker_ids)
+        caravans_configurations = self.estimate_possible_caravans(vessel_ids=vessel_ids, icebreaker_ids=icebreaker_ids)
 
-        best_conf: CaravanConfiguration = max(caravans_configuration, key=lambda model: model.configuration_grade)
+        if not caravans_configurations:
+            return [], [], [], []
+        best_conf: CaravanConfiguration = max(caravans_configurations,
+                                              key=lambda model: self.grade_caravans_configuration(model, icebreakers))
         # TODO: добавить несколько первых и сравнить
 
         vessel_paths, icebreaker_paths = self.convert_caravan_conf_to_ship_paths(best_conf)
@@ -322,9 +341,9 @@ class Computer:
 
                 waiting_time = 0
                 end_type = PathEventsType.formation
-                end_date = icebreaker.start_date + timedelta(hours=icebreaker_simple_path_before.total_time_hours)
-                if end_date < caravan.start_time:
-                    waiting_time = (caravan.start_time - end_date).seconds / 3600
+                ib_arrival_date = icebreaker.start_date + timedelta(hours=icebreaker_simple_path_before.total_time_hours)
+                if ib_arrival_date < caravan.start_time:
+                    waiting_time = (caravan.start_time - ib_arrival_date).seconds / 3600
                     end_type = PathEventsType.wait
 
                 icebreaker_waybill_before = self.navigator.convert_simple_path_to_waybill(icebreaker_simple_path_before,
@@ -335,8 +354,7 @@ class Computer:
             else:
                 icebreaker_waybill_before = []
                 icebreaker_simple_path_before = SimpleVesselPath()
-
-
+                ib_arrival_date = icebreaker.start_date
 
             icebreaker_simple_path_in = self.navigator.calc_shortest_path(icebreaker,
                                                                           source_node=caravan.start_node,
@@ -355,7 +373,7 @@ class Computer:
 
             icebreaker_paths[caravan.icebreaker_id] = IcebreakerPath(
                 start_date=icebreaker.start_date,
-                end_date=end_date,
+                end_date=caravan_end_time,
                 source=icebreaker.source,
                 source_name=self.base.graph.nodes[icebreaker.source]["point_name"],
                 waybill=icebreaker_waybill_before + icebreaker_waybill_in,
@@ -374,12 +392,12 @@ class Computer:
                 if caravan.start_node != v.source:
                     simple_path_before = self.navigator.path_to_all[idx].paths[caravan.start_node]
                     time_before = simple_path_before.total_time_hours
-                    end_date = v.start_date + timedelta(hours=time_before) if time_before != math.inf else None
+                    vessel_caravan_start_arrival_date = v.start_date + timedelta(hours=time_before) if time_before != math.inf else None
 
                     waiting_time = 0
                     end_type = PathEventsType.formation
-                    if end_date < caravan.start_time:
-                        waiting_time = (caravan.start_time - end_date).seconds / 3600
+                    if vessel_caravan_start_arrival_date < caravan.start_time:
+                        waiting_time = (caravan.start_time - vessel_caravan_start_arrival_date).seconds / 3600
                         end_type = PathEventsType.wait
 
                     waybill_before = self.navigator.convert_simple_path_to_waybill(simple_path_before, v.start_date,
@@ -387,6 +405,7 @@ class Computer:
                 else:
                     waybill_before = []
                     simple_path_before = SimpleVesselPath()
+                    vessel_caravan_start_arrival_date = v.start_date
 
                 if caravan.end_node == v.target:
                     end_type = PathEventsType.fin
@@ -406,9 +425,11 @@ class Computer:
 
                     waybill_after = self.navigator.convert_simple_path_to_waybill(simple_path_after, caravan_end_time,
                                                                                   caravan.end_node, PathEventsType.fin)
+                    vessel_end_date = caravan_end_time + timedelta(hours=simple_path_after.total_time_hours)
                 else:
                     waybill_after = []
                     simple_path_after = SimpleVesselPath()
+                    vessel_end_date = caravan_end_time
 
                 # TODO: проверить, не проебаны ли смежные ребра
                 total_time_hours = (simple_path_before.total_time_hours + icebreaker_simple_path_in.total_time_hours
@@ -417,7 +438,7 @@ class Computer:
                 vessel_paths[idx] = VesselPath(
                     total_time_hours=total_time_hours,
                     start_date=v.start_date,
-                    end_date=end_date,
+                    end_date=vessel_end_date,
                     source=v.source,
                     source_name=self.base.graph.nodes[v.source]["point_name"],
                     target=v.target,
@@ -443,7 +464,9 @@ class Computer:
     def optimal_timesheet(self) -> (List[VesselPath], List[IcebreakerPath], Grade, List[Caravan]):
 
         min_time = min([v.start_date for v in self.context.vessels.values()])
-        max_time = max([v.start_date for v in self.context.vessels.values()])
+
+        # нужно, чтобы последние тоже успели дойти
+        max_time = max([v.start_date for v in self.context.vessels.values()]) + self.max_T
 
         current_time = min_time
         icebreakers = self.context.icebreakers.values()
@@ -453,20 +476,36 @@ class Computer:
 
         result_vessels_paths = []
         caravans = []
+        #possible_vessels = self.context.vessels.values()
+        stucked_vessels = []
+        new_vessel_paths = []
 
         while current_time < max_time:
             vessels = self.get_possible_vessels(current_time, current_time + self.planing_horizon)
+            vessels += stucked_vessels  # прибавляем не смогшие пройти на прошлом шаге
+
             possible_icebreakers = self.get_possible_icebreakers(icebreakers, current_time,
                                                                  current_time + self.planing_horizon)
 
             new_vessel_paths, new_icebreaker_paths, updated_possible_icebreakers, new_caravans = \
                 self.optimal_timesheet_for_planing_horizon(vessels=vessels, icebreakers=possible_icebreakers)
 
+            stucked_vessel_ids = [vessel_path.vessel_id for vessel_path in new_vessel_paths
+                                  if vessel_path.success == False]
+
+            unstucked_new_vessel_paths = [vessel_path for vessel_path in new_vessel_paths
+                                          if vessel_path.success]
+            # до последнего будем пытаться провести все недошедшие суда, а застрявшие прогонять
+            stucked_vessels = [self.context.vessels[idx] for idx in stucked_vessel_ids]
+
             icebreakers = self.update_list_of_objects(icebreakers, updated_possible_icebreakers, id_field="idx")
-            result_vessels_paths += new_vessel_paths
+            result_vessels_paths += unstucked_new_vessel_paths
             icebreaker_paths = self.merge_icebreakers_paths(icebreaker_paths, new_icebreaker_paths)
             caravans += new_caravans
             current_time += self.planing_horizon
+
+        fially_stucked_vessel_paths = [vp for vp in new_vessel_paths if not vp.success]
+        result_vessels_paths += fially_stucked_vessel_paths
 
         grade = self.calculate_total_paths_grade(result_vessels_paths)
         # TODO: довозвращать караваны
