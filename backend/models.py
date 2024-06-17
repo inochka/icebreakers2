@@ -134,9 +134,17 @@ class Caravan(CustomBaseModel):
     icebreaker_id: int = -1
     time_estimate: float = 0
     start_time: datetime
+    template_name: str = ""
 
 class CaravanConfiguration(CustomBaseModel):
     caravans: List[Caravan]
     solo_vessel_ids: List[int]
     time_estimate: float
     configuration_grade: float
+
+
+class Grade(CustomBaseModel):
+    """Оценка стоимости проводки"""
+    stuck_vessels:int = 0 #количество судов не достигших точки назначения
+    total_time: float = 0 #общее время всех судов на маршруте в часах (на считая ледоколов) в часах
+    template_name: str = ""

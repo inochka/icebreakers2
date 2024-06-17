@@ -6,10 +6,10 @@ import numpy as np
 from backend.calc.base_graph import BaseGraph
 from backend.calc.vessel import AbstractVessel, Vessel, IceBreaker
 from queue import PriorityQueue
-from backend.calc.context import Context, Grade
+from backend.calc.context import Context
 from backend.constants import PathEventsType
 from backend.utils import add_hours
-from backend.models import PathEvent
+from backend.models import PathEvent, Grade
 from backend.calc.ice_cond import IceCondition
 from backend.models import VesselPath, SimpleVesselPath, AllSimpleVesselPath
 from typing import List, Dict
@@ -138,7 +138,8 @@ class Navigator:
         return path, time
     
     def convert_simple_path_to_waybill(self, simple_path: SimpleVesselPath, start_time: datetime, source: int,
-                                       end_type: PathEventsType = PathEventsType.fin):
+                                       end_type: PathEventsType = PathEventsType.fin,
+                                       start_type: PathEventsType = PathEventsType.move):
         time = simple_path.total_time_hours
         # TODO min_ice_condition сделать функцию расчета худших ледовых условий на маршруте, или пока выпилить
         # TODO speed сделать метод на графе для расчета длины маршрута чтобы посчитать среднюю скорость
@@ -155,6 +156,9 @@ class Navigator:
                 else:
                     waybill.append(PathEvent(event=PathEventsType.move, point=n, dt=next_event_time))
                     next_event_time = add_hours(next_event_time, simple_path.time_line[i + 1])
+
+            if waybill:
+                waybill[0].event = start_type
 
         return waybill
 

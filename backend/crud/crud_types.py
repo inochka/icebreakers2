@@ -1,5 +1,6 @@
 from backend.crud.crud import CRUD, T
-from backend.models import Template, VesselPath, IcebreakerPath
+from backend.models import Template, VesselPath, IcebreakerPath, Grade, Caravan
+from uuid import uuid4
 
 class TemplatesCRUD(CRUD):
     filename = "templates.json"
@@ -22,3 +23,18 @@ class IcebreakerPathCRUD(CRUD):
 
     def _make_id_by_item(self, item: T):
         return item.template_name + "_" + str(item.icebreaker_id)
+
+
+class GradeCRUD(CRUD):
+    filename = "grades.json"
+    model = Grade
+
+    def _make_id_by_item(self, item: T):
+        return item.template_name
+
+class CaravanCRUD(CRUD):
+    filename = "caravans.json"
+    model = Caravan
+
+    def _make_id_by_item(self, item: T):
+        return item.template_name + "_" + str(uuid4())

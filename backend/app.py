@@ -3,12 +3,12 @@ from fastapi.responses import JSONResponse
 from fastapi.encoders import jsonable_encoder
 from typing import List, Dict
 from backend.models import (VesselModel, IcebreakerModel, BaseNode, BaseEdge, Template, IcebreakerPath,
-                            VesselPath, PostCalcPath, PostCalcPathIce)
+                            VesselPath, PostCalcPath, PostCalcPathIce, Caravan)
 from datetime import datetime
 from backend.calc.base_graph import BaseGraph
 from backend.data.vessels_data import vessels_data, icebreaker_data
 from backend.calc.vessel import Vessel, IceBreaker
-from backend.crud.crud_types import TemplatesCRUD, VesselPathCRUD, IcebreakerPathCRUD
+from backend.crud.crud_types import TemplatesCRUD, VesselPathCRUD, IcebreakerPathCRUD, GradeCRUD, CaravanCRUD
 #from backend.calculate_timetable import computator, ice_cond
 from backend.calc.context import Context
 from backend.calc.computer import Computer
@@ -16,6 +16,7 @@ from backend.config import recalculate_loaded
 from backend.utils import replace_inf_nan
 from fastapi.middleware.cors import CORSMiddleware
 import json
+
 
 app = FastAPI()
 
@@ -130,16 +131,22 @@ async def post_calculation_request(template_name: str):
     context = Context(template)
     vessel_paths_crud = VesselPathCRUD()
     icebreaker_paths_crud = IcebreakerPathCRUD()
+    grades_crud = GradeCRUD()
+    caravan_crud = CaravanCRUD()
 
     comp.context = context
-    real_vessel_paths, real_icebreaker_paths, real_grade = comp.optimal_timesheet()
+    real_vessel_paths, real_icebreaker_paths, real_grade, caravans = comp.optimal_timesheet()
 
     vessel_paths_crud.post_or_put_list(real_vessel_paths)
     icebreaker_paths_crud.post_or_put_list(real_icebreaker_paths)
+    grades_crud.post(real_grade)
+    caravan_crud.post_or_put_list(caravans)
 
     return_dict = {
         "vessels": real_vessel_paths,
-        "icebreakers": real_icebreaker_paths
+        "icebreakers": real_icebreaker_paths,
+        "grade": real_grade,
+        "caravans": caravans
     }
 
     return JSONResponse(replace_inf_nan(jsonable_encoder(return_dict)))
@@ -208,6 +215,22 @@ async def calculate_path_with_icebreaker(vessel_id: int | None = None):
         filter_conds["vessel_id"] = vessel_id
 
     return JSONResponse(replace_inf_nan(jsonable_encoder(crud.get_by_filter_conds(filter_conds))))
+
+@app.get("/caravans/", response_model=Caravan)
+async def get_caravans(template_name: str):
+    caravan_crud = CaravanCRUD()
+    filter_conds = {"template_name": template_name}
+    return JSONResponse(replace_inf_nan(jsonable_encoder(caravan_crud.get_by_filter_conds(filter_conds))))
+
+@app.get("/grade/", response_model=Caravan)
+async def get_grades(template_name: str = ""):
+    grades_crud = GradeCRUD()
+    if not template_name:
+        return JSONResponse(jsonable_encoder(grades_crud.get_all()))
+    else:
+        return JSONResponse(jsonable_encoder(grades_crud.get(template_name)))
+
+
 
 @app.get("/get_tiff_name/", response_model=datetime)
 async def get_tiff_name(dt: datetime):

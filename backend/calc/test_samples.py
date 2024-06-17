@@ -1,6 +1,7 @@
 import math
 from functools import reduce
-from backend.calc.navigator import Navigator,IceCondition,Grade
+from backend.calc.navigator import Navigator,IceCondition
+from backend.models import Grade
 from base_graph import BaseGraph
 import matplotlib.pyplot as plt
 #plt.ion() #macOS problem

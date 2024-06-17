@@ -1,0 +1,41 @@
+version: '3.5'
+
+networks:
+  timetable-services:
+    name: timetable-network
+    driver: bridge
+
+services:
+  timetable_planner:
+    container_name: timetable_planner
+    build:
+      context: ./
+      dockerfile: Dockerfile
+    command: uvicorn backend.app:app --host 0.0.0.0 --port 8000
+    networks:
+      - timetable-services
+    deploy:
+      resources:
+        limits:
+          memory: 2048M
+    ports:
+      - "8000:8000"
+  timetable_front:
+    container_name: timetable_front
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    command: npm run dev
+    networks:
+      - timetable-services
+    deploy:
+      resources:
+        limits:
+          memory: 2048M
+    ports:
+      - "80:5173"
+    #env_file:
+    #  - ./frontend/.env
+    environment:
+      - VITE_APP_BASE_URL='http://194.113.34.33:8000/'
+

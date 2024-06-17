@@ -1,18 +1,14 @@
 from backend.calc.vessel import Vessel,IceBreaker
 from backend.data.vessels_data import vessels_data, icebreaker_data
 from backend.data.template_data import templates_data
-from backend.models import Template
+from backend.models import Template, Grade
 from fastapi.encoders import jsonable_encoder
 
-class Grade:
-    """Оценка стоимости проводки"""
-    stuck_vessels:int = 0 #количество судов не достигших точки назначения
-    total_time: int = 0 #общее время всех судов на маршруте в часах (на считая ледоколов) в часах
 
 class Context:
     vessels = {}
     icebreakers = {}
-    res_grade:Grade = None
+    res_grade: Grade = None
     res_vessels = {} #результаты расчета
     res_icebreakers = {} #результаты расчета
     template_name: str = ""
