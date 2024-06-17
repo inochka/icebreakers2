@@ -122,9 +122,9 @@ const getDates = (way: IWaybill, path: IPath, idx: number) => {
 
 const getBackground = (event: tTypeWay, type: typeTransport) => {
   if ((event === tTypeWay.MOVE || event === tTypeWay.FIN) && type === typeTransport.VESSELS) return 'green'
-  if (type === typeTransport.ICEBREAKERS) return 'deepskyblue'
   if (event === tTypeWay.STUCK) return 'red'
   if (event === tTypeWay.FORMATION) return 'blue'
+  if (type === typeTransport.ICEBREAKERS && event !== tTypeWay.WAIT) return 'deepskyblue'
   return 'gray'
 }
 </script>
