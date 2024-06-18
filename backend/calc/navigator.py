@@ -1,6 +1,7 @@
 from datetime import datetime, timedelta
 import math
-
+from collections import defaultdict
+from tqdm import tqdm
 import numpy as np
 
 from backend.calc.base_graph import BaseGraph
@@ -12,7 +13,7 @@ from backend.utils import add_hours
 from backend.models import PathEvent, Grade
 from backend.calc.ice_cond import IceCondition
 from backend.models import VesselPath, SimpleVesselPath, AllSimpleVesselPath
-from typing import List, Dict
+from typing import List, Dict, DefaultDict
 import logging
 
 logger = logging.getLogger(__name__)
@@ -39,6 +40,9 @@ class Navigator:
     path_from_all: Dict[int, AllSimpleVesselPath] | None = None
     estimate_path_time = timedelta(days=14)
 
+    icebreakers_shortest_paths: DefaultDict[int, DefaultDict[int, Dict[int, SimpleVesselPath]]] # ледокол - судно - идентификатор конца пути
+
+    # TODO: просчитать отдельно для всех ледоколов
     best_icebreaker_paths_times: np.ndarray  # матрица оптимальных времен между вершинами
 
     base: BaseGraph
@@ -85,6 +89,19 @@ class Navigator:
                                                      if simple_v_path.total_time_hours < math.inf]
 
 
+        # считаем все.. пред можно убрать, наверное
+        self.icebreakers_shortest_paths = defaultdict(lambda: defaultdict(dict))
+        logger.info(f"Calculating icebreakers paths from all to all...")
+        for idx, icebreaker in tqdm(self.context.icebreakers.items()):
+            for a in self.base.graph:
+                for b in self.base.graph:
+                    if a == b:
+                        self.icebreakers_shortest_paths[idx][a][b] = SimpleVesselPath()
+                        continue
+
+                    self.icebreakers_shortest_paths[idx][a][b] = self.calc_shortest_path(icebreaker,
+                                                                                         source_node=a, target_node=b)
+
         # считаем оптимальные времена с оптимальным ледоколом для дальнейшего откидывания нехороших вариантов
         ice_breaker = self.get_best_ice_breaker()
         n_vertices = len(self.base.graph.nodes)
@@ -97,6 +114,7 @@ class Navigator:
                 best_icebreaker_paths_times[m][n] = simple_path.total_time_hours
 
         self.best_icebreaker_paths_times = best_icebreaker_paths_times
+        # TODO: может, проще уже для всех ледоколов честно просчитать, их не сильно много?
 
 
     def get_best_ice_breaker(self):
@@ -136,7 +154,15 @@ class Navigator:
         path.insert(0, source_node)
         time.insert(0, 0)
         return path, time
-    
+
+    def shift_waybill(self, waybill: List[PathEvent], time_shift: timedelta):
+        shifted_waybill = []
+        for path_event in waybill:
+            shifted_waybill.append(PathEvent(event=path_event.event, point=path_event.point,
+                                             dt=path_event.dt+time_shift))
+
+        return shifted_waybill
+
     def convert_simple_path_to_waybill(self, simple_path: SimpleVesselPath, start_time: datetime, source: int,
                                        end_type: PathEventsType = PathEventsType.fin,
                                        start_type: PathEventsType = PathEventsType.move):
