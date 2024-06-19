@@ -90,6 +90,7 @@ class VesselPath(CustomBaseModel):
     template_name: str = ""  # имя шаблона, если расчет происходит по нему
     path_line: List[int] = []
     time_line: List[float] = []
+    caravan_id: str | None = None
 
 
 class IcebreakerPath(CustomBaseModel):
@@ -98,6 +99,7 @@ class IcebreakerPath(CustomBaseModel):
     end_date: Optional[datetime] = None
     source: int
     source_name: str
+    final_node: int = -1
     speed: Optional[float] = None  # средняя скорость на маршруте
     icebreaker_id: int = -1
     path_line: List[int] = []
@@ -129,6 +131,7 @@ class Caravan(CustomBaseModel):
     icebreaker_id: int = -1
     total_time_hours: float = 0 # всех судов в караване, до, в и после
     start_time: datetime | None = None
+    end_time: datetime | None = None
     template_name: str = ""
     icebreaker_time_fee: float = 0  # время, потраченное ледоколом на конкретно эту проводку
 
@@ -156,5 +159,5 @@ class Algorythm(CustomBaseModel):
     max_time_lapse_to_transfer: timedelta = timedelta(days=14)  # максимальное финальное время после старта последнего
                         # судна, в течение которого планируем. Все недошедшие к этому момету суда считаются застрявшими
     ports_ice_cond: float = 12.  # подгон ледовых условий в портах
-    #planing_horizon: timedelta = timedelta(days=3)  # шаг планирования
-    #icebreaker_time_fee: float = 3.  # насколько время ледокола ценнее времени обычного судна
+    planing_horizon: timedelta = timedelta(days=3)  # шаг планирования
+    icebreaker_time_fee: float = 3.  # насколько время ледокола ценнее времени обычного судна

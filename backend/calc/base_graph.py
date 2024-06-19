@@ -234,15 +234,15 @@ class BaseGraph:
         return G
 
 
-plt.figure(figsize=(20,10))
+#plt.figure(figsize=(20,10))
 
-base_graph = BaseGraph()
+#base_graph = BaseGraph()
 #base_graph.set_base_values()
 #base_graph.draw_geo()
 #plt.show()
 
 #base_graph.graph = base_graph.add_intersection_vertices(base_graph.graph)
 #base_graph.graph = base_graph.add_midpoints_and_connect_within_triangles(base_graph.graph, l0=150.)  # Укажите нужное значение l0
-base_graph.draw_geo()
+#base_graph.draw_geo()
 
-plt.show()
+#plt.show()
