@@ -1,7 +1,8 @@
 from backend.crud.crud import CRUD, T
 from backend.models import Template, VesselPath, IcebreakerPath, Grade, Caravan, Algorythm
 from uuid import uuid4
-from typing import List, Dict, Any
+from typing import List, Dict, Any, Optional
+
 
 class TemplatesCRUD(CRUD):
     filename = "templates.json"
@@ -39,6 +40,16 @@ class CaravanCRUD(CRUD):
 
     def _make_id_by_item(self, item: T):
         return str(uuid4())
+
+    def post_or_put_list(self, items: List[T]):
+        filter_conds = [{"template_name": template_name}
+                        for template_name in set([item.template_name for item in items])]
+
+        for cond in filter_conds:
+            self.delete_by_cond(cond)
+
+        super().post_or_put_list(items)
+
 
 class AlgoCRUD(CRUD):
     filename = "algorythms.json"

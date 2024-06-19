@@ -49,13 +49,11 @@ async def replace_inf_middleware(request, call_next):
 @app.get("/get_base_nodes/", response_model=List[BaseNode])
 async def get_nodes():
     graph = BaseGraph()
-    graph.set_base_values()
     return JSONResponse(jsonable_encoder(graph.make_list_of_models_for_nodes()))
 
 @app.get("/get_base_edges/", response_model=List[BaseEdge])
 async def get_edges():
     graph = BaseGraph()
-    graph.set_base_values()
     return JSONResponse(jsonable_encoder(graph.make_list_of_models_for_edges()))
 
 @app.get("/vessels/", response_model = VesselModel | List[VesselModel])
@@ -230,7 +228,7 @@ async def get_grades(template_name: str = ""):
     else:
         return JSONResponse(jsonable_encoder(grades_crud.get(template_name)))
 
-
+# TODO: добавить пост алгоритма + добавить идентификатора в vesselpath
 
 @app.get("/get_tiff_name/", response_model=datetime)
 async def get_tiff_name(dt: datetime):

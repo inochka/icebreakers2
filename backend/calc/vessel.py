@@ -57,7 +57,7 @@ class IceBreaker(AbstractVessel):
         elif ice_cond_val >= 14.5:
             # правки по итогам встречи с оргами
             speed = ice_cond_val * (1-self.move_pen_19_15)
-        elif ice_cond_val >= 10: #10:
+        elif ice_cond_val >= 6: #10:  # считаем, что ледокол может пройти, где угодно, так как ледовые условия с погр.
             speed = ice_cond_val * (1-self.move_pen_14_10)
         else:
             return math.inf
@@ -109,7 +109,7 @@ class Vessel(AbstractVessel):
             self.move_pen_19_15 = 1
             self.move_pen_19_15_ice = 0.5
             self.move_pen_14_10 = 1
-            self.move_pen_14_10_ice = 1
+            self.move_pen_14_10_ice = 0.7 # 1.0
         elif self.ice_class in ["Arc 4", "Arc 5", "Arc 6"]:
             self.move_pen_19_15 = 1
             self.move_pen_19_15_ice = 0.2
@@ -142,10 +142,10 @@ def calc_time(length, speed, move_pen_19_15, move_pen_14_10, ice_cond_val):
         move_pen = 0
     elif ice_cond_val >= 14.5:
         move_pen = move_pen_19_15
-    elif ice_cond_val >= 3: #10:
+    elif ice_cond_val >= 10: #10:
         move_pen = move_pen_14_10
     else:
-        move_pen = 1
+        move_pen = 1 # 1
     if move_pen == 1:
         return math.inf
     return length / (speed * (1 - move_pen))

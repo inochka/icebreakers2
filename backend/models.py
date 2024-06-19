@@ -46,14 +46,15 @@ class BaseNode(CustomBaseModel):
     id: int = -1 # идентификатор вершины графа
     lat: float
     lon: float
-    point_name: str
+    point_name: str = ""
+    status: int = 0
     rep_id: Optional[int] = None  # rep_id - обозначение на картинке, нет явного требования к использованию
 
 class BaseEdge(CustomBaseModel):
     id: int # сурроготный ключ для фронта (если нужен, пока непонятно)
     start_point_id: int = -1  # начальная вершина
     end_point_id: int = -1  # конечная вершина
-    length: float  # длина в морских милях
+    length: float = 0.  # длина в морских милях
     rep_id: Optional[int] = None  # видимо игнорируем
     status: Optional[int] = None  # на сессии ответов на вопросы сказали что игнорируем
 
@@ -89,6 +90,7 @@ class VesselPath(CustomBaseModel):
     template_name: str = ""  # имя шаблона, если расчет происходит по нему
     path_line: List[int] = []
     time_line: List[float] = []
+    caravan_id: str | None = None
 
 
 class IcebreakerPath(CustomBaseModel):
@@ -97,6 +99,7 @@ class IcebreakerPath(CustomBaseModel):
     end_date: Optional[datetime] = None
     source: int
     source_name: str
+    final_node: int = -1
     speed: Optional[float] = None  # средняя скорость на маршруте
     icebreaker_id: int = -1
     path_line: List[int] = []
@@ -126,15 +129,18 @@ class Caravan(CustomBaseModel):
     end_node: int | None = None
     vessel_ids: List[int] = []
     icebreaker_id: int = -1
-    time_estimate: float = 0
-    start_time: datetime
+    total_time_hours: float = 0 # всех судов в караване, до, в и после
+    start_time: datetime | None = None
+    end_time: datetime | None = None
     template_name: str = ""
+    icebreaker_time_fee: float = 0  # время, потраченное ледоколом на конкретно эту проводку
 
 class CaravanConfiguration(CustomBaseModel):
     caravans: List[Caravan]
     solo_vessel_ids: List[int]
-    time_estimate: float
+    total_time_hours: float
     configuration_grade: float
+    icebreakers_time_fee: float = 0
 
 
 class Grade(CustomBaseModel):
@@ -142,6 +148,7 @@ class Grade(CustomBaseModel):
     stuck_vessels:int = 0 #количество судов не достигших точки назначения
     total_time: float = 0 #общее время всех судов на маршруте в часах (на считая ледоколов) в часах
     template_name: str = ""
+    best_possible_time: float = 0
 
 class Algorythm(CustomBaseModel):
     name: str # имя алгоритма (для сохранения)

@@ -60,8 +60,9 @@ class CRUD:
         return results
 
 
-    def post_new_delete_old(self, items: List[T] | None = None, filter_cond: Dict[str, Any] | None = None):
+    def delete_by_cond(self, filter_cond: Dict[str, Any] | None = None):
         # удаляем старое
+        ids_to_remove = []
         if filter_cond:
             for idx, item in self.data.items():
                 matched = True
@@ -70,10 +71,10 @@ class CRUD:
                         matched = False
                         break
                 if matched:
-                    self.data.pop(idx)
-
-        # загружаем новое
-        self.post_or_put_list(items)
+                    ids_to_remove.append(idx)
+        # можно оптимальнее, но вообще похуй..
+        for idx in ids_to_remove:
+            self.data.pop(idx)
 
     def post(self, item: T, item_id: Any | None = None) -> Optional[T]:
         if not item_id:
