@@ -29,18 +29,33 @@
         <p class="title">Дата начала плавания:</p>
         <p>{{ date }}</p>
       </div>
+      <div class="value" v-if="time">
+        <p class="title">Время в пути:</p>
+        <p>{{ Math.round(time / 24, -1) }} {{ getWord(Math.round(time / 24, -1))}}</p>
+      </div>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import {useCommonStore} from "../../store";
+import {useCommonStore, useIceTransportStore} from "../../store";
 import {getDate} from "../../utils/getDate.ts";
-import {computed} from "vue";
+import {computed, onMounted, type Ref, ref} from "vue";
+import {storeToRefs} from "pinia";
+import {getWord} from "../../utils/getWord.ts";
 
-const {modalInfo} = useCommonStore();
+const {modalInfo} = storeToRefs(useCommonStore())
+const {pathsVessels} = storeToRefs(useIceTransportStore())
+
+const time: Ref<number | null> = ref(null)
 
 const date = computed(() => {
-  return getDate(modalInfo?.start_date, 'yyyy-MM-dd')
+  return getDate(modalInfo.value?.start_date!, 'yyyy-MM-dd')
+})
+
+onMounted(() => {
+  if (modalInfo.value?.target_name && pathsVessels.value.length) {
+    time.value = pathsVessels.value.find(vessel => vessel.vessel_id === modalInfo.value?.id)?.total_time_hours!
+  }
 })
 </script>

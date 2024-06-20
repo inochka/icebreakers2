@@ -46,6 +46,7 @@ export interface IWaybill {
 
 export interface IPath {
     vessel_id: number
+    total_time_hours: number
     type: typeTransport
     start_date: string
     end_date: string

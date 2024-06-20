@@ -24,6 +24,7 @@ import {Overlay} from "ol";
 import {Geometry} from "ol/geom";
 import {generateVectorLayer} from "../utils/createVectorLayer.ts";
 import {getDate} from "../utils/getDate.ts";
+import {getWord} from "../utils/getWord.ts";
 
 const map: Ref<Map | null> = ref(null);
 const popover = ref(undefined)
@@ -97,13 +98,18 @@ onMounted(() => {
   map.value.on('click', (evt) => {
     disposePopover();
 
-    const features: FeatureLike[] = []
+    const features: Record<string, any>[] = []
 
     map.value?.forEachFeatureAtPixel(evt.pixel, (feature) => {
           const properties = feature.getProperties()
           const {graph} = properties
 
-          if (feature && !graph) features.push(feature)
+          const findFeature = features.find((currentFeature) => {
+            if (properties.vessel_id) return properties.vessel_id === currentFeature.vessel_id
+            return properties.icebreaker_id === currentFeature.icebreaker_id
+          })
+
+          if (feature && !graph && !findFeature) features.push(feature.getProperties())
         }
     )
 
@@ -112,7 +118,7 @@ onMounted(() => {
       const strings = features.map((feature, idx) => getFeature(feature, features.length, idx))
       content.innerHTML = strings.join('\n')
     }
-  });
+  })
 
   map.value.on('pointermove', (e) => {
     const pixel = map.value?.getEventPixel(e.originalEvent);
@@ -124,18 +130,17 @@ onMounted(() => {
   map.value.on('movestart', disposePopover);
 })
 
-const getFeature = (feature: FeatureLike, length: number, idx: number) => {
-  const properties = feature.getProperties()
-  if (!properties.name) return ''
-
+const getFeature = (feature: Record<string, any>, length: number, idx: number) => {
+  if (!feature.name) return ''
   return `
-  <p><span style="color: gray">Название: </span>${properties.name}</p>
-  <p><span style="color: gray">Ледовый класс: </span>${properties.ice_class}</p>
-  <p><span style="color: gray">Скорость в узлах по чистой воде: </span>${properties.speed}</p>
-  <p><span style="color: gray">Исходный порт: </span>${properties.source_name}</p>
-  ${properties.target_name ? `<p><span style="color: gray">Конечный порт: </span>${properties.target_name}</p>` : ''}
-  ${properties.start_date ? `<p><span style="color: gray">Дата начала плавания: </span>${getDate(properties.start_date, 'yyyy-MM-dd')}</p>` : ''}
-  ${properties.dt ? `<p><span style="color: gray">Текущая дата: </span>${getDate(properties.dt, 'yyyy-MM-dd')}</p>` : ''}
+  <p><span style="color: gray">Название: </span>${feature.name}</p>
+  <p><span style="color: gray">Ледовый класс: </span>${feature.ice_class}</p>
+  <p><span style="color: gray">Скорость в узлах по чистой воде: </span>${feature.speed}</p>
+  <p><span style="color: gray">Исходный порт: </span>${feature.source_name}</p>
+  ${feature.target_name ? `<p><span style="color: gray">Конечный порт: </span>${feature.target_name}</p>` : ''}
+  ${feature.start_date ? `<p><span style="color: gray">Дата начала плавания: </span>${getDate(feature.start_date, 'yyyy-MM-dd')}</p>` : ''}
+  ${feature.dt ? `<p><span style="color: gray">Текущая дата: </span>${getDate(feature.dt, 'yyyy-MM-dd')}</p>` : ''}
+  ${feature.total_time_hours ? `<p><span style="color: gray">Время в пути: </span>${Math.round(feature.total_time_hours / 24, -1)} ${getWord(Math.round(feature.total_time_hours / 24, -1))}</p>` : ''}
   ${length > 1 && idx !== length - 1 ? '<div style="height: 10px"></div>' : ''}
  `
 }
@@ -294,7 +299,7 @@ const createGeoJson = (
     }
     // @ts-ignore
     const vectorLayer = generateVectorLayer(getFeatures,
-        {waybill, seaTransport, type}
+        {waybill, seaTransport: {...item, ...seaTransport}, type}
     )
     // @ts-ignore
     vectorLayers[item[keyIdx]] = vectorLayer
@@ -490,39 +495,39 @@ watch(() => icebreakerPoints.value, () => {
 // watch(() => tiffDate.value, () => {
 //   if (dateLayer.value) map.value?.removeLayer(dateLayer.value);
 //
-  // fetch(`../../../tiffs/${tiffDate.value}.tif`)
+// fetch(`../../../tiffs/${tiffDate.value}.tif`)
 
-  //   fetch('./example.tiff')
-  //       .then((response) => {
-  //         response.blob()
-  //       })
-  //       .then((blob) => {
-  //         const source = new GeoTIFF({
-  //           sources: [
-  //             {
-  //               blob,
-  //             },
-  //           ],
-  //         });
-  //
-  //         const layer = new WebGLTile({
-  //           source: source,
-  //         })
-  //
-  //         map.value.addLayer(layer)
-  //
-  //         dateLayer.value = layer
-  //
-  //         map.value.setView(source
-  //             .getView().then((options) => {
-  //               const center = options.center;
-  //               const resolution = options.resolutions[0];
-  //               const projection = options.projection;
-  //               return {center, resolution, projection};
-  //             })
-  //         )
-  //       })
-  // }
+//   fetch('./example.tiff')
+//       .then((response) => {
+//         response.blob()
+//       })
+//       .then((blob) => {
+//         const source = new GeoTIFF({
+//           sources: [
+//             {
+//               blob,
+//             },
+//           ],
+//         });
+//
+//         const layer = new WebGLTile({
+//           source: source,
+//         })
+//
+//         map.value.addLayer(layer)
+//
+//         dateLayer.value = layer
+//
+//         map.value.setView(source
+//             .getView().then((options) => {
+//               const center = options.center;
+//               const resolution = options.resolutions[0];
+//               const projection = options.projection;
+//               return {center, resolution, projection};
+//             })
+//         )
+//       })
+// }
 // })
 </script>
 
