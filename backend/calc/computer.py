@@ -449,7 +449,10 @@ class Computer:
                 icebreaker_waybill_before = self.navigator.convert_simple_path_to_waybill(icebreaker_simple_path_before,
                                                                                           icebreaker.start_date,
                                                                                           icebreaker.source,
-                                                                                          end_type)
+                                                                                          PathEventsType.move,
+                                                                                          PathEventsType.move,
+                                                                                          end_type
+                                                                                          )
 
             else:
                 icebreaker_waybill_before = []
@@ -467,8 +470,9 @@ class Computer:
             icebreaker_waybill_in = self.navigator.convert_simple_path_to_waybill(icebreaker_simple_path_in,
                                                                                   caravan.start_time,
                                                                                   caravan.start_node,
-                                                                                  PathEventsType.wait,
-                                                                                  PathEventsType.formation
+                                                                                  PathEventsType.formation,
+                                                                                  PathEventsType.formation,
+                                                                                  PathEventsType.wait
                                                                                   )
 
             icebreaker_paths[caravan.icebreaker_id] = IcebreakerPath(
@@ -492,19 +496,20 @@ class Computer:
                 if caravan.start_node != v.source:
                     simple_path_before = self.navigator.path_to_all[idx].paths[caravan.start_node]
                     time_before = simple_path_before.total_time_hours
-                    # TODO: учесть, что путь тоже меняется тогда..
+                    # TODO: учесть, что путь тоже меняется тогда, или делать ожидание в море
                     vessel_caravan_start_arrival_date = v.start_date + timedelta(hours=time_before) if time_before != math.inf else None
 
-                    waiting_time = 0
-                    # если приходим позже начала, то ждем в порту, а не в точке сбора
+                    # судно дожидается в море
                     waybill_before = self.navigator.convert_simple_path_to_waybill(simple_path_before, v.start_date,
-                                                                                   v.source, PathEventsType.formation)
-                    # TODO: поправить, чтобы судно дожидалось не в море, а в порту
+                                                                                   v.source, 
+                                                                                   PathEventsType.move,
+                                                                                   PathEventsType.move,
+                                                                                   PathEventsType.wait)
                     if vessel_caravan_start_arrival_date < caravan.start_time:
                         waiting_time = (caravan.start_time - vessel_caravan_start_arrival_date).seconds / 3600
-                        waybill_before = ([PathEvent(event=PathEventsType.wait, point=v.source, dt=v.start_date)] +
-                                          self.navigator.shift_waybill(waybill_before, timedelta(hours=waiting_time)))
-
+                    else:
+                        waiting_time = 0
+                        waybill_before.pop () #удаляем последний wait    
                 else:
                     if caravan.start_time > v.start_date:
                         waybill_before = [PathEvent(event=PathEventsType.wait, point=v.source, dt=v.start_date)]
@@ -524,8 +529,10 @@ class Computer:
                 # движение в караване
                 waybill_in = self.navigator.convert_simple_path_to_waybill(icebreaker_simple_path_in,
                                                                            caravan.start_time,
-                                                                           caravan.start_node, end_type,
-                                                                           PathEventsType.formation)
+                                                                           caravan.start_node,
+                                                                           PathEventsType.formation,
+                                                                           PathEventsType.formation,
+                                                                           end_type)
 
                 if end_type != PathEventsType.fin:
                     simple_path_after = self.navigator.calc_shortest_path(v, source_node=caravan.end_node,
@@ -533,7 +540,10 @@ class Computer:
                                                                           start_time=caravan_end_time)
 
                     waybill_after = self.navigator.convert_simple_path_to_waybill(simple_path_after, caravan_end_time,
-                                                                                  caravan.end_node, PathEventsType.fin)
+                                                                                caravan.end_node, 
+                                                                                PathEventsType.move,
+                                                                                PathEventsType.move,
+                                                                                PathEventsType.fin)
                     vessel_end_date = caravan_end_time + timedelta(hours=simple_path_after.total_time_hours)
                 else:
                     waybill_after = []

@@ -21,8 +21,9 @@ from backend.calc.navigator import Grade
 
 comp = Computer()
 comp.init_app(recalculate_loaded=False)
+
 start = time()
-template_name = 'full'
+template_name = 'testtest'
 template: Template =  TemplatesCRUD().get(template_name)
 if not template:
     raise Exception("Template not found")
@@ -32,8 +33,8 @@ icebreaker_paths_crud = IcebreakerPathCRUD()
 grades_crud = GradeCRUD()
 caravan_crud = CaravanCRUD()
 
-comp.planing_horizon = timedelta(days=7)
 
+comp.planing_horizon = timedelta(days=8)
 print('Template: '+ template_name)
 print('Nodes: '+ str(len(comp.base.graph.nodes)))
 print('Edges: '+ str(len(comp.base.graph.edges)))

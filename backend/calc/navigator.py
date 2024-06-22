@@ -162,10 +162,12 @@ class Navigator:
                                              dt=path_event.dt+time_shift))
 
         return shifted_waybill
-
+            
     def convert_simple_path_to_waybill(self, simple_path: SimpleVesselPath, start_time: datetime, source: int,
-                                       end_type: PathEventsType = PathEventsType.fin,
-                                       start_type: PathEventsType = PathEventsType.move):
+                                       start_type: PathEventsType,
+                                       move_type:PathEventsType,
+                                       end_type: PathEventsType
+                                       ):
         time = simple_path.total_time_hours
         # TODO min_ice_condition сделать функцию расчета худших ледовых условий на маршруте, или пока выпилить
         # TODO speed сделать метод на графе для расчета длины маршрута чтобы посчитать среднюю скорость
@@ -180,8 +182,8 @@ class Navigator:
                 if n == simple_path.path_line[-1]:
                     waybill.append(PathEvent(event=end_type, point=n, dt=next_event_time))
                 else:
-                    waybill.append(PathEvent(event=PathEventsType.move, point=n, dt=next_event_time))
-                    next_event_time = add_hours(next_event_time, simple_path.time_line[i + 1])
+                    waybill.append(PathEvent(event=move_type, point=n, dt=next_event_time))
+                    next_event_time = add_hours(start_time, simple_path.time_line[i + 1])
 
             if waybill:
                 waybill[0].event = start_type
