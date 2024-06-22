@@ -125,6 +125,7 @@ class Template(CustomBaseModel):
     # TODO: почекать, что ничего не сломалось
 
 class Caravan(CustomBaseModel):
+    uuid:str = ""
     start_node: int | None = None
     end_node: int | None = None
     vessel_ids: List[int] = []

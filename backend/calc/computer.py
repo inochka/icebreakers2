@@ -10,6 +10,7 @@ from fastapi.encoders import jsonable_encoder
 from collections import defaultdict
 import numpy as np
 import itertools
+from uuid import uuid1
 from backend.calc.base_graph import BaseGraph
 from backend.calc.context import Context
 from backend.calc.ice_cond import IceCondition
@@ -40,7 +41,7 @@ class Computer:
     estimator_samle_size = 100
 
     # почему-то выгоднее просто локально жадничать, чем ставить горизонт планирования ощутимо больше, чем шаг
-    planing_horizon: timedelta = timedelta(days=14)  # насколько мы вперед знаем расписание #timedelta(days=7)
+    planing_horizon: timedelta = timedelta(days=7)  # насколько мы вперед знаем расписание #timedelta(days=7)
     planing_step: timedelta = timedelta(days=3)  # дискретность шага планирования
     # beta - какое-то характерное время ожидания, alpha - вероятность, что придется вести одним ледоколом
     # / характерное число судов в проводке
@@ -227,6 +228,7 @@ class Computer:
         possible_caravan_starts, possible_caravan_ends = self.find_admissible_starts_ends(vessel_ids)
 
         best_caravan = Caravan(
+            uuid=str(uuid1()),
             total_time_hours = math.inf,
             icebreaker_move_time = math.inf
         )
@@ -283,6 +285,7 @@ class Computer:
 
                 if best_time > total_move_time:
                     best_caravan = Caravan(
+                        uuid=str(uuid1()),
                         total_time_hours = total_move_time, icebreaker_time_fee = icebreaker_time_fee, start_node = a,
                         end_node = b, vessel_ids = vessel_ids, icebreaker_id = icebreaker.idx, start_time = caravan_start_time
                     )
@@ -552,6 +555,7 @@ class Computer:
                     path_line=simple_path_before.path_line + icebreaker_simple_path_in.path_line + simple_path_after.path_line,
                     template_name=self.context.template_name,
                     vessel_id=idx,
+                    caravan_id=str(caravan.uuid),
                     time_line=simple_path_before.time_line + icebreaker_simple_path_in.time_line + simple_path_after.time_line
                 )
 
@@ -562,27 +566,27 @@ class Computer:
         return list(filter(lambda v: (v.start_date <= time_to) and (v.start_date >= time_from),
                            list(self.context.vessels.values())))
 
-    def get_possible_icebreakers(self, icebreakers: List[IceBreaker], time_from: datetime,
+    def get_possible_icebreakers(self, icebreakers: List[IceBreaker],
                                  time_to: datetime) -> List[IceBreaker]:
         return list(filter(lambda v: v.start_date < time_to, icebreakers))
 
     def optimal_timesheet(self) -> (List[VesselPath], List[IcebreakerPath], Grade, List[Caravan]):
-
+#определяем начало диапазона - это минимум из всех заявок
         min_time = min([v.start_date for v in self.context.vessels.values()])
-
+#определяем правую границу диапазона, это дата последней заявки + max_T
         # нужно, чтобы последние тоже успели дойти
         max_time = max([v.start_date for v in self.context.vessels.values()]) + self.max_T
 
         self.current_time = min_time
-        icebreakers = self.context.icebreakers.values()
-        icebreaker_paths = []
+        icebreakers = self.context.icebreakers.values() #список ледоколов
+        icebreaker_paths = [] #
 
         logger.info(f"Computing optimal timesheet for context {self.context.to_dict()}")
 
         result_vessels_paths = []
         caravans = []
-        possible_vessels = self.context.vessels.values()
-
+        #possible_vessels = self.context.vessels.values() #суда доступные на очередном шаге
+        possible_vessels = []
         stucked_vessels = []
         new_vessel_paths = []
         used_wessels = []
@@ -592,18 +596,18 @@ class Computer:
             if len(self.context.vessels) == len(used_wessels):
                 break  # выходим, так как все уже посчитали
 
-            possible_vessels = self.get_possible_vessels(self.current_time, self.current_time + self.planing_horizon)
-            possible_vessels += stucked_vessels
-            possible_vessels = list(set(possible_vessels).difference(set(used_wessels)))
+            possible_vessels = self.get_possible_vessels(self.current_time, self.current_time + self.planing_horizon) #выбираем все доступные суда из диапазона
+            possible_vessels += stucked_vessels #добавляем застаканные с прошлого шага
+            possible_vessels = list(set(possible_vessels).difference(set(used_wessels))) #удаляем уже проведенные
 
             logger.info(f"Current Time: {self.current_time}, Planning Horizon: {self.planing_horizon}")
             logger.info(f"Used Vessels Count: {len(used_wessels)}, Used Vessels IDs: {[v.idx for v in used_wessels]}")
             logger.info(f"Possible Vessels Count: {len(possible_vessels)}, Possible Vessels IDs: {[v.idx for v in possible_vessels]}")
             logger.info(f"Currently Stucked Vessels Count: {len(stucked_vessels)}, Currently Stucked Vessels IDs: {[v.idx for v in stucked_vessels]}")
 
-            possible_icebreakers = self.get_possible_icebreakers(icebreakers, self.current_time,
+            possible_icebreakers = self.get_possible_icebreakers(icebreakers, #фильтрует все доступные ледоколы оканчивающие проводки до окончания очередного шага
                                                                  self.current_time + self.planing_horizon)
-            self.current_time += self.planing_step
+            self.current_time += self.planing_step #сдвигаем время вперед
             new_step = self.optimal_timesheet_for_planing_horizon(vessels=possible_vessels, icebreakers=possible_icebreakers)
             if new_step == ([], [], [], []):
                 continue

@@ -1,0 +1,1 @@
+export PYTHONPATH=$PYTHONPATH:/Users/casper/hakaton/git/icebreaker2

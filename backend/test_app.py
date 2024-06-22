@@ -19,10 +19,10 @@ import json
 from time import time
 from backend.calc.navigator import Grade
 
-start = time()
 comp = Computer()
 comp.init_app(recalculate_loaded=False)
-template_name = 'testtest'
+start = time()
+template_name = 'full'
 template: Template =  TemplatesCRUD().get(template_name)
 if not template:
     raise Exception("Template not found")

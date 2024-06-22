@@ -1,14 +1,8 @@
 {
     "full": {
         "stuck_vessels": 0,
-        "total_time": 3348.843401040607,
+        "total_time": 3608.27977079306,
         "template_name": "full",
-        "best_possible_time": 0.0
-    },
-    "test_1": {
-        "stuck_vessels": 0,
-        "total_time": 331.7032218033063,
-        "template_name": "test_1",
         "best_possible_time": 0.0
     }
 }
