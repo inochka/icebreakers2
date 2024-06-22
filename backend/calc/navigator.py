@@ -315,6 +315,7 @@ class Navigator:
 
             res[k] = VesselPath(
                 total_time_hours = time,
+                total_waiting_time_hours = 0,
                 start_date = v.start_date,
                 end_date = end_date,
                 source = v.source,
