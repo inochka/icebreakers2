@@ -1,4 +1,4 @@
-import {IBaseEdge, IBaseNode, IIcebreaker, IPath, IVessel, PathArgs} from "../../types.ts";
+import {IBaseEdge, IBaseNode, ICaravan, IIcebreaker, IPath, IVessel, PathArgs} from "../../types.ts";
 
 export namespace IceTransportStore {
     export type Id = 'IceTransportStore'
@@ -20,6 +20,8 @@ export namespace IceTransportStore {
         vesselPoints: number[]
 
         tiffDate: string
+
+        caravans: ICaravan[]
     }
 
     export interface Actions {
@@ -31,5 +33,6 @@ export namespace IceTransportStore {
         getBaseNodes(): () => Promise<void>
         calculatePath(): (template: string) => Promise<void>
         getTiffDate(): (date: string) => Promise<void>
+        getCaravans(): (template: string) => Promise<void>
     }
 }

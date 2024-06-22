@@ -9,7 +9,7 @@
     <div class="legend">
       <div class="legend_elem">
         <div class="square move"></div>
-        <p>Самостоятельное движение</p>
+        <p>Самостоятельное движение судна</p>
       </div>
       <div class="legend_elem">
         <div class="square formation"></div>
@@ -25,7 +25,7 @@
       </div>
       <div class="legend_elem">
         <div class="square icebreaker-path"></div>
-        <p>Ледокол</p>
+        <p>Самостоятельное движение ледокола</p>
       </div>
     </div>
   </div>

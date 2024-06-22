@@ -26,7 +26,9 @@ export const useIceTransportStore = defineStore<
         icebreakerPoints: [],
         vesselPoints: [],
 
-        tiffDate: ''
+        tiffDate: '',
+
+        caravans: []
     }),
 
     actions: {
@@ -130,10 +132,24 @@ export const useIceTransportStore = defineStore<
                 const {data} = await requestApi({
                     method: 'get',
                     url: '/get_tiff_name/',
+                    url: '/get_tiff_name/',
                     params: {dt}
                 })
 
                 this.tiffDate = DateTime.fromISO(data).toFormat('yyyy_MM_dd')
+            } catch (e) {
+                console.error(e)
+            }
+        },
+        async getCaravans(template_name: string) {
+            try {
+                const {data} = await requestApi({
+                    method: 'get',
+                    url: '/caravans/',
+                    params: {template_name}
+                })
+
+                this.caravans = data
             } catch (e) {
                 console.error(e)
             }
