@@ -1,18 +1,18 @@
 {
     "testtest": {
         "stuck_vessels": 0,
-        "total_time": 1111.762079245094,
+        "total_time": 885.7177459630336,
         "template_name": "testtest",
         "best_possible_time": 0.0,
-        "total_waiting_time": 0.0,
-        "max_waiting_time": 0.0
+        "total_waiting_time": 30.689444444444447,
+        "max_waiting_time": 16.84861111111111
     },
     "full": {
         "stuck_vessels": 0,
-        "total_time": 3207.319362130473,
+        "total_time": 3200.7556662020093,
         "template_name": "full",
         "best_possible_time": 0.0,
-        "total_waiting_time": 229.2425,
-        "max_waiting_time": 23.2825
+        "total_waiting_time": 53.84805555555555,
+        "max_waiting_time": 18.2525
     }
 }
