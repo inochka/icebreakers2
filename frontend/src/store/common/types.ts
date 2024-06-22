@@ -1,4 +1,4 @@
-import {IVessel, tModal, TypeSidebar} from "../../types.ts";
+import {IIcebreaker, IVessel, tModal, TypeSidebar} from "../../types.ts";
 
 export namespace CommonStore {
     export type Id = 'CommonStore'
@@ -6,7 +6,7 @@ export namespace CommonStore {
     export interface State {
         openModal: boolean
         typeModal: tModal | null
-        modalInfo: IVessel | null
+        modalInfo: IVessel | IIcebreaker | null
 
         showGraph: boolean
 

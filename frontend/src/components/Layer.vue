@@ -71,7 +71,7 @@ const loadGraph = async () => {
 const onOpenInfoModal = () => {
   typeModal.value = props.type === typeTransport.VESSELS ? tModal.VESSEL : tModal.ICEBREAKER
   // @ts-ignore
-  modalInfo.value = props.layer
+  modalInfo.value = {...props.layer, type: props.type}
   openModal.value = true
 }
 

@@ -53,7 +53,7 @@ export const getStyles = (feature: FeatureLike) => {
         return stylePoint('red')
     }
 
-    if ((type === 'Point' && event === tTypeWay.MOVE) || (type === 'Point' && point === 'start')) {
+    if ((type === 'Point' && (event === tTypeWay.MOVE)) || (type === 'Point' && point === 'start')) {
         return stylePoint('blue')
     }
 
