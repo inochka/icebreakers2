@@ -19,7 +19,7 @@ import {storeToRefs} from "pinia";
 import VectorLayer from "ol/layer/Vector";
 import {IBaseEdge, IBaseNode, IIcebreaker, IPath, IVessel, IWaybill, tTypeWay, typeTransport} from "../types.ts";
 import {GeoJSONFeature} from "ol/format/GeoJSON";
-import Feature, {FeatureLike} from "ol/Feature";
+import Feature from "ol/Feature";
 import {Overlay} from "ol";
 import {Geometry} from "ol/geom";
 import {generateVectorLayer} from "../utils/createVectorLayer.ts";
@@ -51,6 +51,8 @@ const {
 
   vesselPoints,
   icebreakerPoints,
+
+  caravans
 } = storeToRefs(useIceTransportStore())
 
 const {showGraph} = storeToRefs(useCommonStore())
@@ -141,6 +143,8 @@ const getFeature = (feature: Record<string, any>, length: number, idx: number) =
   ${feature.start_date ? `<p><span style="color: gray">Дата начала плавания: </span>${getDate(feature.start_date, 'yyyy-MM-dd')}</p>` : ''}
   ${feature.dt ? `<p><span style="color: gray">Текущая дата: </span>${getDate(feature.dt, 'yyyy-MM-dd')}</p>` : ''}
   ${feature.total_time_hours ? `<p><span style="color: gray">Время в пути: </span>${Math.round(feature.total_time_hours / 24, -1)} ${getWord(Math.round(feature.total_time_hours / 24, -1))}</p>` : ''}
+  ${feature.icebreakerName ? `<p><span style="color: gray">Ледокол в проводке: </span>${feature.icebreakerName}</p>` : ''}
+  ${feature.vessels ? `<p><span style="color: gray">В проводке участвовали: </span>${feature.vessels}</p>` : ''}
   ${length > 1 && idx !== length - 1 ? '<div style="height: 10px"></div>' : ''}
  `
 }
@@ -185,12 +189,30 @@ const getCoordsByNode = (point: number, nextWay: IWaybill) => {
   return fromLonLat([currentBaseNode.lon, currentBaseNode.lat])
 }
 
+const getIcebreaker = (id: string | undefined) => {
+  if (!id || !caravans.value.length) return
+  const {icebreaker_id} = caravans.value.find(caravan => caravan.uuid === id)!
+  return icebreakers.value.find(({id}) => id === icebreaker_id)?.name
+}
+
+const getVessels = (id: number) => {
+  if (!id || !caravans.value.length) return
+  const currentCaravan = caravans.value.find(caravan => caravan.icebreaker_id === id)!
+
+  if (!currentCaravan) return
+
+  return currentCaravan.vessel_ids.map((id: number) => vessels.value.find(vessel => vessel.id === id)?.name!).join(', ')
+}
+
 const getFeatures = ({waybill, seaTransport, type}: {
   waybill: IWaybill[],
   seaTransport: IVessel | IIcebreaker,
   type: typeTransport
 }) => {
   const geoJsonData: GeoJSONFeature[] = []
+
+  const icebreaker = getIcebreaker(seaTransport?.caravan_id)
+  const vessels = getVessels(seaTransport.icebreaker_id)
 
   waybill.forEach((line: IWaybill, idx: number) => {
     const {point, event} = line
@@ -208,7 +230,7 @@ const getFeatures = ({waybill, seaTransport, type}: {
         properties: {
           ...line,
           ...seaTransport,
-          transport: type
+          transport: type,
         },
       })
 
@@ -225,7 +247,7 @@ const getFeatures = ({waybill, seaTransport, type}: {
         properties: {
           ...line,
           ...seaTransport,
-          transport: type
+          transport: type,
         },
       })
 
@@ -243,7 +265,8 @@ const getFeatures = ({waybill, seaTransport, type}: {
         properties: {
           ...line,
           ...seaTransport,
-          transport: type
+          point: type === typeTransport.VESSELS ? 'start' : '',
+          transport: type,
         },
       })
     }
@@ -258,7 +281,7 @@ const getFeatures = ({waybill, seaTransport, type}: {
         properties: {
           ...line,
           ...seaTransport,
-          transport: type
+          transport: type,
         },
       })
     }
@@ -272,7 +295,9 @@ const getFeatures = ({waybill, seaTransport, type}: {
       properties: {
         ...line,
         ...seaTransport,
-        transport: type
+        transport: type,
+        icebreakerName: event === tTypeWay.FORMATION ? icebreaker : '',
+        vessels: event === tTypeWay.FORMATION ? vessels : ''
       },
     })
   })

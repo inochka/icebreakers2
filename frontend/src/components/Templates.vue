@@ -69,7 +69,7 @@ import DeleteIcon from '../assets/icons/delete.svg'
 import Icebreakers from "./Icebreakers.vue";
 import Vessels from "./Vessels.vue";
 
-const {getVessels, getIcebreakers, calculatePath} = useIceTransportStore()
+const {getVessels, getIcebreakers, calculatePath, getCaravans} = useIceTransportStore()
 const {icebreakers, vessels, icebreakerPoints, vesselPoints} = storeToRefs(useIceTransportStore())
 
 const {typeSidebar, showGraph, isLoading, openModal, typeModal} = storeToRefs(useCommonStore())
@@ -90,14 +90,18 @@ const onRemove = (template: ITemplate) => {
   typeModal.value = tModal.DELETE
 }
 
-const applySettings = async() => {
+const applySettings = async () => {
   typeSidebar.value = TypeSidebar.LAYERS
   icebreakerPoints.value = []
   vesselPoints.value = []
 
   isLoading.value = true
 
-  await calculatePath(selectTemplate.value?.name)
+  await Promise.all([
+        await calculatePath(selectTemplate.value?.name),
+        await getCaravans(selectTemplate.value?.name)
+      ]
+  )
 
   isLoading.value = false
 }
@@ -126,7 +130,7 @@ const onSelectTemplate = async (currentTemplate: ITemplate) => {
     }),
     currentTemplate?.icebreakers?.map(async (icebreaker) => {
       await getIcebreakers(icebreaker)
-    })
+    }),
   ])
 
   isLoading.value = false

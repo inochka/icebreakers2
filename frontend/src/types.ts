@@ -24,6 +24,21 @@ export interface IVessel {
     target: number
     target_name: string
     start_date: string
+    caravan_id: string
+    type?: typeTransport
+}
+
+export interface ICaravan {
+    end_node: number
+    end_time: null
+    icebreaker_id: number
+    icebreaker_time_fee: number
+    start_node: number
+    start_time: string
+    template_name: string
+    total_time_hours: number
+    uuid: string
+    vessel_ids: number[]
 }
 
 export interface IIcebreaker {
@@ -36,6 +51,7 @@ export interface IIcebreaker {
     source: number
     source_name: string
     start_date: string
+    type?: typeTransport
 }
 
 export interface IWaybill {
