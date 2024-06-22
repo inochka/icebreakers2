@@ -50,3 +50,5 @@ coverage.xml
 *.pot
 
 *.idea/*
+.DS_Store
+backend/.DS_Store
