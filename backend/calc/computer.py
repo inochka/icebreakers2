@@ -88,12 +88,14 @@ class Computer:
             # считаем самостоятельные оценки
             context = Context(templates_crud.get("solo"))
             self.context = context
+            self.navigator.context = context
             solo_nav_grade, solo_vessel_paths = self.navigator.rough_estimate()
             vessel_paths_crud.post_or_put_list(solo_vessel_paths.values())
 
             # считаем лучшие оценки
             context = Context(templates_crud.get("best"))
             self.context = context
+            self.navigator.context = context
             best_nav_grade, best_vessel_paths = self.navigator.rough_estimate(with_best_icebreaker=True)
             vessel_paths_crud.post_or_put_list(best_vessel_paths.values())
 

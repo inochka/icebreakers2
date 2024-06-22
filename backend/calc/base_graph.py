@@ -20,8 +20,8 @@ class BaseGraph:
     def __init__(self):
         self.graph = nx.Graph()
         self.set_base_values()
-        self.graph = self.add_intersection_vertices(self.graph)
-        self.graph = self.add_midpoints_and_connect_within_triangles(self.graph, self.l0)
+        #self.graph = self.add_intersection_vertices(self.graph)
+        #self.graph = self.add_midpoints_and_connect_within_triangles(self.graph, self.l0)
 
     graph:nx.Graph
     def draw(self):
