@@ -154,8 +154,15 @@ class Computer:
 
     def calculate_total_paths_grade(self, vessels: List[VesselPath]) -> Grade:
         total_time = sum(vessel.total_time_hours for vessel in vessels if vessel.success)
+        total_waiting_time = sum(vessel.total_waiting_time_hours for vessel in vessels if vessel.success)
+        max_waiting_time = max(vessel.total_waiting_time_hours for vessel in vessels if vessel.success)
         stuck_vessels = sum(1 for vessel in vessels if not vessel.success)
-        return Grade(template_name=self.context.template_name, total_time=total_time, stuck_vessels=stuck_vessels)
+
+        return Grade(template_name=self.context.template_name, 
+                     total_time=total_time, 
+                     total_waiting_time=total_waiting_time,
+                     max_waiting_time=max_waiting_time,
+                     stuck_vessels=stuck_vessels)
 
     @staticmethod
     def update_list_of_objects(old_list: List[Any], updated_values: List[Any], id_field: str) -> List[Any]:
@@ -556,6 +563,7 @@ class Computer:
 
                 vessel_paths[idx] = VesselPath(
                     total_time_hours=total_time_hours,
+                    total_waiting_time_hours = waiting_time,
                     start_date=v.start_date,
                     end_date=vessel_end_date,
                     source=v.source,

@@ -77,6 +77,7 @@ class AllSimpleVesselPath(CustomBaseModel):
 class VesselPath(CustomBaseModel):
     waybill: List[PathEvent] = []  # описание пути
     total_time_hours: float
+    total_waiting_time_hours: float = 0
     start_date: datetime
     end_date: Optional[datetime] = None
     source: int
@@ -150,6 +151,8 @@ class Grade(CustomBaseModel):
     total_time: float = 0 #общее время всех судов на маршруте в часах (на считая ледоколов) в часах
     template_name: str = ""
     best_possible_time: float = 0
+    total_waiting_time:float = 0 
+    max_waiting_time:float = 0 
 
 class Algorythm(CustomBaseModel):
     name: str # имя алгоритма (для сохранения)
