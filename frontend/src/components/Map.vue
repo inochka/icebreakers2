@@ -363,7 +363,7 @@ const createPointLayer = ({baseEdgeStart, baseEdgeEnd, currentTransport, type}: 
     properties: {
       ...currentTransport,
       point: 'start',
-      transport: type
+      transport: type,
     }
   })
 
@@ -372,10 +372,11 @@ const createPointLayer = ({baseEdgeStart, baseEdgeEnd, currentTransport, type}: 
     geometry: {
       'type': 'Point',
       'coordinates': getCoordsByEdge(baseEdgeEnd.id)[1][0],
+
     },
     properties: {
       ...currentTransport,
-      point: 'end'
+      point: 'end',
     }
   })
 
