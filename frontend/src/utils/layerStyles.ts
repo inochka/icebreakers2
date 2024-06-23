@@ -39,7 +39,7 @@ export const getStyles = (feature: FeatureLike) => {
     const {event, point, transport} = feature.getProperties()
     const type = feature.getGeometry()?.getType()
 
-    if (type === 'Point' && transport === typeTransport.ICEBREAKERS && event === tTypeWay.MOVE) {
+    if (type === 'Point' && transport === typeTransport.ICEBREAKERS && event !== tTypeWay.WAIT) {
         return new Style({
             image: new Icon({
                 height: 20,
