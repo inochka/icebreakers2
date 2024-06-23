@@ -232,18 +232,6 @@ async def get_grades(template_name: str = ""):
 
 # TODO: добавить пост алгоритма + добавить идентификатора в vesselpath
 
-@app.get("/get_tiff_name/")
-async def get_tiff_name(dt: datetime): #2020-03-23T23:29:12.512Z
-    """
-    Получение имени файла с тифом (ближайшего к дате прогноза) по дате dt
-    """
-    #TODO  не работает так как интерполяторы рассичтываются только если нет графа
-    return_dict = {
-        "name": os.path.basename(comp.ice_cond.get_geotiff_for_datetime(dt))
-    }
-    return JSONResponse(replace_inf_nan(jsonable_encoder(return_dict)))
-
-
 @app.get("/get_tiff")
 async def get_tiff(dt: datetime):
     name = '2020_03_03.tif'
