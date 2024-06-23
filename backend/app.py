@@ -17,6 +17,7 @@ from backend.utils import replace_inf_nan
 from fastapi.middleware.cors import CORSMiddleware
 
 import json
+import os
 
 
 app = FastAPI()
@@ -236,8 +237,9 @@ async def get_tiff_name(dt: datetime): #2020-03-23T23:29:12.512Z
     """
     Получение имени файла с тифом (ближайшего к дате прогноза) по дате dt
     """
+    #TODO  не работает так как интерполяторы рассичтываются только если нет графа
     return_dict = {
-        "name": comp.ice_cond.find_appropriate_conditions_date(list(comp.ice_cond.graphs_with_conds.keys()), dt)
+        "name": os.path.basename(comp.ice_cond.get_geotiff_for_datetime(dt))
     }
     return JSONResponse(replace_inf_nan(jsonable_encoder(return_dict)))
 

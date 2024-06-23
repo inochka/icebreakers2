@@ -21,6 +21,7 @@ import geopandas
 from geocube.api.core import make_geocube
 from backend.config import tiffs_dir
 import rioxarray
+from xarray import DataArray
 
 logger = logging.getLogger(__name__)
 
@@ -283,17 +284,25 @@ class IceCondition:
             norm = plt.Normalize(vmin=ice_condition.min(), vmax=ice_condition.max())
             rgba = cmap(norm(ice_condition))
 
-            # Запись растра с новой цветовой картой
             # Создание многоканального растра (RGB)
             rgb = np.dstack((rgba[:, :, 0], rgba[:, :, 1], rgba[:, :, 2]))
 
+            # Создание xarray.DataArray для RGB каналов
+            rgb_xr = DataArray(
+                rgb, 
+                dims=["band","y", "x"], 
+                coords={
+                    "band": ["red", "green", "blue"],
+                    "y": ice_condition["y"],
+                    "x": ice_condition["x"],
+                }
+            )
+
             # Запись растра с новой цветовой картой
-            filename = dt.strftime("%Y_%m_%d") + ".tif"
-            with rioxarray.open_rasterio(tiffs_dir / filename, mode='w', driver='GTiff', count=3,
-                                         dtype='uint8') as dst:
-                dst.write(rgb[:, :, 0], 1)
-                dst.write(rgb[:, :, 1], 2)
-                dst.write(rgb[:, :, 2], 3)
+            rgb_xr.rio.to_raster(tiffs_dir / filename, driver='GTiff', dtype='uint8')
+
+            # Приведение размера данных к размеру координаты 'band'
+            rgb_xr = rgb_xr.transpose('band', 'y', 'x')
 
             # Сохранение цветовой карты отдельно
             fig, ax = plt.subplots()
@@ -302,8 +311,6 @@ class IceCondition:
             plt.savefig(tiffs_dir / (dt.strftime("%Y_%m_%d") + "_colormap.png"))
             plt.close(fig)
 
-
-            #out_grid["ice_condition"].rio.to_raster(tiffs_dir / filename)
             self.gtiffs_paths[dt] = tiffs_dir / filename
 
     def get_geotiff_for_datetime(self, dt: datetime):

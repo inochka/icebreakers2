@@ -157,9 +157,10 @@ class Computer:
         total_waiting_time = sum(vessel.total_waiting_time_hours for vessel in vessels if vessel.success)
         max_waiting_time = max(vessel.total_waiting_time_hours for vessel in vessels if vessel.success)
         stuck_vessels = sum(1 for vessel in vessels if not vessel.success)
-
+        best_possible = sum( min(self.navigator.solo_move_ways[v.vessel_id].total_time_hours,self.navigator.ice_move_ways[v.vessel_id].total_time_hours )for v in vessels     )
         return Grade(template_name=self.context.template_name, 
                      total_time=total_time, 
+                     best_possible_time=best_possible,
                      total_waiting_time=total_waiting_time,
                      max_waiting_time=max_waiting_time,
                      stuck_vessels=stuck_vessels)

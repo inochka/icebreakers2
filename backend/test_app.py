@@ -45,7 +45,8 @@ max_waiting = []
 stuck = []
 
 
-comp.planing_horizon = timedelta(days=9)
+comp.planing_horizon = timedelta(days=6)
+comp.planing_step = timedelta(days=3)
 
 print('Template: '+ template_name)
 print('Nodes: '+ str(len(comp.base.graph.nodes)))
@@ -59,7 +60,7 @@ print('solo_stuck_time: '+ str(comp.solo_stuck_time))
 print('icebreaker_time_fee: '+ str(comp.icebreaker_time_fee))
 print('typical_vessel_waiting_time: '+ str(comp.typical_vessel_waiting_time))
 
-N = 10
+N = 1
 for i in range(N):
     start = time()
     context = Context(template)
@@ -99,9 +100,11 @@ for i in range(N):
     max_waiting.append(real_grade.max_waiting_time)
     stuck.append(real_grade.stuck_vessels)
 
-print('------------------- Average:')
+print('------------------- Result:')
+print('Best possible time (h):'+str(real_grade.best_possible_time))
 print('Preprocessing time (s):'+str(preprocessing_time))
 print('Calculation time (s): '+str(sum(calc_time) / len(calc_time)))
+print('------------------- Average:')
 print('Total time (h): '+str(sum(total_time) / len(total_time)))
 print('Total waiting time (h): '+str(sum(total_waiting) / len(total_waiting)))
 print('Max waiting time (h): '+str(sum(max_waiting) / len(max_waiting)))
