@@ -33,5 +33,5 @@ services:
     #env_file:
     #  - ./frontend/.env
     environment:
-      - VITE_APP_BASE_URL='http://194.113.34.33:8000/'
+      - VITE_APP_BASE_URL=http://194.113.34.33:8000/
 

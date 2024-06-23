@@ -36,7 +36,7 @@ const styleLine = (color: string) => {
 }
 
 export const getStyles = (feature: FeatureLike) => {
-    const {event, point, transport} = feature.getProperties()
+    const {event, point, transport, graph} = feature.getProperties()
     const type = feature.getGeometry()?.getType()
 
     if (type === 'Point' && transport === typeTransport.ICEBREAKERS && event !== tTypeWay.WAIT) {
@@ -97,6 +97,8 @@ export const getStyles = (feature: FeatureLike) => {
             })
         })
     }
+
+    if (graph) return styleLine('#a6a6a6')
 
     return styleLine('gray')
 }

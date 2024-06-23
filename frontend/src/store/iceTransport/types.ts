@@ -27,12 +27,11 @@ export namespace IceTransportStore {
     export interface Actions {
         getVessels(): (idVessel?: number) => Promise<void>
         getIcebreakers(): (id?: number) => Promise<void>
-        getPathVessels(): (args: PathArgs) => Promise<void>
+        getPathVessels(): (args: PathArgs) => Promise<IPath[]>
         getPathIcebreakers(): (args: PathArgs) => Promise<void>
         getBaseEdges(): () => Promise<void>
         getBaseNodes(): () => Promise<void>
         calculatePath(): (template: string) => Promise<void>
-        getTiffDate(): (date: string) => Promise<void>
         getCaravans(): (template: string) => Promise<void>
     }
 }

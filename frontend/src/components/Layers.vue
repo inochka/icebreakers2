@@ -6,22 +6,22 @@
         <p>Показать маршрутный граф</p>
       </div>
 
-      <!--      <div>-->
-      <!--        <div class="checkbox">-->
-      <!--          <Checkbox @onChecked="onCheckedTiff" :checked="isShowTiff"/>-->
-      <!--          <p>Показать ледовую обстановку</p>-->
-      <!--        </div>-->
-      <!--        <div class="datepicker" v-if="isShowTiff">-->
-      <!--          <VueDatePicker-->
-      <!--              v-model="date"-->
-      <!--              text-input-->
-      <!--              :enable-time-picker="false"-->
-      <!--              :start-date="new Date(vessels[0].start_date)"-->
-      <!--              :min-date="new Date(vessels[0].start_date)"-->
-      <!--              @update:model-value="changeDate"-->
-      <!--          />-->
-      <!--        </div>-->
-      <!--      </div>-->
+            <div>
+              <div class="checkbox">
+                <Checkbox @onChecked="onCheckedTiff" :checked="isShowTiff"/>
+                <p>Показать ледовую обстановку</p>
+              </div>
+              <div class="datepicker" v-if="isShowTiff">
+                <VueDatePicker
+                    v-model="date"
+                    text-input
+                    :enable-time-picker="false"
+                    :start-date="new Date(vessels[0].start_date)"
+                    :min-date="new Date(vessels[0].start_date)"
+                    @update:model-value="changeDate"
+                />
+              </div>
+            </div>
     </div>
 
     <Icebreakers
@@ -54,10 +54,10 @@ import {IIcebreaker, IPath, IVessel, tModal, TypeLayersForMap, TypeSidebar, type
 import Icebreakers from "./Icebreakers.vue";
 import Vessels from "./Vessels.vue";
 
-const {getPathVessels, getTiffDate, getPathIcebreakers} = useIceTransportStore()
+const {getPathVessels, getPathIcebreakers} = useIceTransportStore()
 const {vessels, pathsVessels, tiffDate, pathsIcebreakers} = storeToRefs(useIceTransportStore())
 
-const {openModal, typeModal, showGraph, typeSidebar} = storeToRefs(useCommonStore())
+const {openModal, typeModal, showGraph, typeSidebar, grade} = storeToRefs(useCommonStore())
 
 const {selectTemplate} = storeToRefs(useTemplateStore())
 
@@ -74,6 +74,8 @@ const onOpenGantt = () => {
 const changeTemplate = () => {
   typeSidebar.value = TypeSidebar.TEMPLATES
   pathsVessels.value = []
+  tiffDate.value = null
+  grade.value = null
   pathsIcebreakers.value = []
 }
 
@@ -106,16 +108,16 @@ const getUniqData = (list: IVessel[] | IIcebreaker[], keyIdx: 'vessel_id' | 'ice
   }, structuredClone(toRaw(paths)));
 }
 
-// const onCheckedTiff = () => {
-//   isShowTiff.value = !isShowTiff.value
-//
-//   if (!isShowTiff.value) tiffDate.value = ''
-// }
-//
-// const changeDate = (modelData: string) => {
-//   date.value = modelData
-//   getTiffDate(date.value.toISOString().replaceAll('.000Z', ''))
-// }
+const onCheckedTiff = () => {
+  isShowTiff.value = !isShowTiff.value
+
+  if (!isShowTiff.value) tiffDate.value = ''
+}
+
+const changeDate = (modelData: string) => {
+  date.value = modelData
+  tiffDate.value = date.value.toISOString().split('T')[0]
+}
 </script>
 
 <style lang="scss" scoped>

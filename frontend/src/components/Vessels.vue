@@ -5,6 +5,10 @@
         <Checkbox @onChecked="onCheckAll" :checked="checkAllVessels"/>
         <h3 class="title">Заявка на проводку</h3>
       </div>
+      <div v-if="grade?.total_time">
+        {{`${Math.round(grade.total_time / 24, -1)}`}}
+        {{ getWord(Math.round(grade.total_time / 24, -1)) }}
+      </div>
       <ArrowIcon
           @click="isVisibleVessels = !isVisibleVessels"
           class="icon"
@@ -32,8 +36,9 @@ import Checkbox from "./UI/Checkbox.vue";
 import ArrowIcon from '../assets/icons/arrow.svg'
 import {ref} from "vue";
 import {storeToRefs} from "pinia";
-import {useIceTransportStore} from "../store";
+import {useCommonStore, useIceTransportStore} from "../store";
 import Layer from "./Layer.vue";
+import {getWord} from "../utils/getWord.ts";
 
 type Props = {
   typeLayer: TypeLayersForMap
@@ -42,6 +47,8 @@ type Props = {
 const props = defineProps<Props>()
 
 const {vessels, pathsVessels, vesselPoints} = storeToRefs(useIceTransportStore())
+
+const {grade} = storeToRefs(useCommonStore())
 
 const isVisibleVessels = ref(true)
 
