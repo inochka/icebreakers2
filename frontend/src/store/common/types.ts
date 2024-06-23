@@ -1,4 +1,4 @@
-import {IIcebreaker, IVessel, tModal, TypeSidebar} from "../../types.ts";
+import {IGrade, IIcebreaker, IVessel, tModal, TypeSidebar} from "../../types.ts";
 
 export namespace CommonStore {
     export type Id = 'CommonStore'
@@ -13,5 +13,11 @@ export namespace CommonStore {
         typeSidebar: TypeSidebar
 
         isLoading: boolean
+
+        grade: IGrade | null
+    }
+
+    export interface Actions {
+        getGrade(): (template: string) => Promise<void>
     }
 }

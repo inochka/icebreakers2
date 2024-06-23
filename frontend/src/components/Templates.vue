@@ -50,8 +50,20 @@
         <button class="footer_button" @click="onOpenModalCreating">
           Добавить шаблон
         </button>
-        <button :disabled="!selectTemplate" class="footer_button" @click="applySettings">
-          Рассчитать
+        <button
+            :disabled="!selectTemplate"
+            class="footer_button"
+            @click="applySettings"
+        >
+          {{ pathsList.length ? 'Сделать перерассчёт' : 'Рассчитать' }}
+        </button>
+        <button
+            v-if="pathsList.length"
+            :disabled="!selectTemplate"
+            class="footer_button"
+            @click="showRoutes"
+        >
+          Отобразить маршруты
         </button>
       </div>
     </div>
@@ -69,15 +81,25 @@ import DeleteIcon from '../assets/icons/delete.svg'
 import Icebreakers from "./Icebreakers.vue";
 import Vessels from "./Vessels.vue";
 
-const {getVessels, getIcebreakers, calculatePath, getCaravans} = useIceTransportStore()
-const {icebreakers, vessels, icebreakerPoints, vesselPoints} = storeToRefs(useIceTransportStore())
+const {
+  getVessels,
+  getIcebreakers,
+  calculatePath,
+  getCaravans,
+  getPathVessels,
+  getPathIcebreakers
+} = useIceTransportStore()
+const {icebreakers, vessels, icebreakerPoints, vesselPoints, pathsVessels} = storeToRefs(useIceTransportStore())
 
+const {getGrade} = useCommonStore()
 const {typeSidebar, showGraph, isLoading, openModal, typeModal} = storeToRefs(useCommonStore())
 
 const {getTemplates} = useTemplateStore()
 const {templates, selectTemplate, removingTemplate} = storeToRefs(useTemplateStore())
 
 const isChoosingTemplate = ref(true)
+
+const pathsList = ref([])
 
 onMounted(async () => {
   await getTemplates()
@@ -90,6 +112,18 @@ const onRemove = (template: ITemplate) => {
   typeModal.value = tModal.DELETE
 }
 
+const showRoutes = async () => {
+  typeSidebar.value = TypeSidebar.LAYERS
+  icebreakerPoints.value = []
+  pathsVessels.value = []
+
+  await Promise.all([
+        await getCaravans(selectTemplate.value?.name),
+        await getGrade(selectTemplate.value?.name)
+      ]
+  )
+}
+
 const applySettings = async () => {
   typeSidebar.value = TypeSidebar.LAYERS
   icebreakerPoints.value = []
@@ -99,7 +133,7 @@ const applySettings = async () => {
 
   await Promise.all([
         await calculatePath(selectTemplate.value?.name),
-        await getCaravans(selectTemplate.value?.name)
+        await getCaravans(selectTemplate.value?.name),
       ]
   )
 
@@ -124,7 +158,8 @@ const onSelectTemplate = async (currentTemplate: ITemplate) => {
   icebreakers.value = []
   vessels.value = []
 
-  await Promise.all([
+  const [paths] = await Promise.all([
+    await getPathVessels({template_name: selectTemplate.value?.name}),
     currentTemplate?.vessels?.map(async (vessel) => {
       await getVessels(vessel)
     }),
@@ -132,6 +167,8 @@ const onSelectTemplate = async (currentTemplate: ITemplate) => {
       await getIcebreakers(icebreaker)
     }),
   ])
+
+pathsList.value = paths
 
   isLoading.value = false
 }

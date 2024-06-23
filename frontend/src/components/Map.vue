@@ -11,7 +11,7 @@ import Map from 'ol/Map';
 import View from 'ol/View';
 import TileLayer from 'ol/layer/Tile';
 import {onMounted, Ref, ref, watch} from "vue";
-import {OSM} from "ol/source";
+import {GeoTIFF, OSM} from "ol/source";
 import 'ol/ol.css';
 import {fromLonLat, transform} from 'ol/proj';
 import {useCommonStore, useIceTransportStore} from "../store";
@@ -25,6 +25,7 @@ import {Geometry} from "ol/geom";
 import {generateVectorLayer} from "../utils/createVectorLayer.ts";
 import {getDate} from "../utils/getDate.ts";
 import {getWord} from "../utils/getWord.ts";
+import {WebGLTile} from "ol/layer";
 
 const map: Ref<Map | null> = ref(null);
 const popover = ref(undefined)
@@ -34,7 +35,7 @@ const vectorLayersIcebreakers: Ref<Record<string, VectorLayer<Feature<Geometry>>
 
 const graph: Ref<Record<string, VectorLayer<Feature<Geometry>>>> = ref({})
 
-// const dateLayer: Ref<Record<string, VectorLayer<Feature<Geometry>>>> = ref({})
+const dateLayer: Ref<Record<string, VectorLayer<Feature<Geometry>>>> = ref({})
 
 const vesselMarkers: Ref<Record<string, VectorLayer<Feature<Geometry>>>> = ref({})
 const icebreakerMarkers: Ref<Record<string, VectorLayer<Feature<Geometry>>>> = ref({})
@@ -52,12 +53,14 @@ const {
   vesselPoints,
   icebreakerPoints,
 
-  caravans
+  caravans,
+
+  tiffDate
 } = storeToRefs(useIceTransportStore())
 
 const {showGraph} = storeToRefs(useCommonStore())
 
-onMounted(() => {
+onMounted(async () => {
   map.value = new Map({
     target: document.getElementById('map') as HTMLDivElement,
     layers: [
@@ -145,6 +148,7 @@ const getFeature = (feature: Record<string, any>, length: number, idx: number) =
   ${feature.total_time_hours ? `<p><span style="color: gray">Время в пути: </span>${Math.round(feature.total_time_hours / 24, -1)} ${getWord(Math.round(feature.total_time_hours / 24, -1))}</p>` : ''}
   ${feature.icebreakerName ? `<p><span style="color: gray">Ледокол в проводке: </span>${feature.icebreakerName}</p>` : ''}
   ${feature.vessels ? `<p><span style="color: gray">В проводке участвовали: </span>${feature.vessels}</p>` : ''}
+  ${feature.point_name ? `<p><span style="color: gray">Текущая точка: </span>${feature.point_name}</p>` : ''}
   ${length > 1 && idx !== length - 1 ? '<div style="height: 10px"></div>' : ''}
  `
 }
@@ -219,6 +223,8 @@ const getFeatures = ({waybill, seaTransport, type}: {
 
     const coordinates = getCoordsByNode(point, waybill[idx + 1])
 
+    const {point_name} = baseNodes.value.find((node: IBaseNode) => node.id === point)!
+
     if (event === tTypeWay.WAIT) {
       geoJsonData.push({
         type: 'Feature',
@@ -231,6 +237,7 @@ const getFeatures = ({waybill, seaTransport, type}: {
           ...line,
           ...seaTransport,
           transport: type,
+          point_name
         },
       })
 
@@ -248,6 +255,7 @@ const getFeatures = ({waybill, seaTransport, type}: {
           ...line,
           ...seaTransport,
           transport: type,
+          point_name
         },
       })
 
@@ -267,6 +275,7 @@ const getFeatures = ({waybill, seaTransport, type}: {
           ...seaTransport,
           point: type === typeTransport.VESSELS ? 'start' : '',
           transport: type,
+          point_name
         },
       })
     }
@@ -282,6 +291,7 @@ const getFeatures = ({waybill, seaTransport, type}: {
           ...line,
           ...seaTransport,
           transport: type,
+          point_name
         },
       })
     }
@@ -297,7 +307,8 @@ const getFeatures = ({waybill, seaTransport, type}: {
         ...seaTransport,
         transport: type,
         icebreakerName: event === tTypeWay.FORMATION ? icebreaker : '',
-        vessels: event === tTypeWay.FORMATION ? vessels : ''
+        vessels: event === tTypeWay.FORMATION ? vessels : '',
+        point_name
       },
     })
   })
@@ -518,43 +529,43 @@ watch(() => icebreakerPoints.value, () => {
   changeMarkersVisibility(icebreakerPoints.value, icebreakerMarkers.value, typeTransport.ICEBREAKERS)
 }, {deep: true})
 
-// watch(() => tiffDate.value, () => {
-//   if (dateLayer.value) map.value?.removeLayer(dateLayer.value);
-//
-// fetch(`../../../tiffs/${tiffDate.value}.tif`)
+watch(() => tiffDate.value, async () => {
+  if (dateLayer.value) map.value?.removeLayer(dateLayer.value)
 
-//   fetch('./example.tiff')
-//       .then((response) => {
-//         response.blob()
-//       })
-//       .then((blob) => {
-//         const source = new GeoTIFF({
-//           sources: [
-//             {
-//               blob,
-//             },
-//           ],
-//         });
-//
-//         const layer = new WebGLTile({
-//           source: source,
-//         })
-//
-//         map.value.addLayer(layer)
-//
-//         dateLayer.value = layer
-//
-//         map.value.setView(source
-//             .getView().then((options) => {
-//               const center = options.center;
-//               const resolution = options.resolutions[0];
-//               const projection = options.projection;
-//               return {center, resolution, projection};
-//             })
-//         )
-//       })
-// }
-// })
+  if (!tiffDate.value) return
+
+  const response = await fetch(`${import.meta.env.VITE_APP_BASE_URL}get_tiff?dt=${tiffDate.value}`)
+  const blob = await response.blob()
+  const source = new GeoTIFF({
+    sources: [
+      {
+        blob: blob,
+      },
+    ],
+  });
+
+  const layer = new WebGLTile({
+    source: source,
+  })
+
+  dateLayer.value = layer
+
+  map.value.addLayer(layer)
+
+  map.value.setView(source
+      .getView().then((options) => {
+        const center = transform(options.center, 'EPSG:4326', 'EPSG:3857')
+        const resolution = options.resolutions[0];
+        return {
+          resolution,
+          center,
+          constrainResolution: true,
+          maxZoom: 0,
+          zoom: 0
+        }
+      })
+  )
+})
 </script>
 
 <style scoped>
