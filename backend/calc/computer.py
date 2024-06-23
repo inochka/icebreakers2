@@ -530,7 +530,7 @@ class Computer:
                 if caravan.end_node == v.target:
                     end_type = PathEventsType.fin
                 else:
-                    end_type = PathEventsType.move
+                    end_type = PathEventsType.wait
 
                 # движение в караване
                 waybill_in = self.navigator.convert_simple_path_to_waybill(icebreaker_simple_path_in,

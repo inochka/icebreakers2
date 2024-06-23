@@ -8,7 +8,10 @@ networks:
 services:
   timetable_planner:
     container_name: timetable_planner
-    image: timetable_back
+    build:
+      context: ./
+      dockerfile: Dockerfile
+    image: timetable_planner
     command: uvicorn backend.app:app --host 0.0.0.0 --port 8000
     networks:
       - timetable-services
@@ -21,6 +24,9 @@ services:
   timetable_front:
     container_name: timetable_front
     image: timetable_front
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
     command: npm run dev
     networks:
       - timetable-services
