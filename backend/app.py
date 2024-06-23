@@ -245,8 +245,11 @@ async def get_tiff_name(dt: datetime): #2020-03-23T23:29:12.512Z
 
 
 @app.get("/get_tiff")
-async def get_tiff(name:str):
-    return FileResponse(tiffs_dir / name)
+async def get_tiff(dt: datetime):
+    name = '2020_03_03.tif'
+    if not os.path.isfile(tiffs_dir / name):
+        raise HTTPException(status_code=404, detail="File not found")
+    return FileResponse(tiffs_dir / name, media_type='image/tiff',filename=name)
 
 #if __name__ == "__main__":
 #    import uvicorn

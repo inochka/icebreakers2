@@ -47,6 +47,7 @@ class IceCondition:
     base_graph: BaseGraph
 
     def __init__(self, file_path: Path | str, graph: Graph):
+        
         if os.path.exists(data_dir / self.graph_filename):
             with open(data_dir / self.graph_filename, "rb") as f:
                 self.graphs_with_conds = pickle.load(f)

@@ -46,7 +46,7 @@ stuck = []
 
 
 comp.planing_horizon = timedelta(days=6)
-comp.planing_step = timedelta(days=3)
+comp.planing_step = timedelta(days=2,hours=12)
 
 print('Template: '+ template_name)
 print('Nodes: '+ str(len(comp.base.graph.nodes)))
@@ -60,7 +60,7 @@ print('solo_stuck_time: '+ str(comp.solo_stuck_time))
 print('icebreaker_time_fee: '+ str(comp.icebreaker_time_fee))
 print('typical_vessel_waiting_time: '+ str(comp.typical_vessel_waiting_time))
 
-N = 1
+N = 6
 for i in range(N):
     start = time()
     context = Context(template)
