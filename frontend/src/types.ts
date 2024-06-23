@@ -41,6 +41,15 @@ export interface ICaravan {
     vessel_ids: number[]
 }
 
+export interface IGrade {
+    "stuck_vessels": number
+    "total_time": number
+    "template_name": string
+    "best_possible_time": number
+    "total_waiting_time": number
+    "max_waiting_time": number
+}
+
 export interface IIcebreaker {
     id: number
     name: string

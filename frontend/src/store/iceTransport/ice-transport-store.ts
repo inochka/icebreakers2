@@ -109,7 +109,10 @@ export const useIceTransportStore = defineStore<
                     params: {vessel_id, template_name}
                 })
 
-                if (data[0]) this.pathsVessels.push(data[0])
+                console.log(vessel_id)
+                if (data[0] && vessel_id) this.pathsVessels.push(data[0])
+
+                return data
             } catch (e) {
                 console.error(e)
             }
@@ -123,20 +126,6 @@ export const useIceTransportStore = defineStore<
                 })
 
                 if (data[0]) this.pathsIcebreakers.push(data[0])
-            } catch (e) {
-                console.error(e)
-            }
-        },
-        async getTiffDate(dt: string) {
-            try {
-                const {data} = await requestApi({
-                    method: 'get',
-                    url: '/get_tiff_name/',
-                    url: '/get_tiff_name/',
-                    params: {dt}
-                })
-
-                this.tiffDate = DateTime.fromISO(data).toFormat('yyyy_MM_dd')
             } catch (e) {
                 console.error(e)
             }
