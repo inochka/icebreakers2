@@ -33,7 +33,15 @@
 
 Переходим в корневую папку и запускаем:
 
-   `docker compose -f docker-compose.yml up -d`
+виртуалка user arc_cats
+
+добавление в 
+
+если первый запуск git clone
+иначе git fetch
+      git rebase
+
+   `docker compose -f docker-compose-dev.yml up -d`
 
 
 # Особенности работы бэка
