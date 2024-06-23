@@ -183,7 +183,7 @@ class Computer:
         solo_movement_times = [self.navigator.solo_move_ways[idx].total_time_hours for idx in vessel_ids]
         # TODO: подумать над правильным штрафом за простой на данном этапе
         best_ib_movement_times = [self.navigator.ice_move_ways[idx].total_time_hours + self.solo_stuck_time +
-                                  ((self.current_time - self.context.vessels[idx].start_date).seconds / 3600) ** 2 / self.typical_vessel_waiting_time
+                                  ((self.current_time - self.context.vessels[idx].start_date).days * 24) ** 2 / self.typical_vessel_waiting_time
                                   for idx in vessel_ids]
         return sum(solo_time if solo_time < math.inf else best_ib_time for solo_time, best_ib_time
                    in zip(solo_movement_times, best_ib_movement_times))
@@ -267,8 +267,8 @@ class Computer:
                                          timedelta(hours=icebreaker_path_times_to_all.paths[a].total_time_hours))
 
                 total_move_time = sum(
-                    [(caravan_start_time - vessel.start_date).seconds for vessel in vessels_obj.values()])
-                total_move_time = total_move_time / 3600
+                    [(caravan_start_time - vessel.start_date).days for vessel in vessels_obj.values()])
+                total_move_time = total_move_time * 24
 
                 total_move_time += sum(
                     [self.navigator.path_from_all[idx].paths[b].total_time_hours for idx in vessel_ids])
@@ -291,7 +291,7 @@ class Computer:
 
                 # TODO: поменять на честные ледоколы
                 #total_move_time += self.navigator.best_icebreaker_paths_times[icebreaker.source][a]
-                icebreaker_time_fee = time_in_caravan + (caravan_start_time - icebreaker.start_date).seconds / 3600
+                icebreaker_time_fee = time_in_caravan + (caravan_start_time - icebreaker.start_date).days * 24
 
                 if best_time > total_move_time:
                     best_caravan = Caravan(
@@ -451,7 +451,7 @@ class Computer:
                 end_type = PathEventsType.formation
                 ib_arrival_date = icebreaker.start_date + timedelta(hours=icebreaker_simple_path_before.total_time_hours)
                 if ib_arrival_date < caravan.start_time:
-                    waiting_time = (caravan.start_time - ib_arrival_date).seconds / 3600
+                    waiting_time = (caravan.start_time - ib_arrival_date).days * 24
                     end_type = PathEventsType.wait
 
                 icebreaker_waybill_before = self.navigator.convert_simple_path_to_waybill(icebreaker_simple_path_before,
@@ -500,8 +500,7 @@ class Computer:
                 v = self.context.vessels[idx]
                 # движение до каравана
                 waiting_time = 0
-                # обрабатываем случай сборки каравана в порту
-                if caravan.start_node != v.source:
+                if caravan.start_node != v.source: # формирование каравана в море
                     simple_path_before = self.navigator.path_to_all[idx].paths[caravan.start_node]
                     time_before = simple_path_before.total_time_hours
                     # TODO: учесть, что путь тоже меняется тогда, или делать ожидание в море
@@ -514,14 +513,14 @@ class Computer:
                                                                                    PathEventsType.move,
                                                                                    PathEventsType.wait)
                     if vessel_caravan_start_arrival_date < caravan.start_time:
-                        waiting_time = (caravan.start_time - vessel_caravan_start_arrival_date).seconds / 3600
+                        waiting_time = (caravan.start_time - vessel_caravan_start_arrival_date).days * 24
                     else:
                         waybill_before.pop () #удаляем последний wait    
-                else:
+                else: #caravan.start_node == v.source формирование в порту
                     if caravan.start_time > v.start_date:
                         waybill_before = [PathEvent(event=PathEventsType.wait, point=v.source, dt=v.start_date)]
-                        time_before = (caravan.start_time - v.start_date).seconds / 3600
-                        simple_path_before = SimpleVesselPath(total_time_hours=time_before, path_line=[v.source],
+                        waiting_time = (caravan.start_time - v.start_date).days * 24
+                        simple_path_before = SimpleVesselPath(total_time_hours=waiting_time, path_line=[v.source],
                                                               time_line=[0])
                     else:
                         waybill_before=[]

@@ -39,9 +39,17 @@
 
 если первый запуск git clone
 иначе git fetch
-      git rebase
+      git pull --rebase  <-это вроде как безопаснее чем git rebase
 
    `docker compose -f docker-compose-dev.yml up -d`
+
+посмотреть контейнеры
+sudo docker ps -a 
+sudo docker logs <??>
+sudo docker rm <??>
+sudo docker images
+sudo docker rmi <??>
+sudo docker system prune
 
 
 # Особенности работы бэка
