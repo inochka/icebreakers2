@@ -45,22 +45,24 @@ max_waiting = []
 stuck = []
 
 
-comp.planing_horizon = timedelta(days=6)
-comp.planing_step = timedelta(days=3)
+comp.planing_horizon = timedelta(days=7)
+comp.planing_step = timedelta(days=3,hours=0)
+comp.solo_stuck_time = 14.0 * 24 # вклад во время в часах, предполагая, что судно придется вести отдельным ледоколом #1e6
+comp.icebreaker_time_fee = 3.  # насколько время ледокола дороже времени обычного судна
+comp.typical_vessel_waiting_time = 3. * 24  # характерное допустимое время ожидания судна в порту
 
 print('Template: '+ template_name)
 print('Nodes: '+ str(len(comp.base.graph.nodes)))
 print('Edges: '+ str(len(comp.base.graph.edges)))
 print('max_ships_per_icebreaker: '+ str(comp.max_ships_per_icebreaker))
 print('max_T: '+ str(comp.max_T))
-print('time_estimate_gate: '+ str(comp.time_estimate_gate))
 print('planing_horizon: '+ str(comp.planing_horizon))
 print('planing_step: '+ str(comp.planing_step))
 print('solo_stuck_time: '+ str(comp.solo_stuck_time))
 print('icebreaker_time_fee: '+ str(comp.icebreaker_time_fee))
 print('typical_vessel_waiting_time: '+ str(comp.typical_vessel_waiting_time))
 
-N = 1
+N = 10
 for i in range(N):
     start = time()
     context = Context(template)
@@ -79,7 +81,6 @@ for i in range(N):
     print('Edges: '+ str(len(comp.base.graph.edges)))
     print('max_ships_per_icebreaker: '+ str(comp.max_ships_per_icebreaker))
     print('max_T: '+ str(comp.max_T))
-    print('time_estimate_gate: '+ str(comp.time_estimate_gate))
     print('planing_horizon: '+ str(comp.planing_horizon))
     print('planing_step: '+ str(comp.planing_step))
     print('solo_stuck_time: '+ str(comp.solo_stuck_time))
