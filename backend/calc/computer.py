@@ -498,7 +498,7 @@ class Computer:
             for idx in caravan.vessel_ids:
                 v = self.context.vessels[idx]
                 # движение до каравана
-
+                waiting_time = 0
                 # обрабатываем случай сборки каравана в порту
                 if caravan.start_node != v.source:
                     simple_path_before = self.navigator.path_to_all[idx].paths[caravan.start_node]
@@ -515,7 +515,6 @@ class Computer:
                     if vessel_caravan_start_arrival_date < caravan.start_time:
                         waiting_time = (caravan.start_time - vessel_caravan_start_arrival_date).seconds / 3600
                     else:
-                        waiting_time = 0
                         waybill_before.pop () #удаляем последний wait    
                 else:
                     if caravan.start_time > v.start_date:

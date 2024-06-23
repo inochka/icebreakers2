@@ -1,5 +1,5 @@
 from fastapi import FastAPI, HTTPException
-from fastapi.responses import JSONResponse
+from fastapi.responses import JSONResponse, FileResponse
 from fastapi.encoders import jsonable_encoder
 from typing import List, Dict
 from backend.models import (VesselModel, IcebreakerModel, BaseNode, BaseEdge, Template, IcebreakerPath,
@@ -12,9 +12,10 @@ from backend.crud.crud_types import TemplatesCRUD, VesselPathCRUD, IcebreakerPat
 #from backend.calculate_timetable import computator, ice_cond
 from backend.calc.context import Context
 from backend.calc.computer import Computer
-from backend.config import recalculate_loaded
+from backend.config import recalculate_loaded, tiffs_dir
 from backend.utils import replace_inf_nan
 from fastapi.middleware.cors import CORSMiddleware
+
 import json
 
 
@@ -230,13 +231,20 @@ async def get_grades(template_name: str = ""):
 
 # TODO: добавить пост алгоритма + добавить идентификатора в vesselpath
 
-@app.get("/get_tiff_name/", response_model=datetime)
-async def get_tiff_name(dt: datetime):
+@app.get("/get_tiff_name/")
+async def get_tiff_name(dt: datetime): #2020-03-23T23:29:12.512Z
     """
     Получение имени файла с тифом (ближайшего к дате прогноза) по дате dt
     """
-    pass
-    #return ice_cond.find_appropriate_conditions_date(list(ice_cond.dfs.keys()), dt)
+    return_dict = {
+        "name": comp.ice_cond.find_appropriate_conditions_date(list(comp.ice_cond.graphs_with_conds.keys()), dt)
+    }
+    return JSONResponse(replace_inf_nan(jsonable_encoder(return_dict)))
+
+
+@app.get("/get_tiff")
+async def get_tiff(name:str):
+    return FileResponse(tiffs_dir / name)
 
 #if __name__ == "__main__":
 #    import uvicorn
