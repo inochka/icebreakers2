@@ -8,11 +8,10 @@
         bar-start="start_date"
         bar-end="end_date"
     >
-      <div v-if="rowBarListVessels.length" class="section">Суда</div>
-      <g-gantt-row v-for="(path, idx) in rowBarListVessels" :bars="path.bars" :key="idx" :label="path.label"/>
-
       <div v-if="rowBarListIcebreakers.length" class="section">Ледоколы</div>
       <g-gantt-row v-for="(path, idx) in rowBarListIcebreakers" :bars="path.bars" :key="idx" :label="path.label"/>
+      <div v-if="rowBarListVessels.length" class="section">Суда</div>
+      <g-gantt-row v-for="(path, idx) in rowBarListVessels" :bars="path.bars" :key="idx" :label="path.label"/>
     </g-gantt-chart>
   </div>
 </template>

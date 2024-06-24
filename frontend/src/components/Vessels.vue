@@ -5,9 +5,9 @@
         <Checkbox @onChecked="onCheckAll" :checked="checkAllVessels"/>
         <h3 class="title">Заявка на проводку</h3>
       </div>
-      <div v-if="grade?.total_time">
-        {{`${Math.round(grade.total_time / 24, -1)}`}}
-        {{ getWord(Math.round(grade.total_time / 24, -1)) }}
+      <div v-if="grade?.total_time" class="time">
+        {{Math.round(grade.total_time, -1)}}
+        {{ getWord(Math.round(grade.total_time, -1)) }}
       </div>
       <ArrowIcon
           @click="isVisibleVessels = !isVisibleVessels"
@@ -46,7 +46,7 @@ type Props = {
 
 const props = defineProps<Props>()
 
-const {vessels, pathsVessels, vesselPoints} = storeToRefs(useIceTransportStore())
+const {vessels, pathsVessels, vesselPoints, icebreakerPoints} = storeToRefs(useIceTransportStore())
 
 const {grade} = storeToRefs(useCommonStore())
 
@@ -62,11 +62,17 @@ const onCheckAll = async () => {
   checkAllVessels.value = !checkAllVessels.value
 
   if (!checkAllVessels.value) {
-    props.typeLayer === TypeLayersForMap.PATH ? pathsVessels.value = [] : vesselPoints.value = []
+    if (props.typeLayer === TypeLayersForMap.PATH) {
+      pathsVessels.value = []
+    } else {
+      vesselPoints.value = []
+    }
+    // props.typeLayer === TypeLayersForMap.PATH ? pathsVessels.value = [] : vesselPoints.value = []
     isChangeParentVessel.value = true
     return;
   }
 
+  isChangeParentVessel.value = false
   emits('getAllData', vessels.value)
 }
 
@@ -78,4 +84,8 @@ const changeParentCheckbox = () => {
 
 <style lang="scss" scoped>
 @import "./src/assets/styles/icons.scss";
+
+.time {
+  font-size: 12px;
+}
 </style>
