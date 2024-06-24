@@ -62,7 +62,7 @@ print('solo_stuck_time: '+ str(comp.solo_stuck_time))
 print('icebreaker_time_fee: '+ str(comp.icebreaker_time_fee))
 print('typical_vessel_waiting_time: '+ str(comp.typical_vessel_waiting_time))
 
-N = 10
+N = 1
 for i in range(N):
     start = time()
     context = Context(template)

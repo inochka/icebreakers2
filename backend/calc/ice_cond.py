@@ -62,12 +62,11 @@ class IceCondition:
                 logger.info(f"Calculating weights for base graph at {dt}")
                 self.graphs_with_conds[dt] = self.obtain_condition_for_graph(graph, dt)
 
-        if not os.listdir(tiffs_dir):
-            self.make_geotiffs_for_ice_conditions()
+        self.make_geotiffs_for_ice_conditions()
 
             # кэшируем расчеты
-            with open(data_dir / self.graph_filename, "wb") as f:
-                pickle.dump(self.graphs_with_conds, f)
+        with open(data_dir / self.graph_filename, "wb") as f:
+            pickle.dump(self.graphs_with_conds, f)
 
 
 
@@ -286,7 +285,7 @@ class IceCondition:
             ice_condition[np.isnan(ice_condition)] = 0  # Заменяем NaN на 0
 
             # Создание цветовой карты и преобразование в RGB
-            cmap = plt.get_cmap('Oranges')
+            cmap = plt.get_cmap('cool')
             norm = plt.Normalize(vmin=np.nanmin(ice_condition), vmax=np.nanmax(ice_condition))
             rgba = cmap(norm(ice_condition))
 
