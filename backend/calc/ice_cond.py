@@ -1,27 +1,24 @@
 import logging
+import os
+import pickle
 from datetime import datetime
 from pathlib import Path
 from typing import List
-import pickle
+
 import geopandas as gpd
 import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
-import rioxarray
+import rasterio
 from dateutil import parser
-import os
-from geocube.api.core import make_geocube
 from networkx import Graph
+from rasterio.transform import from_origin
 from scipy.interpolate import LinearNDInterpolator
-import matplotlib.pyplot as plt
-#plt.ion() #macOS problem
+
+# plt.ion() #macOS problem
 from backend.calc.base_graph import BaseGraph
-from backend.config import data_dir
-import geopandas
-from geocube.api.core import make_geocube
+from backend.config import data_dir, backend_base_dir
 from backend.config import tiffs_dir
-import rioxarray
-from xarray import DataArray
 
 logger = logging.getLogger(__name__)
 
@@ -29,8 +26,8 @@ class IceCondition:
 
     """Хранение данных о ледовой обстановке"""
 
-    dfs: dict[datetime, pd.DataFrame]
-    interpolators: dict[datetime, LinearNDInterpolator]
+    dfs: dict[datetime, pd.DataFrame] | None = None
+    interpolators: dict[datetime, LinearNDInterpolator] | None = None
     graphs_with_conds: dict[datetime, Graph]
     gtiffs_paths: dict[datetime, Path]
     num_points: int = 50  # число точек на ребре при аппроксимации движения
@@ -41,19 +38,19 @@ class IceCondition:
            #  [29,60,11,25,35,86,87,88,1,58,14,0,32,85,26,39,4,5,6])  # вершины, в которых расположены порты
 
     graph_filename = "graphs_dict.pkl"
-
+    file_path = backend_base_dir / "input_files/IntegrVelocity.xlsx"
     fine_tune_coefficient: float = 1.
 
     base_graph: BaseGraph
 
-    def __init__(self, file_path: Path | str, graph: Graph):
+    def __init__(self, graph: Graph):
         
         if os.path.exists(data_dir / self.graph_filename):
             with open(data_dir / self.graph_filename, "rb") as f:
                 self.graphs_with_conds = pickle.load(f)
             # TODO: поправить геотиффы тут!!!
         else:
-            self.dfs = self.read_file(file_path)
+            self.dfs = self.read_file(self.file_path)
             interpolators = {}
             for dt, df in self.dfs.items():
               interpolators[dt] =  self.make_interpolator(df)
@@ -65,6 +62,7 @@ class IceCondition:
                 logger.info(f"Calculating weights for base graph at {dt}")
                 self.graphs_with_conds[dt] = self.obtain_condition_for_graph(graph, dt)
 
+        if not os.listdir(tiffs_dir):
             self.make_geotiffs_for_ice_conditions()
 
             # кэшируем расчеты
@@ -163,6 +161,20 @@ class IceCondition:
 
         return graph
 
+    def find_nearest_tiff(self, dt: datetime):
+        """
+        Функция для поиска ближайшего TIFF файла по дате.
+
+        Параметры:
+        - target_date_str: строка, представляющая целевую дату в формате 'YYYY-MM-DD'.
+        - tiffs_dir: строка или Path, указывающая на директорию с TIFF файлами.
+
+        Возвращает:
+        - Путь к ближайшему TIFF файлу или None, если файлы не найдены.
+        """
+        tiff_files ={datetime.strptime(f.split('.')[0], '%Y_%m_%d'): f for f in os.listdir(tiffs_dir) if f.endswith('.tif')}
+        return tiffs_dir / tiff_files[self.find_appropriate_conditions_date(list(tiff_files.keys()), dt)]
+
 
     @staticmethod
     def find_appropriate_conditions_date(conditions_dates: List[datetime], dt: datetime):
@@ -248,71 +260,57 @@ class IceCondition:
 
     def make_geotiffs_for_ice_conditions(self):
         self.gtiffs_paths = {}
+        if not hasattr(self, 'interpolators') or not self.interpolators:
+            self.dfs = self.read_file(self.file_path)
+            self.interpolators = {dt: self.make_interpolator(df) for dt, df in self.dfs.items()}
+
         for dt, df in self.dfs.items():
-            gdf = gpd.GeoDataFrame(
-                df, geometry=gpd.points_from_xy(df.longitude, df.latitude)
-            )
+            gdf = gpd.GeoDataFrame(df, geometry=gpd.points_from_xy(df.longitude, df.latitude))
 
-            out_grid = make_geocube(
-                vector_data=gdf,
-                measurements=["ice_condition"],
-                resolution=(-0.1, 0.1),
-            )
-            filename = dt.strftime("%Y_%m_%d") + ".tif"
-            out_grid["ice_condition"].rio.to_raster(tiffs_dir / filename)
-            self.gtiffs_paths[dt] = tiffs_dir / filename
+            gdf = gdf[gdf["ice_condition"] > 0]
 
-    def make_geotiffs_for_ice_conditions_draft(self):
-        self.gtiffs_paths = {}
-        for dt, df in self.dfs.items():
-            gdf = gpd.GeoDataFrame(
-                df, geometry=gpd.points_from_xy(df.longitude, df.latitude)
-            )
+            # Получение границ и создание сетки
+            min_x, min_y, max_x, max_y = gdf.total_bounds
+            x_res, y_res = 0.05, 0.05  # Разрешение сетки
 
-            out_grid = make_geocube(
-                vector_data=gdf,
-                measurements=["ice_condition"],
-                resolution=(-0.1, 0.1),
-            )
+            x_grid = np.arange(min_x, max_x, x_res)
+            y_grid = np.arange(min_y, max_y, y_res)
 
-            filename = dt.strftime("%Y_%m_%d") + ".tif"
+            x_mesh, y_mesh = np.meshgrid(x_grid, y_grid)
 
-            # Получение данных для изменения цветовой шкалы
-            ice_condition = out_grid["ice_condition"]
+            # Получение интерполятора
+            points = np.vstack((x_mesh.ravel(), y_mesh.ravel())).T
+            # Интерполяция данных
+            ice_condition = self.interpolators[dt](points)
+            ice_condition = np.flipud(ice_condition.reshape(x_mesh.shape))
+            ice_condition[np.isnan(ice_condition)] = 0  # Заменяем NaN на 0
 
-            # Создание цветовой карты от синего до красного
-            cmap = plt.get_cmap('coolwarm')
-            norm = plt.Normalize(vmin=ice_condition.min(), vmax=ice_condition.max())
+            # Создание цветовой карты и преобразование в RGB
+            cmap = plt.get_cmap('Oranges')
+            norm = plt.Normalize(vmin=np.nanmin(ice_condition), vmax=np.nanmax(ice_condition))
             rgba = cmap(norm(ice_condition))
 
-            # Создание многоканального растра (RGB)
-            rgb = np.dstack((rgba[:, :, 0], rgba[:, :, 1], rgba[:, :, 2]))
+            rgb = np.dstack((rgba[:, :, 0], rgba[:, :, 1], rgba[:, :, 2])) * 255
+            rgb = rgb.astype(np.uint8)
 
-            # Создание xarray.DataArray для RGB каналов
-            rgb_xr = DataArray(
-                rgb, 
-                dims=["band","y", "x"], 
-                coords={
-                    "band": ["red", "green", "blue"],
-                    "y": ice_condition["y"],
-                    "x": ice_condition["x"],
-                }
-            )
+            transform = from_origin(min_x, max_y, x_res, y_res)
+            filename = Path(tiffs_dir) / f"{dt.strftime('%Y_%m_%d')}.tif"
 
-            # Запись растра с новой цветовой картой
-            rgb_xr.rio.to_raster(tiffs_dir / filename, driver='GTiff', dtype='uint8')
+            # Запись данных в GeoTIFF
+            with rasterio.open(filename,'w', driver='GTiff', height=rgb.shape[0], width=rgb.shape[1], count=3,
+                    dtype=rgb.dtype, crs='EPSG:4326', transform=transform, compress='lzw') as dst:
+                dst.write(rgb[:, :, 0], 1)  # Red channel
+                dst.write(rgb[:, :, 1], 2)  # Green channel
+                dst.write(rgb[:, :, 2], 3)  # Blue channel
 
-            # Приведение размера данных к размеру координаты 'band'
-            rgb_xr = rgb_xr.transpose('band', 'y', 'x')
+            self.gtiffs_paths[dt] = filename
 
-            # Сохранение цветовой карты отдельно
-            fig, ax = plt.subplots()
-            cbar = plt.colorbar(plt.cm.ScalarMappable(norm=norm, cmap=cmap), ax=ax)
-            cbar.set_label('Ice Condition')
-            plt.savefig(tiffs_dir / (dt.strftime("%Y_%m_%d") + "_colormap.png"))
-            plt.close(fig)
-
-            self.gtiffs_paths[dt] = tiffs_dir / filename
+            # Сохранение цветовой карты
+            #fig, ax = plt.subplots()
+            #cbar = plt.colorbar(plt.cm.ScalarMappable(norm=norm, cmap=cmap), ax=ax)
+            #cbar.set_label('Ice Condition')
+            #plt.savefig(Path(tiffs_dir) / f"{dt.strftime('%Y_%m_%d')}_colormap.png")
+            #plt.close(fig)
 
     def get_geotiff_for_datetime(self, dt: datetime):
         forecast_date = self.find_appropriate_conditions_date(list(self.interpolators.keys()), dt)
@@ -339,4 +337,7 @@ print(cond)
 
 """
 
-
+#file_path = "../input_files/IntegrVelocity.xlsx"
+#base = BaseGraph()
+#ice_cond = IceCondition(file_path, base.graph)
+#ice_cond.make_geotiffs_for_ice_conditions_draft()

@@ -234,10 +234,11 @@ async def get_grades(template_name: str = ""):
 
 @app.get("/get_tiff")
 async def get_tiff(dt: datetime):
-    name = '2020_03_03.tif'
-    if not os.path.isfile(tiffs_dir / name):
+    #name = '2020_03_03.tif'
+    file_path = comp.ice_cond.find_nearest_tiff(dt)
+    if not os.path.isfile(file_path):
         raise HTTPException(status_code=404, detail="File not found")
-    return FileResponse(tiffs_dir / name, media_type='image/tiff',filename=name)
+    return FileResponse(file_path, media_type='image/tiff',filename=file_path.name)
 
 #if __name__ == "__main__":
 #    import uvicorn
