@@ -109,7 +109,6 @@ export const useIceTransportStore = defineStore<
                     params: {vessel_id, template_name}
                 })
 
-                console.log(vessel_id)
                 if (data[0] && vessel_id) this.pathsVessels.push(data[0])
 
                 return data

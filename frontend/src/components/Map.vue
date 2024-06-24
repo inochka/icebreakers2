@@ -145,7 +145,7 @@ const getFeature = (feature: Record<string, any>, length: number, idx: number) =
   ${feature.target_name ? `<p><span style="color: gray">Конечный порт: </span>${feature.target_name}</p>` : ''}
   ${feature.start_date ? `<p><span style="color: gray">Дата начала плавания: </span>${getDate(feature.start_date, 'yyyy-MM-dd')}</p>` : ''}
   ${feature.dt ? `<p><span style="color: gray">Текущая дата: </span>${getDate(feature.dt, 'yyyy-MM-dd')}</p>` : ''}
-  ${feature.total_time_hours ? `<p><span style="color: gray">Время в пути: </span>${Math.round(feature.total_time_hours / 24, -1)} ${getWord(Math.round(feature.total_time_hours / 24, -1))}</p>` : ''}
+  ${feature.total_time_hours ? `<p><span style="color: gray">Время в пути: </span>${Math.round(feature.total_time_hours, -1)} ${getWord(Math.round(feature.total_time_hour, -1))}</p>` : ''}
   ${feature.icebreakerName ? `<p><span style="color: gray">Ледокол в проводке: </span>${feature.icebreakerName}</p>` : ''}
   ${feature.vessels ? `<p><span style="color: gray">В проводке участвовали: </span>${feature.vessels}</p>` : ''}
   ${feature.point_name ? `<p><span style="color: gray">Текущая точка: </span>${feature.point_name}</p>` : ''}
@@ -415,12 +415,11 @@ const drawPoints = (points: number[], type: typeTransport) => {
 }
 
 const removeLayers = (listLayers: Record<string, VectorLayer<Feature<Geometry>>>) => {
-  Object.keys(listLayers).forEach((layerKey: string) => {
+  Object.keys(listLayers)?.forEach((layerKey: string) => {
     const layer = listLayers[layerKey]
     delete listLayers[layerKey]
     map.value?.removeLayer(layer)
   })
-  return
 }
 
 const generateVectorLayers = (
@@ -463,7 +462,7 @@ const changeMarkersVisibility = (
     markers: Record<string, VectorLayer<Feature<Geometry>>>[],
     type: typeTransport
 ) => {
-  if (!points.length && Object.keys(markers).length) {
+  if (!points.length) {
     removeLayers(markers)
     return
   }
@@ -476,9 +475,8 @@ const changeMarkersVisibility = (
       // @ts-ignore
       const currentPoint = markers[point]
       // @ts-ignore
-      delete markers[point]
-
       map.value?.removeLayer(currentPoint)
+      delete markers[point]
     })
   }
 
@@ -487,8 +485,13 @@ const changeMarkersVisibility = (
 }
 
 watch(() => pathsVessels.value, () => {
-  // @ts-ignore
-  generateVectorLayers(vectorLayersVessels.value, pathsVessels.value, 'vessel_id', typeTransport.VESSELS)
+  generateVectorLayers(
+      // @ts-ignore
+      vectorLayersVessels.value,
+      pathsVessels.value,
+      'vessel_id',
+      typeTransport.VESSELS
+  )
 }, {deep: true})
 
 watch(() => pathsIcebreakers.value, () => {
