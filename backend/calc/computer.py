@@ -242,10 +242,8 @@ class Computer:
             icebreaker_move_time = math.inf
         )
 
-        # сохраняем и передаем список всех возможныз караванов с лучшим временем,мб с какой-то погрешностью!
+        # сохраняем и передаем список всех возможных караванов с лучшим временем,мб с какой-то погрешностью!
         #best_caravans = [best_caravan]
-        best_time = best_caravan.total_time_hours
-
         for a in possible_caravan_starts:
             for b in possible_caravan_ends:
                 if a == b:
@@ -276,7 +274,7 @@ class Computer:
                 if rough:
                     time_in_caravan = self.navigator.best_icebreaker_paths_times[a][b]
                 else:
-                    # отсиваем очевидно-плохие пути еще дополнительно
+                    # отсеиваем очевидно-плохие пути еще дополнительно
                     if total_move_time + self.navigator.best_icebreaker_paths_times[a][b] > best_caravan.total_time_hours:
                         continue  # увеличение скорости перебора примерно в 10 раз дает
 
@@ -291,7 +289,7 @@ class Computer:
                 #total_move_time += self.navigator.best_icebreaker_paths_times[icebreaker.source][a]
                 icebreaker_time_fee = time_in_caravan + (caravan_start_time - icebreaker.start_date).total_seconds() / 3600
 
-                if best_time > total_move_time:
+                if best_caravan.total_time_hours > total_move_time:
                     best_caravan = Caravan(
                         uuid=str(uuid1()),
                         total_time_hours = total_move_time, icebreaker_time_fee = icebreaker_time_fee, start_node = a,
