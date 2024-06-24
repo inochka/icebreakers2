@@ -65,7 +65,8 @@ const onCheckAll = async () => {
     return;
   }
 
-   emits('getAllData', icebreakers.value)
+  isChangeParentIcebreaker.value = false
+  emits('getAllData', icebreakers.value)
 }
 
 const changeParentCheckbox = () => {

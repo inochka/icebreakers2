@@ -1,35 +1,670 @@
 {
-    "1403b48c-874f-4d69-81be-c20818271b36": {
-        "uuid": "b05e3c70-3276-11ef-a991-ae17e04986da",
+    "139e10e0-4086-43e3-80eb-bf653298b1c3": {
+        "uuid": "6a2e2e0c-30e3-11ef-8566-ae17e04986da",
+        "start_node": 6,
+        "end_node": 130,
+        "vessel_ids": [
+            4,
+            5
+        ],
+        "icebreaker_id": 1,
+        "total_time_hours": 201.28287023821787,
+        "start_time": "2022-03-10T05:11:21.224959",
+        "end_time": null,
+        "template_name": "testtest",
+        "icebreaker_time_fee": 40.61755280729256
+    },
+    "23f9ffbd-2d62-4597-bd1c-8affb10892b1": {
+        "uuid": "6640761a-30e3-11ef-8566-ae17e04986da",
+        "start_node": 25,
+        "end_node": 29,
+        "vessel_ids": [
+            2
+        ],
+        "icebreaker_id": 2,
+        "total_time_hours": 74.72429126141833,
+        "start_time": "2022-03-02T00:00:00",
+        "end_time": null,
+        "template_name": "testtest",
+        "icebreaker_time_fee": 74.72429126141833
+    },
+    "07882eb6-fdbb-4a6f-bf04-67f0d0996dab": {
+        "uuid": "69c8451a-30e3-11ef-8566-ae17e04986da",
+        "start_node": 10,
+        "end_node": 35,
+        "vessel_ids": [
+            9,
+            8
+        ],
+        "icebreaker_id": 3,
+        "total_time_hours": 50.28581924444445,
+        "start_time": "2022-03-09T16:01:29.204501",
+        "end_time": null,
+        "template_name": "testtest",
+        "icebreaker_time_fee": 25.142909622222223
+    },
+    "27ce77f5-7c00-4db1-bb21-218716eed74e": {
+        "uuid": "6934ad28-30e3-11ef-8566-ae17e04986da",
+        "start_node": 11,
+        "end_node": 70,
+        "vessel_ids": [
+            1
+        ],
+        "icebreaker_id": 4,
+        "total_time_hours": 76.03489975405631,
+        "start_time": "2022-03-01T00:00:00",
+        "end_time": null,
+        "template_name": "testtest",
+        "icebreaker_time_fee": 63.03787615770391
+    },
+    "9f9129d6-aeb5-4301-a178-1c61bb49d5d9": {
+        "uuid": "6dfccdfe-30e3-11ef-8566-ae17e04986da",
+        "start_node": 124,
+        "end_node": 27,
+        "vessel_ids": [
+            6
+        ],
+        "icebreaker_id": 4,
+        "total_time_hours": 103.51625862037373,
+        "start_time": "2022-03-13T06:32:10.960732",
+        "end_time": null,
+        "template_name": "testtest",
+        "icebreaker_time_fee": 99.95681417592928
+    },
+    "59f047f1-c951-4980-9d8c-6a02925ffd13": {
+        "uuid": "6fe84274-30e3-11ef-8566-ae17e04986da",
+        "start_node": 35,
+        "end_node": 84,
+        "vessel_ids": [
+            10
+        ],
+        "icebreaker_id": 1,
+        "total_time_hours": 61.73314123535222,
+        "start_time": "2022-03-15T00:00:00",
+        "end_time": null,
+        "template_name": "testtest",
+        "icebreaker_time_fee": 68.43892048593702
+    },
+    "b3426e53-df4d-48fc-a2fc-bbd9ab1b095e": {
+        "uuid": "6f387b32-30e3-11ef-8566-ae17e04986da",
+        "start_node": 124,
+        "end_node": 27,
+        "vessel_ids": [
+            7
+        ],
+        "icebreaker_id": 2,
+        "total_time_hours": 108.32872037354738,
+        "start_time": "2022-03-14T10:58:42.415770",
+        "end_time": null,
+        "template_name": "testtest",
+        "icebreaker_time_fee": 102.92955370688071
+    },
+    "ab5f4594-014a-4e3b-8bb8-eb1dd4251021": {
+        "uuid": "e869dec2-31a2-11ef-897c-6c240812d26c",
+        "start_node": 103,
+        "end_node": 120,
+        "vessel_ids": [
+            4
+        ],
+        "icebreaker_id": 1,
+        "total_time_hours": 127.49229458794153,
+        "start_time": "2022-03-08T18:33:28.940291",
+        "end_time": null,
+        "template_name": "test_1",
+        "icebreaker_time_fee": 90.22427060135918
+    },
+    "0698391a-b75c-4848-97a4-8d38d99a06fe": {
+        "uuid": "e447b228-31a2-11ef-bb91-6c240812d26c",
+        "start_node": 25,
+        "end_node": 29,
+        "vessel_ids": [
+            2
+        ],
+        "icebreaker_id": 3,
+        "total_time_hours": 74.72429126141833,
+        "start_time": "2022-03-02T00:00:00",
+        "end_time": null,
+        "template_name": "test_1",
+        "icebreaker_time_fee": 74.72429126141833
+    },
+    "1b62571a-0e6d-44ad-b8f9-5bd734e56882": {
+        "uuid": "e5662894-31a2-11ef-a565-6c240812d26c",
+        "start_node": 11,
+        "end_node": 70,
+        "vessel_ids": [
+            1
+        ],
+        "icebreaker_id": 4,
+        "total_time_hours": 76.03489975405631,
+        "start_time": "2022-03-01T00:00:00",
+        "end_time": null,
+        "template_name": "test_1",
+        "icebreaker_time_fee": 63.03787615770391
+    },
+    "5856ff14-9b14-48ac-b3c7-9fb628005bff": {
+        "uuid": "1ddcbeeb-31a8-11ef-99c5-6c240812d26c",
+        "start_node": 71,
+        "end_node": 130,
+        "vessel_ids": [
+            5,
+            4
+        ],
+        "icebreaker_id": 1,
+        "total_time_hours": 184.4867695859203,
+        "start_time": "2022-03-10T00:04:52.687342",
+        "end_time": null,
+        "template_name": "solo",
+        "icebreaker_time_fee": 32.2195024811438
+    },
+    "0a432aac-e4b9-4062-8cb5-c744ee50abbb": {
+        "uuid": "134987c1-31a8-11ef-a94b-6c240812d26c",
+        "start_node": 25,
+        "end_node": 29,
+        "vessel_ids": [
+            2
+        ],
+        "icebreaker_id": 2,
+        "total_time_hours": 74.72429126141833,
+        "start_time": "2022-03-02T00:00:00",
+        "end_time": null,
+        "template_name": "solo",
+        "icebreaker_time_fee": 74.72429126141833
+    },
+    "1b8c153d-8e7c-4b1a-868c-5f355cea1a72": {
+        "uuid": "0e4cc211-31a8-11ef-9a48-6c240812d26c",
+        "start_node": 11,
+        "end_node": 70,
+        "vessel_ids": [
+            1
+        ],
+        "icebreaker_id": 3,
+        "total_time_hours": 76.03489975405631,
+        "start_time": "2022-03-01T00:00:00",
+        "end_time": null,
+        "template_name": "solo",
+        "icebreaker_time_fee": 63.03787615770391
+    },
+    "097b827e-b878-4ce8-8aa5-89c1ce9a25a4": {
+        "uuid": "1bd1265d-31a8-11ef-9ffd-6c240812d26c",
+        "start_node": 24,
+        "end_node": 11,
+        "vessel_ids": [
+            22,
+            17
+        ],
+        "icebreaker_id": 4,
+        "total_time_hours": 258.7717799512401,
+        "start_time": "2022-03-09T00:02:51.952645",
+        "end_time": null,
+        "template_name": "solo",
+        "icebreaker_time_fee": 107.9496182200645
+    },
+    "6a442c02-1bc3-4603-8373-442d5a584d55": {
+        "uuid": "212e13d4-31a8-11ef-b1e7-6c240812d26c",
+        "start_node": 21,
+        "end_node": 35,
+        "vessel_ids": [
+            11
+        ],
+        "icebreaker_id": 2,
+        "total_time_hours": 32.58578199913738,
+        "start_time": "2022-03-10T01:38:46.511650",
+        "end_time": null,
+        "template_name": "solo",
+        "icebreaker_time_fee": 51.186615332470716
+    },
+    "83c1b797-b616-4ee9-979d-515991ddbb55": {
+        "uuid": "212c8244-31a8-11ef-a95d-6c240812d26c",
+        "start_node": 11,
+        "end_node": 5,
+        "vessel_ids": [
+            14
+        ],
+        "icebreaker_id": 3,
+        "total_time_hours": 70.6038070639145,
+        "start_time": "2022-03-10T00:00:00",
+        "end_time": null,
+        "template_name": "solo",
+        "icebreaker_time_fee": 91.04408484169228
+    },
+    "efb3f53c-6cbf-4c53-b226-eb351762421e": {
+        "uuid": "37f9ec4f-31a8-11ef-bfe8-6c240812d26c",
+        "start_node": 124,
+        "end_node": 27,
+        "vessel_ids": [
+            6,
+            7
+        ],
+        "icebreaker_id": 2,
+        "total_time_hours": 216.65744074709477,
+        "start_time": "2022-03-14T10:58:42.415770",
+        "end_time": null,
+        "template_name": "solo",
+        "icebreaker_time_fee": 102.15177592910294
+    },
+    "88029740-45c8-4970-a544-cd4aa61e1e93": {
+        "uuid": "30dc7f97-31a8-11ef-a27f-6c240812d26c",
+        "start_node": 103,
+        "end_node": 116,
+        "vessel_ids": [
+            15
+        ],
+        "icebreaker_id": 3,
+        "total_time_hours": 65.78694918223756,
+        "start_time": "2022-03-14T00:27:35.036625",
+        "end_time": null,
+        "template_name": "solo",
+        "icebreaker_time_fee": 69.96705704777364
+    },
+    "b5aec809-cab8-4ea7-96ee-9bb7701ea768": {
+        "uuid": "68891764-31a8-11ef-a04c-6c240812d26c",
+        "start_node": 35,
+        "end_node": 84,
+        "vessel_ids": [
+            10
+        ],
+        "icebreaker_id": 1,
+        "total_time_hours": 61.73314123535222,
+        "start_time": "2022-03-15T00:00:00",
+        "end_time": null,
+        "template_name": "solo",
+        "icebreaker_time_fee": 76.69558715260368
+    },
+    "c09db736-30b5-42ad-a312-97e7a70e2b4a": {
+        "uuid": "688e4e89-31a8-11ef-a081-6c240812d26c",
+        "start_node": 16,
+        "end_node": 35,
+        "vessel_ids": [
+            12
+        ],
+        "icebreaker_id": 3,
+        "total_time_hours": 27.75768323295518,
+        "start_time": "2022-03-18T03:32:23.997502",
+        "end_time": null,
+        "template_name": "solo",
+        "icebreaker_time_fee": 45.94657212184407
+    },
+    "92a69fec-41fb-4cb9-8827-ed489bd92f80": {
+        "uuid": "689ca14c-31a8-11ef-b5d3-6c240812d26c",
+        "start_node": 28,
+        "end_node": 29,
+        "vessel_ids": [
+            24
+        ],
+        "icebreaker_id": 4,
+        "total_time_hours": 135.68875501940855,
+        "start_time": "2022-03-16T01:18:09.053647",
+        "end_time": null,
+        "template_name": "solo",
+        "icebreaker_time_fee": 155.87986613051964
+    },
+    "b76b5e8d-5c5c-48cc-8993-77a339a98b42": {
+        "uuid": "69871a85-31a8-11ef-b93f-6c240812d26c",
+        "start_node": 28,
+        "end_node": 70,
+        "vessel_ids": [
+            23
+        ],
+        "icebreaker_id": 1,
+        "total_time_hours": 104.63997284041942,
+        "start_time": "2022-03-20T00:00:00",
+        "end_time": null,
+        "template_name": "solo",
+        "icebreaker_time_fee": 111.18609655217239
+    },
+    "cfe5f783-acfa-4ff9-beed-ae492993b973": {
+        "uuid": "694e5ec4-31a8-11ef-894c-6c240812d26c",
+        "start_node": 90,
+        "end_node": 116,
+        "vessel_ids": [
+            19
+        ],
+        "icebreaker_id": 2,
+        "total_time_hours": 52.71631301171469,
+        "start_time": "2022-03-21T00:17:57.714188",
+        "end_time": null,
+        "template_name": "solo",
+        "icebreaker_time_fee": 52.025228501029844
+    },
+    "e02748c8-d4e5-495b-ade5-653ed51c3734": {
+        "uuid": "69372e73-31a8-11ef-a2df-6c240812d26c",
+        "start_node": 11,
+        "end_node": 70,
+        "vessel_ids": [
+            20
+        ],
+        "icebreaker_id": 3,
+        "total_time_hours": 99.4988243019021,
+        "start_time": "2022-03-20T07:44:58.401484",
+        "end_time": null,
+        "template_name": "solo",
+        "icebreaker_time_fee": 71.65474826420656
+    },
+    "b8313c67-fc2a-4e65-b097-8c640bb2a48c": {
+        "uuid": "69f327c2-31a8-11ef-8c4d-6c240812d26c",
+        "start_node": 71,
+        "end_node": 1,
+        "vessel_ids": [
+            13
+        ],
+        "icebreaker_id": 1,
+        "total_time_hours": 32.13792901219667,
+        "start_time": "2022-03-27T02:17:05.191757",
+        "end_time": null,
+        "template_name": "solo",
+        "icebreaker_time_fee": 33.545151234418896
+    },
+    "b728c1b2-52ef-4b27-85e4-2257b1002579": {
+        "uuid": "6acebb59-31a8-11ef-87c2-6c240812d26c",
+        "start_node": 0,
+        "end_node": 1,
+        "vessel_ids": [
+            21
+        ],
+        "icebreaker_id": 3,
+        "total_time_hours": 33.00602331190476,
+        "start_time": "2022-03-27T15:00:57.243154",
+        "end_time": null,
+        "template_name": "solo",
+        "icebreaker_time_fee": 21.696856645238096
+    },
+    "1648c4ba-68a8-4f7a-b6fe-38ba10236d00": {
+        "uuid": "6acd2fd6-31a8-11ef-b77e-6c240812d26c",
+        "start_node": 11,
+        "end_node": 70,
+        "vessel_ids": [
+            16
+        ],
+        "icebreaker_id": 4,
+        "total_time_hours": 75.77541307081947,
+        "start_time": "2022-03-24T00:00:00",
+        "end_time": null,
+        "template_name": "solo",
+        "icebreaker_time_fee": 68.87169270865101
+    },
+    "813aa7e2-4f43-4446-b250-f20caee89f39": {
+        "uuid": "6afff83e-31a8-11ef-afc1-6c240812d26c",
+        "start_node": 6,
+        "end_node": 1,
+        "vessel_ids": [
+            25
+        ],
+        "icebreaker_id": 2,
+        "total_time_hours": 42.002575230782895,
+        "start_time": "2022-04-01T00:00:00",
+        "end_time": null,
+        "template_name": "solo",
+        "icebreaker_time_fee": 47.75063078633845
+    },
+    "37be6628-3bfe-4dcd-87bd-4bdf33c9809e": {
+        "uuid": "6b14623f-31a8-11ef-ada0-6c240812d26c",
+        "start_node": 27,
+        "end_node": 98,
+        "vessel_ids": [
+            33
+        ],
+        "icebreaker_id": 1,
+        "total_time_hours": 120.71958839043222,
+        "start_time": "2022-04-06T00:00:00",
+        "end_time": null,
+        "template_name": "solo",
+        "icebreaker_time_fee": 115.23401208871726
+    },
+    "9036bd1b-b32c-4dd0-8c3a-25517703a50a": {
+        "uuid": "6b3e56ea-31a8-11ef-954a-6c240812d26c",
+        "start_node": 29,
+        "end_node": 84,
+        "vessel_ids": [
+            28
+        ],
+        "icebreaker_id": 2,
+        "total_time_hours": 99.62879120744985,
+        "start_time": "2022-04-07T00:00:00",
+        "end_time": null,
+        "template_name": "solo",
+        "icebreaker_time_fee": 109.6226075768943
+    },
+    "328db6b0-2969-41ba-8c54-551241c21ded": {
+        "uuid": "6b49407f-31a8-11ef-bc7c-6c240812d26c",
+        "start_node": 16,
+        "end_node": 1,
+        "vessel_ids": [
+            26
+        ],
+        "icebreaker_id": 1,
+        "total_time_hours": 55.71217383786869,
+        "start_time": "2022-04-09T07:36:00.366581",
+        "end_time": null,
+        "template_name": "solo",
+        "icebreaker_time_fee": 51.411618282313135
+    },
+    "1ee3bee8-ee6a-47f8-989a-f4332da6ae64": {
+        "uuid": "6b46d81d-31a8-11ef-a71b-6c240812d26c",
+        "start_node": 11,
+        "end_node": 84,
+        "vessel_ids": [
+            27
+        ],
+        "icebreaker_id": 3,
+        "total_time_hours": 96.7831307303106,
+        "start_time": "2022-04-10T00:00:00",
+        "end_time": null,
+        "template_name": "solo",
+        "icebreaker_time_fee": 105.44986288785029
+    },
+    "5897aaf8-dde3-4152-88fe-01473ef7b1cc": {
+        "uuid": "6b5c6d1b-31a8-11ef-ab30-6c240812d26c",
+        "start_node": 35,
+        "end_node": 27,
+        "vessel_ids": [
+            29
+        ],
+        "icebreaker_id": 1,
+        "total_time_hours": 100.71936550572407,
+        "start_time": "2022-04-15T00:00:00",
+        "end_time": null,
+        "template_name": "solo",
+        "icebreaker_time_fee": 108.83186550572407
+    },
+    "e9de414d-7a64-4d92-8a1a-a2a0a011fcce": {
+        "uuid": "6b62d7ce-31a8-11ef-be57-6c240812d26c",
+        "start_node": 21,
+        "end_node": 35,
+        "vessel_ids": [
+            30
+        ],
+        "icebreaker_id": 2,
+        "total_time_hours": 48.127708159583285,
+        "start_time": "2022-04-16T15:28:09.802748",
+        "end_time": null,
+        "template_name": "solo",
+        "icebreaker_time_fee": 36.38826371513884
+    },
+    "afd816a5-4b94-40f1-9c3b-1b8dac65a3fd": {
+        "uuid": "6b69ef44-31a8-11ef-82ed-6c240812d26c",
+        "start_node": 64,
+        "end_node": 6,
+        "vessel_ids": [
+            32
+        ],
+        "icebreaker_id": 3,
+        "total_time_hours": 36.57368112671002,
+        "start_time": "2022-04-16T05:18:15.998050",
+        "end_time": null,
+        "template_name": "solo",
+        "icebreaker_time_fee": 35.710070015598916
+    },
+    "6e20f086-93c2-4e47-92be-b1d920754dae": {
+        "uuid": "6b7ab6ad-31a8-11ef-84b2-6c240812d26c",
+        "start_node": 66,
+        "end_node": 11,
+        "vessel_ids": [
+            31
+        ],
+        "icebreaker_id": 4,
+        "total_time_hours": 63.00261784221268,
+        "start_time": "2022-04-16T10:37:27.964027",
+        "end_time": null,
+        "template_name": "solo",
+        "icebreaker_time_fee": 59.443173397768234
+    },
+    "c601ed9c-378f-435c-93e9-d07166ab303d": {
+        "uuid": "6b936113-31a8-11ef-82f0-6c240812d26c",
+        "start_node": 16,
+        "end_node": 35,
+        "vessel_ids": [
+            36
+        ],
+        "icebreaker_id": 1,
+        "total_time_hours": 43.19555551564231,
+        "start_time": "2022-04-23T15:31:43.825774",
+        "end_time": null,
+        "template_name": "solo",
+        "icebreaker_time_fee": 51.45749996008675
+    },
+    "9b9b6e7a-2f1a-41a5-b0d4-a9d8e26dfa4b": {
+        "uuid": "6b8adae9-31a8-11ef-87bd-6c240812d26c",
+        "start_node": 25,
+        "end_node": 70,
+        "vessel_ids": [
+            34
+        ],
+        "icebreaker_id": 2,
+        "total_time_hours": 67.11455260965047,
+        "start_time": "2022-04-20T00:00:00",
+        "end_time": null,
+        "template_name": "solo",
+        "icebreaker_time_fee": 49.93157635444465
+    },
+    "00545c42-0fcd-477e-b3a2-9ca1e12ce830": {
+        "uuid": "6bd48d03-31a8-11ef-aca4-6c240812d26c",
+        "start_node": 66,
+        "end_node": 1,
+        "vessel_ids": [
+            37
+        ],
+        "icebreaker_id": 1,
+        "total_time_hours": 61.94826245455812,
+        "start_time": "2022-04-26T00:20:47.051967",
+        "end_time": null,
+        "template_name": "solo",
+        "icebreaker_time_fee": 73.10270689900256
+    },
+    "00a57b72-5101-404a-937f-68e012398d48": {
+        "uuid": "6bcdfe84-31a8-11ef-bf31-6c240812d26c",
+        "start_node": 11,
+        "end_node": 5,
+        "vessel_ids": [
+            41
+        ],
+        "icebreaker_id": 2,
+        "total_time_hours": 70.59894652989811,
+        "start_time": "2022-04-25T00:00:00",
+        "end_time": null,
+        "template_name": "solo",
+        "icebreaker_time_fee": 83.12200208545367
+    },
+    "5456e6dc-a787-49e3-913e-09369bfb288b": {
+        "uuid": "6bc2f25e-31a8-11ef-a1e1-6c240812d26c",
+        "start_node": 25,
+        "end_node": 70,
+        "vessel_ids": [
+            35
+        ],
+        "icebreaker_id": 3,
+        "total_time_hours": 77.7256683789496,
+        "start_time": "2022-04-23T00:00:00",
+        "end_time": null,
+        "template_name": "solo",
+        "icebreaker_time_fee": 72.36102545707712
+    },
+    "0fea4258-1d94-451f-a116-aeb1f4067eab": {
+        "uuid": "6bab08dd-31a8-11ef-a70c-6c240812d26c",
+        "start_node": 70,
+        "end_node": 11,
+        "vessel_ids": [
+            38
+        ],
+        "icebreaker_id": 4,
+        "total_time_hours": 66.30814720964159,
+        "start_time": "2022-04-25T07:12:19.719141",
+        "end_time": null,
+        "template_name": "solo",
+        "icebreaker_time_fee": 76.33592498741938
+    },
+    "a7604008-edb3-4230-8ed3-11a20e139a4f": {
+        "uuid": "6c09e269-31a8-11ef-b507-6c240812d26c",
+        "start_node": 71,
+        "end_node": 24,
+        "vessel_ids": [
+            39
+        ],
+        "icebreaker_id": 1,
+        "total_time_hours": 57.20309498827969,
+        "start_time": "2022-04-29T04:04:43.965453",
+        "end_time": null,
+        "template_name": "solo",
+        "icebreaker_time_fee": 58.385039432724135
+    },
+    "492b2066-66ca-4b5f-a0e5-53fe90587001": {
+        "uuid": "6befc994-31a8-11ef-9ebc-6c240812d26c",
+        "start_node": 25,
+        "end_node": 29,
+        "vessel_ids": [
+            40
+        ],
+        "icebreaker_id": 3,
+        "total_time_hours": 98.77094057535022,
+        "start_time": "2022-04-27T00:00:00",
+        "end_time": null,
+        "template_name": "solo",
+        "icebreaker_time_fee": 106.91427390868355
+    },
+    "25da17dd-5937-4cdd-ae04-be0d5c85d7b2": {
+        "uuid": "6c663e67-31a8-11ef-b2c1-6c240812d26c",
+        "start_node": 47,
+        "end_node": 11,
+        "vessel_ids": [
+            42
+        ],
+        "icebreaker_id": 3,
+        "total_time_hours": 51.25195199688623,
+        "start_time": "2022-05-01T00:51:18.154231",
+        "end_time": null,
+        "template_name": "solo",
+        "icebreaker_time_fee": 63.2486186635529
+    },
+    "d044df22-9d16-40e3-9c87-01791869d5c5": {
+        "uuid": "07e1bf70-326e-11ef-a3ac-6c240812d26c",
+        "start_node": 44,
+        "end_node": 35,
+        "vessel_ids": [
+            8,
+            9
+        ],
+        "icebreaker_id": 1,
+        "total_time_hours": 195.89301572093794,
+        "start_time": "2022-03-08T19:44:16.827206",
+        "end_time": null,
+        "template_name": "full",
+        "icebreaker_time_fee": 289.94650786046896
+    },
+    "60b8d44f-514e-4ca2-b69c-6bfd320e0713": {
+        "uuid": "07d32466-326e-11ef-8e5b-6c240812d26c",
         "start_node": 11,
         "end_node": 24,
         "vessel_ids": [
             5
         ],
-        "icebreaker_id": 1,
+        "icebreaker_id": 2,
         "total_time_hours": 92.61877744076288,
         "start_time": "2022-03-08T00:00:00",
         "end_time": null,
         "template_name": "full",
         "icebreaker_time_fee": 308.61877744076287
     },
-    "ae2ab10f-3134-49d5-a831-5860ca534317": {
-        "uuid": "b066fb94-3276-11ef-a991-ae17e04986da",
-        "start_node": 5,
-        "end_node": 35,
-        "vessel_ids": [
-            9,
-            8
-        ],
-        "icebreaker_id": 2,
-        "total_time_hours": 173.68030049220778,
-        "start_time": "2022-03-07T00:00:00",
-        "end_time": null,
-        "template_name": "full",
-        "icebreaker_time_fee": 278.8401502461039
-    },
-    "4ea4b9ce-3a55-4f02-b789-a3b5e3e0edea": {
-        "uuid": "b05ddbae-3276-11ef-a991-ae17e04986da",
+    "8b79d48e-439e-40a5-9fbc-4b832d2fb21e": {
+        "uuid": "078b2d0b-326e-11ef-94f1-6c240812d26c",
         "start_node": 24,
         "end_node": 11,
         "vessel_ids": [
@@ -42,117 +677,88 @@
         "template_name": "full",
         "icebreaker_time_fee": 345.65254240416124
     },
-    "99de84f1-3c92-4e99-b02f-551b896589ab": {
-        "uuid": "b06e7bc6-3276-11ef-a991-ae17e04986da",
+    "50b9b116-03a1-4ebd-8980-b47496370a1b": {
+        "uuid": "07df9881-326e-11ef-a1d1-6c240812d26c",
         "start_node": 25,
-        "end_node": 2,
+        "end_node": 31,
         "vessel_ids": [
-            3,
-            2
+            2,
+            3
         ],
         "icebreaker_id": 4,
-        "total_time_hours": 190.11466622060607,
+        "total_time_hours": 222.15882262460607,
         "start_time": "2022-03-04T00:00:00",
         "end_time": null,
         "template_name": "full",
-        "icebreaker_time_fee": 172.9729433369697
+        "icebreaker_time_fee": 164.99910711230302
     },
-    "a526f6a1-a78d-4017-908f-d902220a5275": {
-        "uuid": "b09d0180-3276-11ef-a991-ae17e04986da",
-        "start_node": 16,
+    "de14ee6d-bed6-4f93-9c9c-ef872aa556fd": {
+        "uuid": "083b9e4c-326e-11ef-bc62-6c240812d26c",
+        "start_node": 15,
         "end_node": 35,
         "vessel_ids": [
             11
         ],
-        "icebreaker_id": 2,
-        "total_time_hours": 71.0832582516135,
-        "start_time": "2022-03-10T18:08:00.955036",
+        "icebreaker_id": 1,
+        "total_time_hours": 89.68277737270999,
+        "start_time": "2022-03-11T12:53:49.688563",
         "end_time": null,
         "template_name": "full",
-        "icebreaker_time_fee": 56.21011905328017
+        "icebreaker_time_fee": 55.22846388354333
     },
-    "aa767aa8-8361-458b-a667-123f9e624a11": {
-        "uuid": "b09f6222-3276-11ef-a991-ae17e04986da",
+    "c9c58ce0-3b16-40a7-8a41-472ba8d92942": {
+        "uuid": "0842e074-326e-11ef-b39f-6c240812d26c",
         "start_node": 11,
         "end_node": 10,
         "vessel_ids": [
-            1,
-            14
+            14,
+            1
         ],
         "icebreaker_id": 4,
-        "total_time_hours": 424.2703429373188,
+        "total_time_hours": 437.01046415881063,
         "start_time": "2022-03-10T00:00:00",
         "end_time": null,
         "template_name": "full",
         "icebreaker_time_fee": 132.155869222197
     },
-    "98da7eea-6580-4cc9-9eff-22f0672c745d": {
-        "uuid": "b0eb9fe8-3276-11ef-a991-ae17e04986da",
-        "start_node": 8,
+    "0a6c78ef-43b3-46ac-9bac-15f0606cf798": {
+        "uuid": "0845cee3-326e-11ef-9af8-6c240812d26c",
+        "start_node": 35,
+        "end_node": 45,
+        "vessel_ids": [
+            7
+        ],
+        "icebreaker_id": 1,
+        "total_time_hours": 217.19547965288962,
+        "start_time": "2022-03-13T00:00:00",
+        "end_time": null,
+        "template_name": "full",
+        "icebreaker_time_fee": 183.51943107531025
+    },
+    "369ddd09-5c09-43cd-b4f3-65f578d41e99": {
+        "uuid": "08abf24c-326e-11ef-9029-6c240812d26c",
+        "start_node": 45,
         "end_node": 25,
         "vessel_ids": [
             17
         ],
-        "icebreaker_id": 1,
-        "total_time_hours": 251.1056956114952,
-        "start_time": "2022-03-12T06:20:43.068523",
-        "end_time": null,
-        "template_name": "full",
-        "icebreaker_time_fee": 72.9824517303841
-    },
-    "4bb66fd8-3b4a-4ac7-9d9e-96049cc1977a": {
-        "uuid": "b131c0ae-3276-11ef-a991-ae17e04986da",
-        "start_node": 16,
-        "end_node": 52,
-        "vessel_ids": [
-            4,
-            15
-        ],
         "icebreaker_id": 2,
-        "total_time_hours": 382.5026597745164,
-        "start_time": "2022-03-13T00:00:00",
+        "total_time_hours": 435.33113386566185,
+        "start_time": "2022-03-15T08:23:04.304350",
         "end_time": null,
         "template_name": "full",
-        "icebreaker_time_fee": 85.14125955322662
+        "icebreaker_time_fee": 256.208518416773
     },
-    "1592b83f-a1bd-4f31-be50-9fe5ad1e85bc": {
-        "uuid": "b0ee1354-3276-11ef-a991-ae17e04986da",
-        "start_node": 35,
-        "end_node": 27,
-        "vessel_ids": [
-            7
-        ],
-        "icebreaker_id": 3,
-        "total_time_hours": 190.27302331624048,
-        "start_time": "2022-03-14T06:30:02.041888",
-        "end_time": null,
-        "template_name": "full",
-        "icebreaker_time_fee": 208.84451187068493
-    },
-    "e446a7be-381e-4f3e-b7de-0ae1a2db6f6b": {
-        "uuid": "b0dbda90-3276-11ef-a991-ae17e04986da",
+    "c97720b0-9991-4d9e-82e4-8b5262074e0b": {
+        "uuid": "08a9eea7-326e-11ef-8283-6c240812d26c",
         "start_node": 25,
-        "end_node": 27,
-        "vessel_ids": [
-            6
-        ],
-        "icebreaker_id": 4,
-        "total_time_hours": 153.10612208296723,
-        "start_time": "2022-03-12T00:00:00",
-        "end_time": null,
-        "template_name": "full",
-        "icebreaker_time_fee": 167.50735404657834
-    },
-    "c15538f3-5367-46c8-a245-c6841f202f31": {
-        "uuid": "b185c8ac-3276-11ef-a991-ae17e04986da",
-        "start_node": 11,
-        "end_node": 5,
+        "end_node": 45,
         "vessel_ids": [
             20
         ],
-        "icebreaker_id": 1,
-        "total_time_hours": 108.77743312669256,
-        "start_time": "2022-03-17T00:00:00",
+        "icebreaker_id": 3,
+        "total_time_hours": 272.715459709306,
+        "start_time": "2022-03-14T04:48:24.933704",
         "end_time": null,
         "template_name": "full",
         "icebreaker_time_fee": 175.85156181891477
@@ -161,132 +767,150 @@
         "uuid": "b189b21e-3276-11ef-a991-ae17e04986da",
         "start_node": 16,
         "end_node": 35,
+    "946bc479-7b98-46c7-ab9e-f176d125f176": {
+        "uuid": "08a7b5a1-326e-11ef-8683-6c240812d26c",
+        "start_node": 21,
+        "end_node": 24,
+        "vessel_ids": [
+            15
+        ],
+        "icebreaker_id": 4,
+        "total_time_hours": 106.53534564979408,
+        "start_time": "2022-03-14T06:57:55.747168",
+        "end_time": null,
+        "template_name": "full",
+        "icebreaker_time_fee": 119.13023084423853
+    },
+    "19ccc66f-45f2-4f86-94c4-1ee4b36d8f8d": {
+        "uuid": "08e4f064-326e-11ef-84e5-6c240812d26c",
+        "start_node": 28,
+        "end_node": 31,
         "vessel_ids": [
             12
         ],
-        "icebreaker_id": 2,
-        "total_time_hours": 71.0832582516135,
-        "start_time": "2022-03-17T18:08:00.955036",
+        "icebreaker_id": 1,
+        "total_time_hours": 508.55560630498013,
+        "start_time": "2022-03-20T19:23:11.687324",
         "end_time": null,
         "template_name": "full",
         "icebreaker_time_fee": 95.58299621189127
     },
-    "af14274a-22f0-48dd-bfe3-3fd0c06d9405": {
-        "uuid": "b19e9ef4-3276-11ef-a991-ae17e04986da",
+    "aec249cf-0892-444e-9216-48b5fe844553": {
+        "uuid": "08ec3a72-326e-11ef-9c11-6c240812d26c",
         "start_node": 35,
         "end_node": 24,
         "vessel_ids": [
             19,
             10
         ],
-        "icebreaker_id": 2,
-        "total_time_hours": 254.04933439061668,
-        "start_time": "2022-03-19T00:00:00",
+        "icebreaker_id": 4,
+        "total_time_hours": 353.00407260878467,
+        "start_time": "2022-03-20T16:13:44.984751",
         "end_time": null,
         "template_name": "full",
         "icebreaker_time_fee": 83.36627419280833
     },
-    "233c22ac-cea8-4431-ae9e-a70253ecdc6e": {
-        "uuid": "b19c8952-3276-11ef-a991-ae17e04986da",
-        "start_node": 28,
-        "end_node": 16,
+    "3650f1f8-3f75-4bec-9776-46c936228ff4": {
+        "uuid": "08fa9b7e-326e-11ef-98d9-6c240812d26c",
+        "start_node": 44,
+        "end_node": 45,
         "vessel_ids": [
             23,
             24
         ],
-        "icebreaker_id": 4,
-        "total_time_hours": 432.1851723426721,
-        "start_time": "2022-03-20T00:00:00",
+        "icebreaker_id": 2,
+        "total_time_hours": 616.9544595111569,
+        "start_time": "2022-03-23T00:48:11.503950",
         "end_time": null,
         "template_name": "full",
-        "icebreaker_time_fee": 162.65707861008605
+        "icebreaker_time_fee": 230.91839528976791
     },
-    "52051f57-db6e-407a-ae6f-dcdfe70ff760": {
-        "uuid": "b1a6a766-3276-11ef-a991-ae17e04986da",
-        "start_node": 11,
-        "end_node": 4,
+    "a5d5baa3-e8f1-4691-90e1-53d0ab4baeff": {
+        "uuid": "08edcf2f-326e-11ef-8d73-6c240812d26c",
+        "start_node": 0,
+        "end_node": 35,
         "vessel_ids": [
             16
         ],
-        "icebreaker_id": 1,
-        "total_time_hours": 83.41915060382652,
-        "start_time": "2022-03-24T00:00:00",
+        "icebreaker_id": 3,
+        "total_time_hours": 311.25636594885066,
+        "start_time": "2022-03-27T22:52:11.598352",
         "end_time": null,
         "template_name": "full",
         "icebreaker_time_fee": 176.59447384188206
     },
-    "ad52ba3c-efdf-4f92-ae4e-8273c196fd0f": {
-        "uuid": "b1a86420-3276-11ef-a991-ae17e04986da",
-        "start_node": 4,
-        "end_node": 1,
+    "7a6aef98-cfd7-4f42-a099-404d24d91e80": {
+        "uuid": "0912a78b-326e-11ef-9d70-6c240812d26c",
+        "start_node": 11,
+        "end_node": 31,
         "vessel_ids": [
             13
         ],
-        "icebreaker_id": 2,
-        "total_time_hours": 63.572079301172195,
-        "start_time": "2022-03-26T00:00:00",
+        "icebreaker_id": 1,
+        "total_time_hours": 586.7507814437643,
+        "start_time": "2022-03-27T14:34:35.302838",
         "end_time": null,
         "template_name": "full",
-        "icebreaker_time_fee": 162.59110450311664
+        "icebreaker_time_fee": 109.28578874708049
     },
-    "b952924e-d824-41d5-86f6-e5ce6b423937": {
-        "uuid": "b1a6757a-3276-11ef-a991-ae17e04986da",
-        "start_node": 0,
+    "fe15d71c-05c2-4b9e-b25d-a6ed83d77f9d": {
+        "uuid": "0918eca4-326e-11ef-ada7-6c240812d26c",
+        "start_node": 16,
         "end_node": 1,
         "vessel_ids": [
             21
         ],
         "icebreaker_id": 4,
-        "total_time_hours": 107.2893018005303,
-        "start_time": "2022-03-27T04:45:37.780431",
+        "total_time_hours": 200.8794512683622,
+        "start_time": "2022-03-26T23:16:50.547455",
         "end_time": null,
         "template_name": "full",
         "icebreaker_time_fee": 94.59372840775252
     },
-    "5202aceb-5fd5-4f05-8b2e-28ac07c2210e": {
-        "uuid": "b1ae1906-3276-11ef-a991-ae17e04986da",
+    "11a9342a-3ce6-4bc0-ac1c-67a21c251fa7": {
+        "uuid": "091b030c-326e-11ef-9e78-6c240812d26c",
         "start_node": 6,
         "end_node": 1,
         "vessel_ids": [
             25
         ],
-        "icebreaker_id": 2,
-        "total_time_hours": 46.53844159146739,
+        "icebreaker_id": 1,
+        "total_time_hours": 59.822181360085224,
         "start_time": "2022-04-01T00:00:00",
         "end_time": null,
         "template_name": "full",
-        "icebreaker_time_fee": 129.57436934396736
+        "icebreaker_time_fee": 118.34584072091856
     },
-    "46a88759-16d6-477a-baa0-8f308ed9e5c6": {
-        "uuid": "b1afe39e-3276-11ef-a991-ae17e04986da",
-        "start_node": 27,
-        "end_node": 4,
-        "vessel_ids": [
-            33
-        ],
-        "icebreaker_id": 1,
-        "total_time_hours": 164.79070383400443,
-        "start_time": "2022-04-06T00:00:00",
-        "end_time": null,
-        "template_name": "full",
-        "icebreaker_time_fee": 417.56573352983776
-    },
-    "b4242631-3a98-404b-8c2d-7d09defc65fa": {
-        "uuid": "b1b584de-3276-11ef-a991-ae17e04986da",
+    "d7a86f1f-16c9-4d82-afc6-b20d47ce6468": {
+        "uuid": "091f6465-326e-11ef-a650-6c240812d26c",
         "start_node": 29,
         "end_node": 24,
         "vessel_ids": [
             28
         ],
-        "icebreaker_id": 2,
+        "icebreaker_id": 1,
         "total_time_hours": 110.6595819995281,
         "start_time": "2022-04-07T00:00:00",
         "end_time": null,
         "template_name": "full",
-        "icebreaker_time_fee": 213.4257237920281
+        "icebreaker_time_fee": 205.28346057619476
     },
-    "fb6feb0e-2ed0-46fe-a2e2-2c1f5078d0b0": {
-        "uuid": "b1b87b1c-3276-11ef-a991-ae17e04986da",
+    "c0fd0f96-b32d-499a-8cc7-be6d22d9d41a": {
+        "uuid": "09291dc4-326e-11ef-a6d7-6c240812d26c",
+        "start_node": 27,
+        "end_node": 21,
+        "vessel_ids": [
+            33
+        ],
+        "icebreaker_id": 2,
+        "total_time_hours": 162.73992961919643,
+        "start_time": "2022-04-06T00:00:00",
+        "end_time": null,
+        "template_name": "full",
+        "icebreaker_time_fee": 314.8415360101686
+    },
+    "cad80fb6-88be-4043-ac15-987794b38ed2": {
+        "uuid": "0930c458-326e-11ef-8704-6c240812d26c",
         "start_node": 21,
         "end_node": 1,
         "vessel_ids": [
@@ -297,202 +921,188 @@
         "start_time": "2022-04-08T21:13:30.207900",
         "end_time": null,
         "template_name": "full",
-        "icebreaker_time_fee": 533.935923239935
+        "icebreaker_time_fee": 329.76323720354617
     },
-    "47b2af6e-b355-4a74-9743-9907983d2173": {
-        "uuid": "b1b83a3a-3276-11ef-a991-ae17e04986da",
+    "6bdae9d9-d9b8-429c-8679-a9c0a5e07e26": {
+        "uuid": "092fa779-326e-11ef-93fb-6c240812d26c",
         "start_node": 11,
         "end_node": 24,
         "vessel_ids": [
-            27
+            33
         ],
         "icebreaker_id": 4,
         "total_time_hours": 117.77696654039019,
         "start_time": "2022-04-10T00:00:00",
         "end_time": null,
         "template_name": "full",
-        "icebreaker_time_fee": 418.4876647398346
+        "icebreaker_time_fee": 405.6243278773346
     },
-    "82313c66-698f-4d8b-93f8-34ca9cb44aa8": {
-        "uuid": "b1ba9c9e-3276-11ef-a991-ae17e04986da",
-        "start_node": 2,
-        "end_node": 11,
+    "25d05d2b-cd75-49a5-beea-2c075fd39c8e": {
+        "uuid": "093937ca-326e-11ef-a1e3-6c240812d26c",
+        "start_node": 21,
+        "end_node": 35,
         "vessel_ids": [
-            31
+            30
         ],
         "icebreaker_id": 1,
-        "total_time_hours": 70.99084763838384,
-        "start_time": "2022-04-16T12:37:25.386080",
+        "total_time_hours": 54.48733400542929,
+        "start_time": "2022-04-16T16:30:30.161700",
         "end_time": null,
         "template_name": "full",
-        "icebreaker_time_fee": 181.52602071810605
+        "icebreaker_time_fee": 175.26220504487372
     },
-    "c9a32f94-ff45-4501-951f-b44d0f120cc1": {
-        "uuid": "b1be9b64-3276-11ef-a991-ae17e04986da",
+    "17639a69-8f7c-4728-9353-99de7982ff6a": {
+        "uuid": "093b596e-326e-11ef-99f3-6c240812d26c",
         "start_node": 35,
         "end_node": 27,
         "vessel_ids": [
-            29
+            26
         ],
         "icebreaker_id": 2,
-        "total_time_hours": 138.3218262277329,
+        "total_time_hours": 136.49891581457024,
         "start_time": "2022-04-15T00:00:00",
         "end_time": null,
         "template_name": "full",
-        "icebreaker_time_fee": 233.41860839689957
+        "icebreaker_time_fee": 235.22181719179247
     },
-    "1cc74281-9bdc-402c-9177-9155a1693268": {
-        "uuid": "b1bcc2b2-3276-11ef-a991-ae17e04986da",
+    "0440b7ec-5d08-4d52-bfe1-4b91928f818a": {
+        "uuid": "093547ad-326e-11ef-81c3-6c240812d26c",
         "start_node": 44,
         "end_node": 6,
         "vessel_ids": [
             32
         ],
         "icebreaker_id": 3,
-        "total_time_hours": 41.54849842046025,
+        "total_time_hours": 38.812029154687494,
         "start_time": "2022-04-16T00:00:00",
         "end_time": null,
         "template_name": "full",
-        "icebreaker_time_fee": 154.96443311407137
+        "icebreaker_time_fee": 152.86733029246528
     },
-    "05a73296-0a16-4094-9585-3e092e7cb586": {
-        "uuid": "b1be551e-3276-11ef-a991-ae17e04986da",
-        "start_node": 16,
-        "end_node": 35,
+    "4289e89a-eaf1-48a0-aa04-bf17b893aa14": {
+        "uuid": "0938b672-326e-11ef-934f-6c240812d26c",
+        "start_node": 10,
+        "end_node": 11,
         "vessel_ids": [
-            30
+            31
         ],
         "icebreaker_id": 4,
-        "total_time_hours": 58.355655932702014,
-        "start_time": "2022-04-17T00:34:26.688980",
+        "total_time_hours": 79.39053964747475,
+        "start_time": "2022-04-17T21:47:30.377800",
         "end_time": null,
         "template_name": "full",
-        "icebreaker_time_fee": 100.92714448714645
+        "icebreaker_time_fee": 121.35366108525253
     },
-    "8185c890-21a9-49cf-ba83-788f4891cfd8": {
-        "uuid": "b1c21000-3276-11ef-a991-ae17e04986da",
-        "start_node": 5,
+    "2626cde5-fa0e-4340-8482-831b314e6ed7": {
+        "uuid": "093f720b-326e-11ef-8fc0-6c240812d26c",
+        "start_node": 31,
         "end_node": 35,
         "vessel_ids": [
             36
         ],
         "icebreaker_id": 1,
-        "total_time_hours": 82.03612724088845,
-        "start_time": "2022-04-22T00:00:00",
+        "total_time_hours": 92.45645050230428,
+        "start_time": "2022-04-24T03:00:46.426567",
         "end_time": null,
         "template_name": "full",
-        "icebreaker_time_fee": 161.07583473977735
+        "icebreaker_time_fee": 187.2642394286932
     },
-    "71e68a96-8434-4398-b6a0-47168c7f09aa": {
-        "uuid": "b1c1bb82-3276-11ef-a991-ae17e04986da",
+    "2ed9eebf-5d78-4ef1-8236-035b5b01772f": {
+        "uuid": "09433b00-326e-11ef-9fa8-6c240812d26c",
         "start_node": 25,
         "end_node": 5,
         "vessel_ids": [
             34
         ],
-        "icebreaker_id": 4,
-        "total_time_hours": 83.6024408893733,
+        "icebreaker_id": 3,
+        "total_time_hours": 83.80175173811551,
         "start_time": "2022-04-20T00:00:00",
         "end_time": null,
         "template_name": "full",
         "icebreaker_time_fee": 124.08859668631774
     },
-    "8d454132-61e2-47d8-93de-891d292d08ca": {
-        "uuid": "b1c8452e-3276-11ef-a991-ae17e04986da",
+    "1c1a647d-0510-4e61-ab97-d65b6c1e932b": {
+        "uuid": "0949e74c-326e-11ef-ab2a-6c240812d26c",
         "start_node": 16,
         "end_node": 11,
         "vessel_ids": [
             38
         ],
-        "icebreaker_id": 1,
+        "icebreaker_id": 2,
         "total_time_hours": 73.44174027897412,
         "start_time": "2022-04-26T03:38:45.025103",
         "end_time": null,
         "template_name": "full",
-        "icebreaker_time_fee": 84.21117376258522
+        "icebreaker_time_fee": 187.8376989270297
     },
-    "b30238f8-8edb-4d8b-a62a-e31244493983": {
-        "uuid": "b1c72716-3276-11ef-a991-ae17e04986da",
-        "start_node": 11,
-        "end_node": 5,
-        "vessel_ids": [
-            41
-        ],
-        "icebreaker_id": 2,
-        "total_time_hours": 120.06210643412078,
-        "start_time": "2022-04-26T00:25:54.728212",
-        "end_time": null,
-        "template_name": "full",
-        "icebreaker_time_fee": 234.64322708300966
-    },
-    "787f191e-d9ba-4865-9493-68dc492a8bfe": {
-        "uuid": "b1c53a50-3276-11ef-a991-ae17e04986da",
-        "start_node": 25,
-        "end_node": 5,
-        "vessel_ids": [
-            35
-        ],
-        "icebreaker_id": 3,
-        "total_time_hours": 105.62670319583333,
-        "start_time": "2022-04-23T00:00:00",
-        "end_time": null,
-        "template_name": "full",
-        "icebreaker_time_fee": 241.94146634444445
-    },
-    "70466df4-57e9-4aa4-94d6-d4110d67bffa": {
-        "uuid": "b1c66f38-3276-11ef-a991-ae17e04986da",
-        "start_node": 0,
+    "8b4fd15f-9f67-4d3e-b63f-f88dcc4432d0": {
+        "uuid": "094c4b0f-326e-11ef-ab32-6c240812d26c",
+        "start_node": 15,
         "end_node": 1,
         "vessel_ids": [
             37
         ],
-        "icebreaker_id": 4,
-        "total_time_hours": 92.18937545525253,
-        "start_time": "2022-04-25T13:39:38.045588",
+        "icebreaker_id": 3,
+        "total_time_hours": 92.16867774247476,
+        "start_time": "2022-04-24T07:06:49.285642",
         "end_time": null,
         "template_name": "full",
-        "icebreaker_time_fee": 93.18531237275252
+        "icebreaker_time_fee": 127.0611812405303
     },
-    "29ff6651-5a0a-4bca-a901-b297328a262d": {
-        "uuid": "b1cdd336-3276-11ef-a991-ae17e04986da",
-        "start_node": 16,
+    "c7105e76-437c-4141-b516-a790d302a37f": {
+        "uuid": "0946d6be-326e-11ef-8ff8-6c240812d26c",
+        "start_node": 11,
+        "end_node": 5,
+        "vessel_ids": [
+            35
+        ],
+        "icebreaker_id": 4,
+        "total_time_hours": 99.42955444261364,
+        "start_time": "2022-04-25T00:00:00",
+        "end_time": null,
+        "template_name": "full",
+        "icebreaker_time_fee": 236.03901479511364
+    },
+    "26f181b4-8ce5-4198-a6ca-d166bb1c842b": {
+        "uuid": "095bdf14-326e-11ef-9b3f-6c240812d26c",
+        "start_node": 25,
+        "end_node": 31,
+        "vessel_ids": [
+            37
+        ],
+        "icebreaker_id": 1,
+        "total_time_hours": 315.1913732920833,
+        "start_time": "2022-04-27T00:00:00",
+        "end_time": null,
+        "template_name": "full",
+        "icebreaker_time_fee": 95.65474631714285
+    },
+    "b7e63273-20fc-46a5-a565-88303e65cfb1": {
+        "uuid": "095997cf-326e-11ef-a873-6c240812d26c",
+        "start_node": 21,
         "end_node": 24,
         "vessel_ids": [
             39
         ],
         "icebreaker_id": 3,
-        "total_time_hours": 109.35183256737345,
-        "start_time": "2022-04-28T07:35:42.885831",
+        "total_time_hours": 136.8899342061036,
+        "start_time": "2022-04-29T00:45:47.373799",
         "end_time": null,
         "template_name": "full",
-        "icebreaker_time_fee": 134.34776948487345
+        "icebreaker_time_fee": 144.8464159297147
     },
-    "77967bcb-44f2-499d-b10d-f0116ea7cec8": {
-        "uuid": "b1cbfe94-3276-11ef-a991-ae17e04986da",
-        "start_node": 25,
-        "end_node": 2,
-        "vessel_ids": [
-            40
-        ],
-        "icebreaker_id": 4,
-        "total_time_hours": 139.84121662579366,
-        "start_time": "2022-04-29T00:48:09.546950",
-        "end_time": null,
-        "template_name": "full",
-        "icebreaker_time_fee": 121.13007239908731
-    },
-    "82288990-a904-4714-95b6-3d7aadc26c0c": {
-        "uuid": "b1d05af2-3276-11ef-a991-ae17e04986da",
-        "start_node": 2,
+    "f6f64a4e-f112-4133-a7ee-bdcb3bd88bc6": {
+        "uuid": "09652f4b-326e-11ef-980d-6c240812d26c",
+        "start_node": 41,
         "end_node": 11,
         "vessel_ids": [
             42
         ],
-        "icebreaker_id": 2,
+        "icebreaker_id": 1,
         "total_time_hours": 76.71481908977272,
         "start_time": "2022-04-30T14:12:06.059340",
         "end_time": null,
         "template_name": "full",
-        "icebreaker_time_fee": 95.81570069810606
+        "icebreaker_time_fee": 117.13556791560606
     }
 }

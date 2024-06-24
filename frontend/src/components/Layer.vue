@@ -46,7 +46,9 @@ const props = defineProps<Props>()
 const isChecked = ref(false)
 
 watch(() => props.isCheckParent, (newCheckParent) => {
-  if (newCheckParent) isChecked.value = true
+  if (newCheckParent) {
+    isChecked.value = true
+  }
 })
 
 watch(() => props.isChangeParent, (newChangeParent) => {
@@ -77,16 +79,16 @@ const onOpenInfoModal = () => {
 
 const createDataForPoints = () => {
   const listTransport = props.type === typeTransport.ICEBREAKERS ? icebreakerPoints.value : vesselPoints.value
-
+  console.log(props.isCheckParent, isChecked.value)
   if (props.isCheckParent && !isChecked.value) {
     emits('changeParentCheckbox')
-    return;
   }
-
   if (!isChecked.value) {
+    console.log(listTransport, props.layer.id)
     const idx = listTransport.findIndex(id => id === props.layer.id)
+    console.log(idx)
     listTransport.splice(idx, 1)
-
+    console.log(2, listTransport)
     return
   }
 
@@ -111,6 +113,7 @@ const createDataForPaths = () => {
 const onChecked = () => {
   isChecked.value = !isChecked.value
 
+  console.log(isChecked.value)
   if (props.typeLayer === TypeLayersForMap.POINT) {
     createDataForPoints()
     return
