@@ -1,4 +1,4 @@
-from datetime import datetime
+from datetime import datetime, timedelta
+from backend.utils import timedelta_to_hours
 
-
-print((datetime(2022, 3, 4, 0, 0) - datetime(2022, 3, 1, 0, 0)).days)
+print(timedelta_to_hours(timedelta(days=1, hours=1, minutes=30)))

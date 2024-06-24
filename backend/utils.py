@@ -10,6 +10,9 @@ def parse_datetimes(datetime_str: str):
 def add_hours(date_time:datetime, hours):
     return date_time + timedelta(hours=hours)
 
+def timedelta_to_hours(td:timedelta) -> int:
+    return td.total_seconds()/3600
+
 def replace_inf_nan(obj):
     if isinstance(obj, float):
         if math.isinf(obj):
