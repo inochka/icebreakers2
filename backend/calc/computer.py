@@ -52,9 +52,8 @@ class Computer:
     typical_vessel_waiting_time: float = 3 * 24  # характерное допустимое время ожидания судна в порту
 
     def __init__(self, context: Context | None = None):
-        file_path = backend_base_dir / "input_files/IntegrVelocity.xlsx"
         base = BaseGraph()
-        ice_cond = IceCondition(file_path, base.graph)
+        ice_cond = IceCondition(base.graph)
 
         if not context:
             full_template_name = "full"

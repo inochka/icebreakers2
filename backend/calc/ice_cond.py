@@ -1,30 +1,24 @@
 import logging
+import os
+import pickle
 from datetime import datetime
 from pathlib import Path
 from typing import List
-import pickle
+
 import geopandas as gpd
 import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
 import rasterio
-from rasterio.transform import from_origin
-from rasterio.enums import Resampling
-import rioxarray
 from dateutil import parser
-import os
-from geocube.api.core import make_geocube
 from networkx import Graph
+from rasterio.transform import from_origin
 from scipy.interpolate import LinearNDInterpolator
-import matplotlib.pyplot as plt
-#plt.ion() #macOS problem
+
+# plt.ion() #macOS problem
 from backend.calc.base_graph import BaseGraph
-from backend.config import data_dir
-import geopandas
-from geocube.api.core import make_geocube
+from backend.config import data_dir, backend_base_dir
 from backend.config import tiffs_dir
-import rioxarray
-from xarray import DataArray
 
 logger = logging.getLogger(__name__)
 
@@ -44,19 +38,19 @@ class IceCondition:
            #  [29,60,11,25,35,86,87,88,1,58,14,0,32,85,26,39,4,5,6])  # вершины, в которых расположены порты
 
     graph_filename = "graphs_dict.pkl"
-
+    file_path = backend_base_dir / "input_files/IntegrVelocity.xlsx"
     fine_tune_coefficient: float = 1.
 
     base_graph: BaseGraph
 
-    def __init__(self, file_path: Path | str, graph: Graph):
+    def __init__(self, graph: Graph):
         
         if os.path.exists(data_dir / self.graph_filename):
             with open(data_dir / self.graph_filename, "rb") as f:
                 self.graphs_with_conds = pickle.load(f)
             # TODO: поправить геотиффы тут!!!
         else:
-            self.dfs = self.read_file(file_path)
+            self.dfs = self.read_file(self.file_path)
             interpolators = {}
             for dt, df in self.dfs.items():
               interpolators[dt] =  self.make_interpolator(df)
@@ -267,7 +261,7 @@ class IceCondition:
     def make_geotiffs_for_ice_conditions(self):
         self.gtiffs_paths = {}
         if not hasattr(self, 'interpolators') or not self.interpolators:
-            self.dfs = self.read_file(file_path)
+            self.dfs = self.read_file(self.file_path)
             self.interpolators = {dt: self.make_interpolator(df) for dt, df in self.dfs.items()}
 
         for dt, df in self.dfs.items():
@@ -277,7 +271,7 @@ class IceCondition:
 
             # Получение границ и создание сетки
             min_x, min_y, max_x, max_y = gdf.total_bounds
-            x_res, y_res = 0.1, 0.1  # Разрешение сетки
+            x_res, y_res = 0.05, 0.05  # Разрешение сетки
 
             x_grid = np.arange(min_x, max_x, x_res)
             y_grid = np.arange(min_y, max_y, y_res)
