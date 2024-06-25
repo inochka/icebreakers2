@@ -44,8 +44,8 @@ total_waiting = []
 max_waiting = []
 stuck = []
 
-#4284
-comp.planing_horizon = timedelta(days=6)
+#BEST = 4284 -> 4178  
+comp.planing_horizon = timedelta(days=7)
 comp.planing_step = timedelta(days=3,hours=0)
 comp.solo_stuck_time = 15.0 * 24 # вклад во время в часах, предполагая, что судно придется вести отдельным ледоколом #1e6
 comp.icebreaker_time_fee = 3.  # насколько время ледокола дороже времени обычного судна
@@ -62,7 +62,7 @@ print('solo_stuck_time: '+ str(comp.solo_stuck_time))
 print('icebreaker_time_fee: '+ str(comp.icebreaker_time_fee))
 print('typical_vessel_waiting_time: '+ str(comp.typical_vessel_waiting_time))
 
-N = 5
+N = 10
 for i in range(N):
     start = time()
     context = Context(template)

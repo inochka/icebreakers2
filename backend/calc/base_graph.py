@@ -13,18 +13,30 @@ class BaseGraph:
     """
     Опорный граф
     """
+    graph:nx.Graph
 
     ports = [1, 35, 4, 5, 6, 41, 11, 44, 16, 24, 25, 27, 28, 29]  # вершины, в которых расположены порты
     l0 = 100
 
+# Треугольник на юге Обсуой Губы: Новый-порт (11) - Терминал утренний (35)  - Сабетта (25)
+#
+
+    new_ages =  [ (11,35, {"length" : 205.18, "id" : 0, "rep_id": 54, "status": 1, "new_age":True}), #380rv
+                (11,25, {"length" : 232.18, "id" : 0, "rep_id": 54, "status": 1, "new_age":True}),
+                (25,35, {"length" : 35.64, "id" : 0, "rep_id": 54, "status": 1, "new_age":True}),
+                ]
+    
     def __init__(self):
         self.graph = nx.Graph()
         self.set_base_values()
         self.graph = self.add_intersection_vertices(self.graph)
+        self.graph.add_edges_from(self.new_ages)
         #self.graph = self.add_midpoints_and_connect_within_triangles(self.graph, self.l0)
 
 
-    graph:nx.Graph
+           
+
+
     def draw(self):
         """Построить и отобразить опорный граф
         """

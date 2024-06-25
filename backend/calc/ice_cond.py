@@ -15,8 +15,6 @@ from networkx import Graph
 from rasterio.transform import from_origin
 from scipy.interpolate import LinearNDInterpolator
 
-# plt.ion() #macOS problem
-from backend.calc.base_graph import BaseGraph
 from backend.config import data_dir, backend_base_dir
 from backend.config import tiffs_dir
 
@@ -34,17 +32,17 @@ class IceCondition:
     bound_ice_value: float = 0.0  # граничное значение, начиная с которого учитываем точки
 
     ports_ice_cond: float = 11
+    new_edge_ice_cond: float = 20
+
     ports = set([0, 1, 35, 4, 5, 6, 41, 11, 44, 16, 24, 25, 27, 28, 29])# +
            #  [29,60,11,25,35,86,87,88,1,58,14,0,32,85,26,39,4,5,6])  # вершины, в которых расположены порты
-
+    graph: Graph
     graph_filename = "graphs_dict.pkl"
     file_path = backend_base_dir / "input_files/IntegrVelocity.xlsx"
     fine_tune_coefficient: float = 1.
 
-    base_graph: BaseGraph
-
     def __init__(self, graph: Graph):
-        
+        self.graph = graph
         if os.path.exists(data_dir / self.graph_filename):
             with open(data_dir / self.graph_filename, "rb") as f:
                 self.graphs_with_conds = pickle.load(f)
@@ -80,7 +78,11 @@ class IceCondition:
         if base_node_v in self.ports or base_node_u in self.ports:
             cond = max(cond, self.ports_ice_cond)
 
+        if 'new_edge' in self.graph[base_node_u][base_node_v]:
+            cond = self.new_edge_ice_cond
+        
         return cond * self.fine_tune_coefficient
+
 
     def best_condition(self,  base_node_u, base_node_v) -> float:
         # TODO: переделать, с учетом, что в реальности мы не знаем будущих значений
