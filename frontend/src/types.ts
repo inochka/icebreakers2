@@ -70,7 +70,8 @@ export interface IWaybill {
 }
 
 export interface IPath {
-    vessel_id: number
+    vessel_id?: number
+    icebreaker_id?: number
     total_time_hours: number
     type: typeTransport
     start_date: string

@@ -545,6 +545,7 @@ watch(() => tiffDate.value, async () => {
         blob: blob,
       },
     ],
+    zIndex: 0
   });
 
   const layer = new WebGLTile({
@@ -563,8 +564,7 @@ watch(() => tiffDate.value, async () => {
           resolution,
           center,
           constrainResolution: true,
-          maxZoom: 0,
-          zoom: 0
+          maxZoom: 8
         }
       })
   )
