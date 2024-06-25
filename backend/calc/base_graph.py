@@ -35,8 +35,11 @@ class BaseGraph:
 
 
     def add_new_edges(self):
-        self.graph.add_edges_from(self.new_edges)
-        #TODO автоматически переопределить айдишники ребер
+        max_id = max(d["id"] for u,v,d in self.graph.edges.data())
+        for e in self.new_edges:
+            max_id += 1
+            e[2]["id"] = max_id
+            self.graph.add_edges_from([e])
 
     def draw(self):
         """Построить и отобразить опорный граф
