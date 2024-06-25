@@ -18,8 +18,11 @@ export const generateVectorLayer = (featuresFunction: (params: any) => any[], pa
         features: new GeoJSON().readFeatures(features),
     });
 
-    return new VectorLayer({
+    const vectorLayer = new VectorLayer({
         source: vectorSource,
         style: (feature) => getStyles(feature)
     })
+    vectorLayer.setZIndex(3);
+
+    return vectorLayer
 }
