@@ -5,11 +5,13 @@
         :chart-end="endDate"
         precision="day"
         width="100%"
+        :grid="true"
         bar-start="start_date"
         bar-end="end_date"
     >
       <div v-if="rowBarListIcebreakers.length" class="section">Ледоколы</div>
       <g-gantt-row v-for="(path, idx) in rowBarListIcebreakers" :bars="path.bars" :key="idx" :label="path.label"/>
+
       <div v-if="rowBarListVessels.length" class="section">Суда</div>
       <g-gantt-row v-for="(path, idx) in rowBarListVessels" :bars="path.bars" :key="idx" :label="path.label"/>
     </g-gantt-chart>
@@ -25,7 +27,7 @@ import {storeToRefs} from "pinia";
 import {DateTime} from "luxon";
 import {getDate} from "../../utils/getDate.ts";
 
-const {vessels, pathsVessels, icebreakers, pathsIcebreakers} = storeToRefs(useIceTransportStore())
+const {vessels, pathsVessels, icebreakers, pathsIcebreakers, caravans} = storeToRefs(useIceTransportStore())
 
 interface IRowBar {
   label: string
@@ -39,9 +41,13 @@ const endDate = ref()
 
 onMounted(() => {
   // @ts-ignore
-  rowBarListVessels.value = createRows(pathsVessels.value, vessels.value, 'vessel_id', typeTransport.VESSELS)
+  rowBarListVessels.value = createRows(
+      pathsVessels.value.sort((a, b) => new Date(a.start_date) - new Date(b.start_date)),
+      vessels.value, 'vessel_id', typeTransport.VESSELS)
   // @ts-ignore
-  rowBarListIcebreakers.value = createRows(pathsIcebreakers.value, icebreakers.value, 'icebreaker_id', typeTransport.ICEBREAKERS)
+  rowBarListIcebreakers.value = createRows(
+      pathsIcebreakers.value.sort((a, b) => new Date(a.start_date) - new Date(b.start_date)),
+      icebreakers.value, 'icebreaker_id', typeTransport.ICEBREAKERS)
 
   startDate.value = getStartDate()
   endDate.value = getEndDate()
@@ -79,16 +85,17 @@ const createRows = (paths: IPath[], listTransport: IVessel[] | IIcebreaker[], ke
       label: listTransport?.find(transport => transport.id === path[keyIdx])?.name || '',
       bars: path.waybill?.map((way, idx) => {
         const {start_date, end_date} = getDates(way, path, idx)
-
+        // console.log(path)
         return {
           start_date,
           end_date,
           ganttBarConfig: {
             // @ts-ignore
-            id: `${path[keyIdx]}_${way.point}_${way.event}`,
+            id: `${path[keyIdx]}_${way.point}_${way.event}_${start_date}_${end_date}`,
             style: {
               background: getBackground(way.event, type),
-            }
+            },
+            immobile: true,
           }
         }
       })

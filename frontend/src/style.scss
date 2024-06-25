@@ -65,3 +65,12 @@ p, h3 {
     }
   }
 }
+
+.g-gantt-tooltip:before {
+  content: none !important;
+}
+
+.ol-popup {
+  max-height: 250px;
+  overflow-y: auto;
+}

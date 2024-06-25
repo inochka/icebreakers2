@@ -51,11 +51,11 @@
           Добавить шаблон
         </button>
         <button
-            :disabled="!selectTemplate"
+            v-if="selectTemplate"
             class="footer_button"
             @click="applySettings"
         >
-          {{ pathsList.length ? 'Сделать перерассчёт' : 'Рассчитать' }}
+          {{ pathsList.length  ? 'Сделать перерассчёт' : 'Рассчитать' }}
         </button>
         <button
             v-if="pathsList.length"
