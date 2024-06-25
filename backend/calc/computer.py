@@ -592,7 +592,7 @@ class Computer:
         # нужно, чтобы последние тоже успели дойти
         max_time = max([v.start_date for v in self.context.vessels.values()]) + self.max_T
 
-        self.current_time = min_time
+        self.current_time = min_time - self.planing_horizon
         icebreakers = self.context.icebreakers.values() #список ледоколов
         icebreaker_paths = [] #
 

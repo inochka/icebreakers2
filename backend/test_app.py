@@ -44,7 +44,7 @@ total_waiting = []
 max_waiting = []
 stuck = []
 
-#BEST = 4284 -> 4178 -> 3815
+#BEST = 4284 -> 4178 -> 3815  ??? 3932
 comp.planing_horizon = timedelta(days=7)
 comp.planing_step = timedelta(days=3,hours=0)
 comp.solo_stuck_time = 15.0 * 24 # вклад во время в часах, предполагая, что судно придется вести отдельным ледоколом #1e6
