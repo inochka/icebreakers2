@@ -21,21 +21,22 @@ class BaseGraph:
 # Треугольник на юге Обсуой Губы: Новый-порт (11) - Терминал утренний (35)  - Сабетта (25)
 #
 
-    new_ages =  [ (11,35, {"length" : 205.18, "id" : 0, "rep_id": 54, "status": 1, "new_age":True}), #380rv
-                (11,25, {"length" : 232.18, "id" : 0, "rep_id": 54, "status": 1, "new_age":True}),
-                (25,35, {"length" : 35.64, "id" : 0, "rep_id": 54, "status": 1, "new_age":True}),
+    new_edges =  [ (11,35, {"length" : 205.18, "id" : 73, "rep_id": 54, "status": 1, "new_edge":True}), #380rv
+                (11,25, {"length" : 232.18, "id" : 74, "rep_id": 54, "status": 1, "new_edge":True}),
+                (25,35, {"length" : 35.64, "id" : 75, "rep_id": 54, "status": 1, "new_edge":True}),
                 ]
     
     def __init__(self):
         self.graph = nx.Graph()
         self.set_base_values()
         self.graph = self.add_intersection_vertices(self.graph)
-        self.graph.add_edges_from(self.new_ages)
+        self.add_new_edges()
         #self.graph = self.add_midpoints_and_connect_within_triangles(self.graph, self.l0)
 
 
-           
-
+    def add_new_edges(self):
+        self.graph.add_edges_from(self.new_edges)
+        #TODO автоматически переопределить айдишники ребер
 
     def draw(self):
         """Построить и отобразить опорный граф

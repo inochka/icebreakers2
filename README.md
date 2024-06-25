@@ -31,7 +31,7 @@
 
 # Запуск в контейнере
 
-Перейти в виртуальную консоль Cloud.ru и запустить ~/projects/icebreaker2/restart.sh
+Перейти в виртуальную консоль Cloud.ru и запустить ~/projects/icebreakers2/restart.sh
 
 # Полезные команды для консоли
 
