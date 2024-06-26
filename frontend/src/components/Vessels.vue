@@ -46,7 +46,7 @@ type Props = {
 
 const props = defineProps<Props>()
 
-const {vessels, pathsVessels, vesselPoints, icebreakerPoints} = storeToRefs(useIceTransportStore())
+const {vessels, pathsVessels, vesselPoints} = storeToRefs(useIceTransportStore())
 
 const {grade} = storeToRefs(useCommonStore())
 
