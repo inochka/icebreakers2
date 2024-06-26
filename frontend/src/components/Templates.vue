@@ -148,7 +148,7 @@ const onOpenModalCreating = async () => {
 
 const onSelectTemplate = async (currentTemplate: ITemplate) => {
   selectTemplate.value = currentTemplate
-
+  pathsList.value = []
   isChoosingTemplate.value = false
 
   isLoading.value = true
