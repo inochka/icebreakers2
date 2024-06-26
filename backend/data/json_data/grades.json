@@ -1,11 +1,11 @@
 {
     "full": {
         "stuck_vessels": 0,
-        "total_time": 3932.7462988302327,
+        "total_time": 4287.214972778861,
         "template_name": "full",
-        "best_possible_time": 3993.4505457527125,
-        "total_waiting_time": 575.6067428013888,
-        "max_waiting_time": 131.858058895
+        "best_possible_time": 4002.2325945549173,
+        "total_waiting_time": 740.408845705,
+        "max_waiting_time": 216.0
     },
     "test_1": {
         "stuck_vessels": 0,
