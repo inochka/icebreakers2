@@ -55,7 +55,7 @@
             class="footer_button"
             @click="applySettings"
         >
-          {{ pathsList.length  ? 'Сделать перерассчёт' : 'Рассчитать' }}
+          {{ pathsList.length ? 'Сделать перерассчёт' : 'Рассчитать' }}
         </button>
         <button
             v-if="pathsList.length"
@@ -87,7 +87,6 @@ const {
   calculatePath,
   getCaravans,
   getPathVessels,
-  getPathIcebreakers
 } = useIceTransportStore()
 const {icebreakers, vessels, icebreakerPoints, vesselPoints, pathsVessels} = storeToRefs(useIceTransportStore())
 
@@ -131,9 +130,11 @@ const applySettings = async () => {
 
   isLoading.value = true
 
+  await calculatePath(selectTemplate.value?.name)
+
   await Promise.all([
-        await calculatePath(selectTemplate.value?.name),
         await getCaravans(selectTemplate.value?.name),
+        await getGrade(selectTemplate.value?.name)
       ]
   )
 
@@ -168,7 +169,7 @@ const onSelectTemplate = async (currentTemplate: ITemplate) => {
     }),
   ])
 
-pathsList.value = paths
+  pathsList.value = paths
 
   isLoading.value = false
 }
