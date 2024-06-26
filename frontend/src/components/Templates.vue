@@ -47,24 +47,23 @@
         <button v-if="!isChoosingTemplate" class="footer_button" @click="isChoosingTemplate = true">
           Сменить шаблон
         </button>
-        <button class="footer_button" @click="onOpenModalCreating">
-          Добавить шаблон
-        </button>
-        <button
-            v-if="selectTemplate"
-            class="footer_button"
-            @click="applySettings"
-        >
-          {{ pathsList.length ? 'Сделать перерассчёт' : 'Рассчитать' }}
-        </button>
-        <button
-            v-if="pathsList.length"
-            :disabled="!selectTemplate"
-            class="footer_button"
-            @click="showRoutes"
-        >
-          Отобразить маршруты
-        </button>
+        <template v-if="!isChoosingTemplate">
+          <button
+              v-if="selectTemplate"
+              class="footer_button"
+              @click="applySettings"
+          >
+            {{ pathsList.length ? 'Сделать перерассчёт' : 'Рассчитать' }}
+          </button>
+          <button
+              v-if="pathsList.length"
+              :disabled="!selectTemplate"
+              class="footer_button"
+              @click="showRoutes"
+          >
+            Отобразить маршруты
+          </button>
+        </template>
       </div>
     </div>
   </div>
